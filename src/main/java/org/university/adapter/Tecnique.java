@@ -19,16 +19,4 @@ public abstract class Tecnique {
         }
         return count;
     }
-
-//    public int calculateInversions(int[][] matrix, int[][] solution){
-//        int count = 0;
-//        for (int i = 0; i < Matrix.MATRIX_SIZE; i++) {
-//            for (int j = 0; j < Matrix.MATRIX_SIZE; j++) {
-//                if(matrix[i][j] != 0 && matrix[i][j] != solution[i][j]){
-//                    count++;
-//                }
-//            }
-//        }
-//        return count;
-//    }
 }

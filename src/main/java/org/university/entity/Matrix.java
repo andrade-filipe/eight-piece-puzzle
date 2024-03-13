@@ -12,12 +12,14 @@ public class Matrix {
     private Random randomNumber;
     private int[][] data;
     private int blankX, blankY;
+    private int inversions;
 
     public Matrix() {
         this.possibilities = new ArrayList();
         this.possibilities.addAll(List.of(0,1,2,3,4,5,6,7,8));
         this.randomNumber= new Random();
         this.data = new int[MATRIX_SIZE][MATRIX_SIZE];
+        this.inversions = 0;
         this.generatePuzzle();
     }
 
@@ -25,6 +27,7 @@ public class Matrix {
         this.data = new int[MATRIX_SIZE][MATRIX_SIZE];
         this.blankX = blankX;
         this.blankY = blankY;
+        this.inversions = 0;
 
         this.copyData(data);
     }
@@ -41,6 +44,7 @@ public class Matrix {
                 k--;
             }
         }
+        this.calculateInversions();
     }
 
     public void generatePuzzle() {
@@ -63,6 +67,19 @@ public class Matrix {
                 this.data[i][j] = data[i][j];
             }
         }
+        this.calculateInversions();
+    }
+
+    public void calculateInversions(){
+        int count = 0;
+        for (int i = 0; i < Matrix.MATRIX_SIZE - 1; i++) {
+            for (int j = 0; j < Matrix.MATRIX_SIZE - 1; j++) {
+                if(this.data[i][j] != 0 && this.data[i][j] > this.data[i][j + 1]){
+                    count++;
+                }
+            }
+        }
+        this.setInversions(count);
     }
 
     private boolean checkMove(int x, int y) {
@@ -139,6 +156,14 @@ public class Matrix {
 
     public void setBlankY(int blankY) {
         this.blankY = blankY;
+    }
+
+    public int getInversions() {
+        return inversions;
+    }
+
+    public void setInversions(int inversions) {
+        this.inversions = inversions;
     }
 
     @Override
