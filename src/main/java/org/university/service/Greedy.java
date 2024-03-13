@@ -5,19 +5,15 @@ import org.university.entity.Matrix;
 import org.university.entity.Node;
 import org.university.util.CostComparator;
 
-import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class Greedy extends Tecnique {
 
     final public static int MAX_NUMBER_OF_MOVES = 4;
-    PriorityQueue<Node> queue;
-
-    ArrayList<int[][]> cache;
+    private PriorityQueue<Node> queue;
 
     public Greedy() {
         this.queue = new PriorityQueue<>(new CostComparator());
-        this.cache = new ArrayList<>();
     }
 
     @Override

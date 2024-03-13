@@ -5,7 +5,6 @@ import org.university.entity.Matrix;
 import org.university.entity.Node;
 import org.university.util.PathCostComparator;
 
-import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class AStar extends Tecnique {
@@ -13,11 +12,8 @@ public class AStar extends Tecnique {
     final public static int MAX_NUMBER_OF_MOVES = 4;
     PriorityQueue<Node> queue;
 
-    ArrayList<int[][]> cache;
-
     public AStar() {
         this.queue = new PriorityQueue<>(new PathCostComparator());
-        this.cache = new ArrayList<>();
     }
 
     @Override

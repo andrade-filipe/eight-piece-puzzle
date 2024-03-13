@@ -53,14 +53,14 @@ public class RunGreedy {
 
     public void run(int times){
         for (int i = 0; i < times; i++) {
-            System.out.println("#################################");
-            System.out.println("EXECUTION NUMBER: " + i);
             try{
                 run();
+                System.out.println("#################################");
+                System.out.println("EXECUTION NUMBER: " + i);
+                System.out.println("#################################");
             } catch (OutOfMemoryError e){
                 i--;
             }
-            System.out.println("#################################");
         }
         long timeSum = this.times.stream().mapToLong(t -> (long) t).sum();
         long memorySum = this.memoryUsage.stream().mapToLong(m -> (long) m).sum();
