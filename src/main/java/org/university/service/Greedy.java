@@ -2,16 +2,14 @@ package org.university.service;
 
 import org.university.adapter.Tecnique;
 import org.university.entity.Matrix;
+import org.university.entity.Node;
+import org.university.util.CostComparator;
 
-public class Greedy implements Tecnique {
+import java.util.PriorityQueue;
 
+public class Greedy extends Tecnique {
     @Override
-    public Matrix solve() {
-        return null;
-    }
-
-    @Override
-    public int calculateCost(int[][] matrix, int[][] solution) {
-        return 0;
+    protected Matrix solve(Matrix initial, int[][] solution) {
+        PriorityQueue<Node> queue = new PriorityQueue<>(new CostComparator());
     }
 }

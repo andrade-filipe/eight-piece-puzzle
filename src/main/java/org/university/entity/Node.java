@@ -5,15 +5,21 @@ public class Node{
     private Matrix puzzle;
     private int cost;
     private int level;
+    private int pathCost;
 
     public Node(Node parent, Matrix puzzle) {
         this.parent = parent;
         this.puzzle = new Matrix(puzzle.getData(), puzzle.getBlankX(), puzzle.getBlankY());
         this.level = calculateLevel();
+        this.cost = 0;
+        this.pathCost = 0;
     }
 
-    public int calculateLevel() {
+    private int calculateLevel() {
         return parent.getLevel() + 1;
+    }
+    public int calculatePathCost(){
+        return parent.getPathCost() + cost;
     }
 
     public Node getParent() {
@@ -46,5 +52,13 @@ public class Node{
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public int getPathCost() {
+        return pathCost;
+    }
+
+    public void setPathCost(int pathCost) {
+        this.pathCost = pathCost;
     }
 }

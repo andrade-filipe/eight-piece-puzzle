@@ -2,15 +2,15 @@ package org.university.service;
 
 import org.university.adapter.Tecnique;
 import org.university.entity.Matrix;
+import org.university.entity.Node;
+import org.university.util.PathCostComparator;
 
-public class AStar implements Tecnique {
-    @Override
-    public Matrix solve() {
-        return null;
-    }
+import java.util.PriorityQueue;
+
+public class AStar extends Tecnique {
 
     @Override
-    public int calculateCost(int[][] matrix, int[][] solvedMatrix) {
-        return 0;
+    protected Matrix solve(Matrix initial, int[][] solution) {
+        PriorityQueue<Node> queue = new PriorityQueue<>(new PathCostComparator());
     }
 }
