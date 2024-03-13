@@ -6,17 +6,20 @@ import org.university.entity.Node;
 import org.university.util.CostComparator;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.PriorityQueue;
 
 public class Greedy extends Tecnique {
-    final public static int MAX_NUMBER_OF_MOVES = 4;
-    PriorityQueue<Node> queue = new PriorityQueue<>(new CostComparator());
+    PriorityQueue<Node> queue;
 
-    ArrayList<int[][]> cache = new ArrayList<>();
+    ArrayList<int[][]> cache;
+
+    public Greedy() {
+        this.queue = new PriorityQueue<>(new CostComparator());
+        this.cache = new ArrayList<>();
+    }
 
     @Override
-    protected Matrix solve(Matrix initial, int[][] solution) {
+    public Matrix solve(Matrix initial, int[][] solution) {
         long start = System.currentTimeMillis();
         /*---------------------------------------*/
 
@@ -29,7 +32,7 @@ public class Greedy extends Tecnique {
             Node node = queue.peek();
             queue.poll();
 
-            if(Objects.requireNonNull(node).getCost() == 0){
+            if(node.getCost() == 0){
                 return node.getPuzzle();
             }
 
@@ -58,6 +61,8 @@ public class Greedy extends Tecnique {
                 child.setCost(calculateCost(child.getPuzzle().getData(), solution));
                 queue.add(child);
             }
+
+            cache.add(node.getPuzzle().getData());
         }
 
         /*---------------------------------------*/

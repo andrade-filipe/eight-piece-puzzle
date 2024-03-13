@@ -16,6 +16,9 @@ public class Node{
     }
 
     private int calculateLevel() {
+        if(parent == null){
+            return 0;
+        }
         return parent.getLevel() + 1;
     }
     public int calculatePathCost(){
