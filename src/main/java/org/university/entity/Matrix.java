@@ -74,7 +74,7 @@ public class Matrix {
         int count = 0;
         for (int i = 0; i < Matrix.MATRIX_SIZE - 1; i++) {
             for (int j = 0; j < Matrix.MATRIX_SIZE - 1; j++) {
-                if(this.data[i][j] != 0 && this.data[i][j] > this.data[i][j + 1]){
+                if(this.data[i][j] > this.data[i][j + 1]){
                     count++;
                 }
             }
