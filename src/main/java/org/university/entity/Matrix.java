@@ -27,7 +27,7 @@ public class Matrix {
         this.blankY = blankY;
     }
 
-    public boolean checkMove(int x, int y) {
+    private boolean checkMove(int x, int y) {
         int check = x >= 0 && x < MATRIX_SIZE && y >= 0 && y < MATRIX_SIZE ? 1 : 0;
         return check > 0;
     }
@@ -61,7 +61,7 @@ public class Matrix {
     }
 
     public Matrix moveRight(){
-        if(this.checkMove(this.getBlankX() + 1, this.getBlankY())){
+        if(this.checkRight()){
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY()][this.getBlankX() + 1];
             this.data[this.getBlankY()][this.getBlankX() + 1] = 0;
             this.setBlankX(this.getBlankX() + 1);
@@ -72,7 +72,7 @@ public class Matrix {
     }
 
     public Matrix moveLeft(){
-        if(this.checkMove(this.getBlankX() - 1, this.getBlankY())){
+        if(checkLeft()){
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY()][this.getBlankX() - 1];
             this.data[this.getBlankY()][this.getBlankX() - 1] = 0;
             this.setBlankX(this.getBlankX() - 1);
@@ -83,7 +83,7 @@ public class Matrix {
     }
 
     public Matrix moveUp(){
-        if(this.checkMove(this.getBlankX(), this.getBlankY() - 1)){
+        if(checkUp()){
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY() - 1][this.getBlankX()];
             this.data[this.getBlankY() - 1][this.getBlankX()] = 0;
             this.setBlankY(this.getBlankY() - 1);
@@ -93,7 +93,7 @@ public class Matrix {
         return null;
     }
     public Matrix moveDown(){
-        if(this.checkMove(this.getBlankX(), this.getBlankY() + 1)){
+        if(checkDown()){
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY() + 1][this.getBlankX()];
             this.data[this.getBlankY() + 1][this.getBlankX()] = 0;
             this.setBlankY(this.getBlankY() + 1);
@@ -101,6 +101,22 @@ public class Matrix {
         }
 
         return null;
+    }
+
+    public boolean checkRight(){
+        return this.checkMove(this.getBlankX() + 1, this.getBlankY());
+    }
+
+    public boolean checkLeft(){
+        return this.checkMove(this.getBlankX() - 1, this.getBlankY());
+    }
+
+    public boolean checkUp(){
+        return this.checkMove(this.getBlankX(), this.getBlankY() - 1);
+    }
+
+    public boolean checkDown(){
+        return this.checkMove(this.getBlankX(), this.getBlankY() + 1);
     }
 
     public int[][] getData() {
