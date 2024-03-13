@@ -67,7 +67,6 @@ public class Matrix {
             this.setBlankX(this.getBlankX() + 1);
             return this;
         }
-
         return null;
     }
 
@@ -78,7 +77,6 @@ public class Matrix {
             this.setBlankX(this.getBlankX() - 1);
             return this;
         }
-
         return null;
     }
 
@@ -89,7 +87,6 @@ public class Matrix {
             this.setBlankY(this.getBlankY() - 1);
             return this;
         }
-
         return null;
     }
     public Matrix moveDown(){
@@ -99,7 +96,6 @@ public class Matrix {
             this.setBlankY(this.getBlankY() + 1);
             return this;
         }
-
         return null;
     }
 

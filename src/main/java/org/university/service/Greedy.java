@@ -6,6 +6,7 @@ import org.university.entity.Node;
 import org.university.util.CostComparator;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.PriorityQueue;
 
 public class Greedy extends Tecnique {
@@ -29,42 +30,42 @@ public class Greedy extends Tecnique {
         this.queue.add(root);
 
         while(queueIsNotEmpty()){
-            Node node = queue.peek();
-            queue.poll();
+            Node node = this.queue.peek();
+            this.queue.clear();
 
             System.out.println("WHILE= " + node.getPuzzle());
 
-            if(node.getCost() == 0){
+            if(Objects.requireNonNull(node).getCost() == 0){
                 return node.getPuzzle();
             }
 
-            if(cache.contains(node.getPuzzle().getData())){
-                continue;
-            }
+//            if(this.cache.contains(node.getPuzzle().getData())){
+//                continue;
+//            }
 
             if(node.getPuzzle().checkRight()){
                 Matrix cloneMatrix = node.getPuzzle();
                 Node child = new Node(node, cloneMatrix.moveRight());
                 child.setCost(calculateCost(child.getPuzzle().getData(), solution));
-                queue.add(child);
+                this.queue.add(child);
             } else if (node.getPuzzle().checkLeft()){
                 Matrix cloneMatrix = node.getPuzzle();
                 Node child = new Node(node, cloneMatrix.moveLeft());
                 child.setCost(calculateCost(child.getPuzzle().getData(), solution));
-                queue.add(child);
+                this.queue.add(child);
             } else if(node.getPuzzle().checkUp()){
                 Matrix cloneMatrix = node.getPuzzle();
                 Node child = new Node(node, cloneMatrix.moveUp());
                 child.setCost(calculateCost(child.getPuzzle().getData(), solution));
-                queue.add(child);
+                this.queue.add(child);
             } else if(node.getPuzzle().checkDown()){
                 Matrix cloneMatrix = node.getPuzzle();
                 Node child = new Node(node, cloneMatrix.moveDown());
                 child.setCost(calculateCost(child.getPuzzle().getData(), solution));
-                queue.add(child);
+                this.queue.add(child);
             }
 
-            cache.add(node.getPuzzle().getData());
+//            this.cache.add(node.getPuzzle().getData());
         }
 
         /*---------------------------------------*/
