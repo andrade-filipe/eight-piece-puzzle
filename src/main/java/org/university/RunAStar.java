@@ -7,26 +7,30 @@ import org.university.service.AStar;
 import java.util.ArrayList;
 
 public class RunAStar {
+    private ArrayList times;
+    private ArrayList memoryUsage;
+    public ArrayList unsolvableCases;
 
-    public ArrayList times;
-    public ArrayList memoryUsage;
+    public RunAStar(){
+        this.unsolvableCases = new ArrayList();
+    }
 
-    private void run() {
-
+    private void run() throws OutOfMemoryError{
         this.times = new ArrayList();
         this.memoryUsage = new ArrayList();
+
         Matrix initial = new Matrix();
 
-        AStar astar = new AStar();
+        AStar aStar = new AStar();
 
         Matrix solved;
 
-        if(initial.getInversions() % 2 == 0) {
+        if(initial.getInversions() % 2 == 0 || this.unsolvableCases.contains(initial.getData())) {
             try{
                 long start = System.currentTimeMillis();
                 long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
-                solved = astar.solve(initial, Tecnique.SOLUTION);
+                solved = aStar.solve(initial, Tecnique.SOLUTION);
 
                 long finish = System.currentTimeMillis();
                 long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
@@ -43,28 +47,28 @@ public class RunAStar {
                 this.times.add(executionTime);
                 this.memoryUsage.add(memUsedInMegabytes);
             }catch (OutOfMemoryError e){
+                this.unsolvableCases.add(initial);
                 throw e;
             }
         } else {
             throw new OutOfMemoryError();
         }
     }
-
     public void run(int times){
         for (int i = 0; i < times; i++) {
-            System.out.println("#################################");
-            System.out.println("EXECUTION NUMBER: " + i);
             try{
                 run();
+                System.out.println("#################################");
+                System.out.println("EXECUTION NUMBER: " + i);
+                System.out.println("#################################");
             } catch (OutOfMemoryError e){
                 i--;
             }
-            System.out.println("#################################");
         }
         long timeSum = this.times.stream().mapToLong(t -> (long) t).sum();
         long memorySum = this.memoryUsage.stream().mapToLong(m -> (long) m).sum();
 
-        System.out.println("Average Time: " + timeSum / this.times.size());
-        System.out.println("Average Memory Usage: " + memorySum / this.memoryUsage.size());
+        System.out.println("Average Time: " + timeSum / this.times.size() + "ms");
+        System.out.println("Average Memory Usage: " + memorySum / this.memoryUsage.size() + "MB");
     }
 }

@@ -8,11 +8,15 @@ import java.util.ArrayList;
 
 public class RunGreedy {
 
-    public ArrayList times;
-    public ArrayList memoryUsage;
+    private ArrayList times;
+    private ArrayList memoryUsage;
+    public ArrayList unsolvableCases;
+
+    public RunGreedy(){
+        this.unsolvableCases = new ArrayList();
+    }
 
     private void run() throws OutOfMemoryError{
-
         this.times = new ArrayList();
         this.memoryUsage = new ArrayList();
 
@@ -22,7 +26,7 @@ public class RunGreedy {
 
         Matrix solved;
 
-        if(initial.getInversions() % 2 == 0) {
+        if(initial.getInversions() % 2 == 0 || this.unsolvableCases.contains(initial.getData())) {
             try{
                 long start = System.currentTimeMillis();
                 long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
@@ -44,6 +48,7 @@ public class RunGreedy {
                 this.times.add(executionTime);
                 this.memoryUsage.add(memUsedInMegabytes);
             }catch (OutOfMemoryError e){
+                this.unsolvableCases.add(initial);
                 throw e;
             }
         } else {
@@ -65,7 +70,7 @@ public class RunGreedy {
         long timeSum = this.times.stream().mapToLong(t -> (long) t).sum();
         long memorySum = this.memoryUsage.stream().mapToLong(m -> (long) m).sum();
 
-        System.out.println("Average Time: " + timeSum / this.times.size());
-        System.out.println("Average Memory Usage: " + memorySum / this.memoryUsage.size());
+        System.out.println("Average Time: " + timeSum / this.times.size() + "ms");
+        System.out.println("Average Memory Usage: " + memorySum / this.memoryUsage.size() + "MB");
     }
 }
