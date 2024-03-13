@@ -16,13 +16,17 @@ public class Node{
     }
 
     private int calculateLevel() {
-        if(parent == null){
+        if(this.parent == null){
             return 0;
         }
-        return parent.getLevel() + 1;
+        return this.parent.getLevel() + 1;
     }
-    public int calculatePathCost(){
-        return parent.getPathCost() + cost;
+    public void calculatePathCost(){
+        if(this.parent == null){
+            this.setPathCost(cost);
+        } else{
+            this.setPathCost(this.parent.getPathCost() + cost);
+        }
     }
 
     public Node getParent() {
