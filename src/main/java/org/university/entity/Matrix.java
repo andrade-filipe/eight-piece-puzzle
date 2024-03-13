@@ -7,12 +7,11 @@ import java.util.Random;
 public class Matrix {
 
     final public static int MATRIX_SIZE = 3;
-    final public static int[] ROW_MOVES = {1, 0, -1, 0};
-    final public static int[] COL_MOVES = {0, -1, 0, 1};
 
     private ArrayList possibilities;
     private Random randomNumber;
     private int[][] data;
+    private int blankX, blankY;
 
     public Matrix() {
         this.possibilities = new ArrayList();
@@ -23,12 +22,14 @@ public class Matrix {
         this.generatePuzzle();
     }
 
-    public Matrix(int[][] data) {
+    public Matrix(int[][] data, int blankX, int blankY) {
         this.data = data;
+        this.blankX = blankX;
+        this.blankY = blankY;
     }
 
     public boolean checkMove(int x, int y) {
-        int check = (x >= 0 && x < MATRIX_SIZE && y >= 0 && y < MATRIX_SIZE) ? 1 : 0;
+        int check = x >= 0 && x < MATRIX_SIZE && y >= 0 && y < MATRIX_SIZE ? 1 : 0;
         return check > 0;
     }
 
@@ -37,6 +38,10 @@ public class Matrix {
         for (int i = 0; i < MATRIX_SIZE; i++) {
             for (int j = 0; j < MATRIX_SIZE; j++) {
                 this.data[i][j] = (int) arr.get(k);
+                if((int) arr.get(k) == 0){
+                    this.setBlankX(j);
+                    this.setBlankY(i);
+                }
                 k--;
             }
         }
@@ -56,12 +61,71 @@ public class Matrix {
         this.add(randomize);
     }
 
+    public Matrix moveRight(){
+        if(this.checkMove(this.getBlankX() + 1, this.getBlankY())){
+            this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY()][this.getBlankX() + 1];
+            this.data[this.getBlankY()][this.getBlankX() + 1] = 0;
+            this.setBlankX(this.getBlankX() + 1);
+            return this;
+        }
+
+        return null;
+    }
+
+    public Matrix moveLeft(){
+        if(this.checkMove(this.getBlankX() - 1, this.getBlankY())){
+            this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY()][this.getBlankX() - 1];
+            this.data[this.getBlankY()][this.getBlankX() - 1] = 0;
+            this.setBlankX(this.getBlankX() - 1);
+            return this;
+        }
+
+        return null;
+    }
+
+    public Matrix moveUp(){
+        if(this.checkMove(this.getBlankX(), this.getBlankY() - 1)){
+            this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY() - 1][this.getBlankX()];
+            this.data[this.getBlankY() - 1][this.getBlankX()] = 0;
+            this.setBlankY(this.getBlankY() - 1);
+            return this;
+        }
+
+        return null;
+    }
+    public Matrix moveDown(){
+        if(this.checkMove(this.getBlankX(), this.getBlankY() + 1)){
+            this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY() + 1][this.getBlankX()];
+            this.data[this.getBlankY() + 1][this.getBlankX()] = 0;
+            this.setBlankY(this.getBlankY() + 1);
+            return this;
+        }
+
+        return null;
+    }
+
     public int[][] getData() {
         return data;
     }
 
     public void setData(int[][] data) {
         this.data = data;
+    }
+
+    public int getBlankX() {
+        return blankX;
+    }
+
+    public void setBlankX(int blankX) {
+        this.blankX = blankX;
+    }
+
+    public int getBlankY() {
+        return blankY;
+    }
+
+    public void setBlankY(int blankY) {
+        this.blankY = blankY;
     }
 
     @Override
