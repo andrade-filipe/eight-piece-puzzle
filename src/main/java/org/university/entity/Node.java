@@ -6,6 +6,16 @@ public class Node{
     private int cost;
     private int level;
 
+    public Node(Node parent, Matrix puzzle) {
+        this.parent = parent;
+        this.puzzle = new Matrix(puzzle.getData(), puzzle.getBlankX(), puzzle.getBlankY());
+        this.level = calculateLevel();
+    }
+
+    public int calculateLevel() {
+        return parent.getLevel() + 1;
+    }
+
     public Node getParent() {
         return parent;
     }

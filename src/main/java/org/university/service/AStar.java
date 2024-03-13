@@ -8,4 +8,9 @@ public class AStar implements Tecnique {
     public Matrix solve() {
         return null;
     }
+
+    @Override
+    public int calculateCost(int[][] matrix, int[][] solvedMatrix) {
+        return 0;
+    }
 }
