@@ -6,7 +6,6 @@ import org.university.entity.Node;
 import org.university.util.CostComparator;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.PriorityQueue;
 
 public class Greedy extends Tecnique {
@@ -23,11 +22,9 @@ public class Greedy extends Tecnique {
 
     @Override
     public Matrix solve(Matrix initial, int[][] solution) {
-        long start = System.currentTimeMillis();
-        /*---------------------------------------*/
-
         Node root = new Node(null, initial);
-        root.setCost(calculateCost(root.getPuzzle().getData(), solution));
+        int rootCost = calculateCost(root.getPuzzle().getData(), solution);
+        root.setCost(rootCost);
 
         this.queue.add(root);
 
@@ -35,7 +32,7 @@ public class Greedy extends Tecnique {
             Node node = this.queue.peek();
             this.queue.poll();
 
-            if(Objects.requireNonNull(node).getCost() == 0){
+            if(node.getCost() == 0){
                 return node.getPuzzle();
             }
 
@@ -80,12 +77,6 @@ public class Greedy extends Tecnique {
                 }
             }
         }
-
-        /*---------------------------------------*/
-        long finish = System.currentTimeMillis();
-        long executionTime = finish - start;
-        System.out.println("Time: " + executionTime + "ms");
-
         return null;
     }
 

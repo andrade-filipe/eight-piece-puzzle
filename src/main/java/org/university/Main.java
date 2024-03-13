@@ -10,7 +10,18 @@ public class Main {
 
         Greedy greedy = new Greedy();
 
+        long start = System.currentTimeMillis();
+        long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+
         Matrix solved = greedy.solve(initial, Tecnique.SOLUTION);
+
+        long finish = System.currentTimeMillis();
+        long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        long executionTime = finish - start;
+        long actualMemUsed = afterUsedMem - beforeUsedMem;
+        System.out.println("Time: " + executionTime + "ms");
+        System.out.println("Memory: " + actualMemUsed);
+
         System.out.println(solved);
     }
 }

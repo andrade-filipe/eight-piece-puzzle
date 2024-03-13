@@ -29,19 +29,6 @@ public class Matrix {
         this.copyData(data);
     }
 
-    private void copyData(int[][] data){
-        for (int i = 0; i < MATRIX_SIZE; i++) {
-            for (int j = 0; j < MATRIX_SIZE; j++) {
-                this.data[i][j] = data[i][j];
-            }
-        }
-    }
-
-    private boolean checkMove(int x, int y) {
-        int check = x >= 0 && x < MATRIX_SIZE && y >= 0 && y < MATRIX_SIZE ? 1 : 0;
-        return check > 0;
-    }
-
     public void add(ArrayList arr) {
         int k = arr.size() - 1;
         for (int i = 0; i < MATRIX_SIZE; i++) {
@@ -68,6 +55,19 @@ public class Matrix {
             i--;
         }
         this.add(randomize);
+    }
+
+    private void copyData(int[][] data){
+        for (int i = 0; i < MATRIX_SIZE; i++) {
+            for (int j = 0; j < MATRIX_SIZE; j++) {
+                this.data[i][j] = data[i][j];
+            }
+        }
+    }
+
+    private boolean checkMove(int x, int y) {
+        int check = x >= 0 && x < MATRIX_SIZE && y >= 0 && y < MATRIX_SIZE ? 1 : 0;
+        return check > 0;
     }
 
     public void moveRight(){
