@@ -32,6 +32,8 @@ public class Greedy extends Tecnique {
             Node node = queue.peek();
             queue.poll();
 
+            System.out.println("WHILE= " + node.getPuzzle());
+
             if(node.getCost() == 0){
                 return node.getPuzzle();
             }

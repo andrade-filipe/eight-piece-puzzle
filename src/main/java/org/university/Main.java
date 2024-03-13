@@ -10,7 +10,7 @@ public class Main {
 
         Greedy greedy = new Greedy();
 
-        Matrix solved = greedy.solve(initial, Tecnique.SOLUTION_TWO);
+        Matrix solved = greedy.solve(initial, Tecnique.SOLUTION);
         System.out.println(solved);
     }
 }
