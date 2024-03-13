@@ -10,6 +10,8 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 
 public class Greedy extends Tecnique {
+
+    final public static int MAX_NUMBER_OF_MOVES = 4;
     PriorityQueue<Node> queue;
 
     ArrayList<int[][]> cache;
@@ -31,41 +33,52 @@ public class Greedy extends Tecnique {
 
         while(queueIsNotEmpty()){
             Node node = this.queue.peek();
-            this.queue.clear();
-
-            System.out.println("WHILE= " + node.getPuzzle());
+            this.queue.poll();
 
             if(Objects.requireNonNull(node).getCost() == 0){
                 return node.getPuzzle();
             }
 
-//            if(this.cache.contains(node.getPuzzle().getData())){
-//                continue;
-//            }
+            for (int i = 0; i < MAX_NUMBER_OF_MOVES; i++) {
+                if(node.getPuzzle().checkRight() && i == 0){
+                    Matrix cloneMatrix = new Matrix(node.getPuzzle().getData(), node.getPuzzle().getBlankX(), node.getPuzzle().getBlankY());
 
-            if(node.getPuzzle().checkRight()){
-                Matrix cloneMatrix = node.getPuzzle();
-                Node child = new Node(node, cloneMatrix.moveRight());
-                child.setCost(calculateCost(child.getPuzzle().getData(), solution));
-                this.queue.add(child);
-            } else if (node.getPuzzle().checkLeft()){
-                Matrix cloneMatrix = node.getPuzzle();
-                Node child = new Node(node, cloneMatrix.moveLeft());
-                child.setCost(calculateCost(child.getPuzzle().getData(), solution));
-                this.queue.add(child);
-            } else if(node.getPuzzle().checkUp()){
-                Matrix cloneMatrix = node.getPuzzle();
-                Node child = new Node(node, cloneMatrix.moveUp());
-                child.setCost(calculateCost(child.getPuzzle().getData(), solution));
-                this.queue.add(child);
-            } else if(node.getPuzzle().checkDown()){
-                Matrix cloneMatrix = node.getPuzzle();
-                Node child = new Node(node, cloneMatrix.moveDown());
-                child.setCost(calculateCost(child.getPuzzle().getData(), solution));
-                this.queue.add(child);
+                    cloneMatrix.moveRight();
+
+                    Node child = new Node(node, cloneMatrix);
+                    int cost = calculateCost(cloneMatrix.getData(), solution);
+                    child.setCost(cost);
+                    this.queue.add(child);
+                } else if (node.getPuzzle().checkLeft() && i == 1){
+                    Matrix cloneMatrix = new Matrix(node.getPuzzle().getData(), node.getPuzzle().getBlankX(), node.getPuzzle().getBlankY());
+
+                    cloneMatrix.moveLeft();
+
+                    Node child = new Node(node, cloneMatrix);
+                    int cost = calculateCost(cloneMatrix.getData(), solution);
+                    child.setCost(cost);
+                    this.queue.add(child);
+                } else if(node.getPuzzle().checkUp() && i == 2){
+                    Matrix cloneMatrix = new Matrix(node.getPuzzle().getData(), node.getPuzzle().getBlankX(), node.getPuzzle().getBlankY());
+
+                    cloneMatrix.moveUp();
+
+                    Node child = new Node(node, cloneMatrix);
+                    int cost = calculateCost(cloneMatrix.getData(), solution);
+                    child.setCost(cost);
+                    this.queue.add(child);
+                } else if(node.getPuzzle().checkDown() && i == 3){
+                    Matrix cloneMatrix = new Matrix(node.getPuzzle().getData(), node.getPuzzle().getBlankX(), node.getPuzzle().getBlankY());
+
+                    cloneMatrix.moveDown();
+
+                    Node child = new Node(node, cloneMatrix);
+
+                    int cost = calculateCost(cloneMatrix.getData(), solution);
+                    child.setCost(cost);
+                    this.queue.add(child);
+                }
             }
-
-//            this.cache.add(node.getPuzzle().getData());
         }
 
         /*---------------------------------------*/

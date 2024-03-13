@@ -9,7 +9,7 @@ public class Node{
 
     public Node(Node parent, Matrix puzzle) {
         this.parent = parent;
-        this.puzzle = new Matrix(puzzle.getData(), puzzle.getBlankX(), puzzle.getBlankY());
+        this.puzzle = puzzle;
         this.level = calculateLevel();
         this.cost = 0;
         this.pathCost = 0;

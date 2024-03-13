@@ -22,9 +22,19 @@ public class Matrix {
     }
 
     public Matrix(int[][] data, int blankX, int blankY) {
-        this.data = data;
+        this.data = new int[MATRIX_SIZE][MATRIX_SIZE];
         this.blankX = blankX;
         this.blankY = blankY;
+
+        this.copyData(data);
+    }
+
+    private void copyData(int[][] data){
+        for (int i = 0; i < MATRIX_SIZE; i++) {
+            for (int j = 0; j < MATRIX_SIZE; j++) {
+                this.data[i][j] = data[i][j];
+            }
+        }
     }
 
     private boolean checkMove(int x, int y) {
@@ -60,43 +70,35 @@ public class Matrix {
         this.add(randomize);
     }
 
-    public Matrix moveRight(){
+    public void moveRight(){
         if(this.checkRight()){
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY()][this.getBlankX() + 1];
             this.data[this.getBlankY()][this.getBlankX() + 1] = 0;
             this.setBlankX(this.getBlankX() + 1);
-            return this;
         }
-        return null;
     }
 
-    public Matrix moveLeft(){
+    public void moveLeft(){
         if(checkLeft()){
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY()][this.getBlankX() - 1];
             this.data[this.getBlankY()][this.getBlankX() - 1] = 0;
             this.setBlankX(this.getBlankX() - 1);
-            return this;
         }
-        return null;
     }
 
-    public Matrix moveUp(){
+    public void moveUp(){
         if(checkUp()){
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY() - 1][this.getBlankX()];
             this.data[this.getBlankY() - 1][this.getBlankX()] = 0;
             this.setBlankY(this.getBlankY() - 1);
-            return this;
         }
-        return null;
     }
-    public Matrix moveDown(){
+    public void moveDown(){
         if(checkDown()){
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY() + 1][this.getBlankX()];
             this.data[this.getBlankY() + 1][this.getBlankX()] = 0;
             this.setBlankY(this.getBlankY() + 1);
-            return this;
         }
-        return null;
     }
 
     public boolean checkRight(){
