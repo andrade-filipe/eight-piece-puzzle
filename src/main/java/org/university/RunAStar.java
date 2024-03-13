@@ -4,8 +4,17 @@ import org.university.adapter.Tecnique;
 import org.university.entity.Matrix;
 import org.university.service.AStar;
 
+import java.util.ArrayList;
+
 public class RunAStar {
+
+    public ArrayList times;
+    public ArrayList memoryUsage;
+
     private void run() {
+
+        this.times = new ArrayList();
+        this.memoryUsage = new ArrayList();
         Matrix initial = new Matrix();
 
         AStar astar = new AStar();
@@ -24,16 +33,20 @@ public class RunAStar {
                 long executionTime = finish - start;
                 long actualMemUsed = afterUsedMem - beforeUsedMem;
                 int megaByte = 1048576;
+                long memUsedInMegabytes = actualMemUsed / megaByte;
 
                 System.out.println("Time: " + executionTime + "ms");
-                System.out.println("Memory: " + actualMemUsed / megaByte + "MB");
+                System.out.println("Memory: " + memUsedInMegabytes  + "MB");
                 System.out.println("START: " + initial);
                 System.out.println("SOLVED: " + solved);
+
+                this.times.add(executionTime);
+                this.memoryUsage.add(memUsedInMegabytes);
             }catch (OutOfMemoryError e){
-                run();
+                throw e;
             }
         } else {
-            run();
+            throw new OutOfMemoryError();
         }
     }
 
@@ -41,8 +54,17 @@ public class RunAStar {
         for (int i = 0; i < times; i++) {
             System.out.println("#################################");
             System.out.println("EXECUTION NUMBER: " + i);
-            run();
+            try{
+                run();
+            } catch (OutOfMemoryError e){
+                i--;
+            }
             System.out.println("#################################");
         }
+        long timeSum = this.times.stream().mapToLong(t -> (long) t).sum();
+        long memorySum = this.memoryUsage.stream().mapToLong(m -> (long) m).sum();
+
+        System.out.println("Average Time: " + timeSum / this.times.size());
+        System.out.println("Average Memory Usage: " + memorySum / this.memoryUsage.size());
     }
 }
