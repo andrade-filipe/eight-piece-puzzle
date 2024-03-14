@@ -67,7 +67,6 @@ public class Matrix {
                 this.data[i][j] = data[i][j];
             }
         }
-        this.calculateInversions();
     }
 
     public void calculateInversions(){
@@ -87,35 +86,43 @@ public class Matrix {
         return check > 0;
     }
 
-    public void moveRight(){
+    public Matrix moveRight(){
         if(this.checkRight()){
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY()][this.getBlankX() + 1];
             this.data[this.getBlankY()][this.getBlankX() + 1] = 0;
             this.setBlankX(this.getBlankX() + 1);
+            return this;
         }
+        return null;
     }
 
-    public void moveLeft(){
+    public Matrix moveLeft(){
         if(checkLeft()){
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY()][this.getBlankX() - 1];
             this.data[this.getBlankY()][this.getBlankX() - 1] = 0;
             this.setBlankX(this.getBlankX() - 1);
+            return this;
         }
+        return null;
     }
 
-    public void moveUp(){
+    public Matrix moveUp(){
         if(checkUp()){
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY() - 1][this.getBlankX()];
             this.data[this.getBlankY() - 1][this.getBlankX()] = 0;
             this.setBlankY(this.getBlankY() - 1);
+            return this;
         }
+        return null;
     }
-    public void moveDown(){
+    public Matrix moveDown(){
         if(checkDown()){
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY() + 1][this.getBlankX()];
             this.data[this.getBlankY() + 1][this.getBlankX()] = 0;
             this.setBlankY(this.getBlankY() + 1);
+            return this;
         }
+        return null;
     }
 
     public boolean checkRight(){

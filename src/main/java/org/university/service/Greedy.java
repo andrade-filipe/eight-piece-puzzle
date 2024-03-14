@@ -17,7 +17,7 @@ public class Greedy extends Tecnique {
     }
 
     @Override
-    public Matrix solve(Matrix initial, int[][] solution) {
+    public Node solve(Matrix initial, int[][] solution) {
         Node root = new Node(null, initial);
         int rootCost = calculateCost(root.getPuzzle().getData(), solution);
         root.setCost(rootCost);
@@ -28,47 +28,24 @@ public class Greedy extends Tecnique {
             Node node = this.queue.peek();
             this.queue.poll();
 
+            System.out.println(node.getPuzzle());
+
             if (node.getCost() == 0) {
-                return node.getPuzzle();
+                return node;
             }
 
             for (int i = 0; i < MAX_NUMBER_OF_MOVES; i++) {
                 if (node.getPuzzle().checkRight() && i == 0) {
-                    Matrix cloneMatrix = new Matrix(node.getPuzzle().getData(), node.getPuzzle().getBlankX(), node.getPuzzle().getBlankY());
-
-                    cloneMatrix.moveRight();
-
-                    Node child = new Node(node, cloneMatrix);
-                    int cost = calculateCost(cloneMatrix.getData(), solution);
-                    child.setCost(cost);
+                    Node child = this.doChildCalculations(node, this.createNewStateOf(node).moveRight(), solution);
                     this.queue.add(child);
                 } else if (node.getPuzzle().checkLeft() && i == 1) {
-                    Matrix cloneMatrix = new Matrix(node.getPuzzle().getData(), node.getPuzzle().getBlankX(), node.getPuzzle().getBlankY());
-
-                    cloneMatrix.moveLeft();
-
-                    Node child = new Node(node, cloneMatrix);
-                    int cost = calculateCost(cloneMatrix.getData(), solution);
-                    child.setCost(cost);
+                    Node child = this.doChildCalculations(node, this.createNewStateOf(node).moveLeft(), solution);
                     this.queue.add(child);
                 } else if (node.getPuzzle().checkUp() && i == 2) {
-                    Matrix cloneMatrix = new Matrix(node.getPuzzle().getData(), node.getPuzzle().getBlankX(), node.getPuzzle().getBlankY());
-
-                    cloneMatrix.moveUp();
-
-                    Node child = new Node(node, cloneMatrix);
-                    int cost = calculateCost(cloneMatrix.getData(), solution);
-                    child.setCost(cost);
+                    Node child = this.doChildCalculations(node, this.createNewStateOf(node).moveUp(), solution);
                     this.queue.add(child);
                 } else if (node.getPuzzle().checkDown() && i == 3) {
-                    Matrix cloneMatrix = new Matrix(node.getPuzzle().getData(), node.getPuzzle().getBlankX(), node.getPuzzle().getBlankY());
-
-                    cloneMatrix.moveDown();
-
-                    Node child = new Node(node, cloneMatrix);
-
-                    int cost = calculateCost(cloneMatrix.getData(), solution);
-                    child.setCost(cost);
+                    Node child = this.doChildCalculations(node, this.createNewStateOf(node).moveDown(), solution);
                     this.queue.add(child);
                 }
             }
@@ -78,5 +55,21 @@ public class Greedy extends Tecnique {
 
     private boolean queueIsNotEmpty() {
         return !this.queue.isEmpty();
+    }
+
+    private Matrix createNewStateOf(Node node) {
+        return new Matrix(
+                node.getPuzzle().getData(),
+                node.getPuzzle().getBlankX(),
+                node.getPuzzle().getBlankY()
+        );
+    }
+
+    private Node doChildCalculations(Node parentNode, Matrix state, int[][] solution) {
+        Node child = new Node(parentNode, state);
+        int cost = calculateCost(state.getData(), solution);
+        child.setCost(cost);
+        child.getPuzzle().calculateInversions();
+        return child;
     }
 }

@@ -17,7 +17,7 @@ public class AStar extends Tecnique {
     }
 
     @Override
-    public Matrix solve(Matrix initial, int[][] solution) {
+    public Node solve(Matrix initial, int[][] solution) {
         Node root = new Node(null, initial);
         int rootCost = calculateCost(root.getPuzzle().getData(), solution);
         root.setCost(rootCost);
@@ -31,7 +31,7 @@ public class AStar extends Tecnique {
 
             if (node.getCost() == 0) {
                 System.out.println("Path Cost: " + node.getPathCost());
-                return node.getPuzzle();
+                return node;
             }
 
             for (int i = 0; i < MAX_NUMBER_OF_MOVES; i++) {

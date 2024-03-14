@@ -1,8 +1,8 @@
-package org.university;
+package org.university.service;
 
 import org.university.adapter.Tecnique;
 import org.university.entity.Matrix;
-import org.university.service.AStar;
+import org.university.entity.Node;
 
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ public class RunAStar {
 
         AStar aStar = new AStar();
 
-        Matrix solved;
+        Node solved;
 
         if(initial.getInversions() % 2 == 0 || this.unsolvableCases.contains(initial.getData())) {
             try{

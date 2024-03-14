@@ -1,11 +1,11 @@
 package org.university;
 
+import org.university.service.Greedy;
+
 public class Main {
     public static void main(String[] args) {
-        RunGreedy greedy = new RunGreedy();
-        greedy.run(10);
+        Greedy greedy = new Greedy();
 
-//        RunAStar astar = new RunAStar();
-//        astar.run(5);
+        greedy.execute(1);
     }
 }
