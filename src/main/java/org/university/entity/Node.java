@@ -7,6 +7,14 @@ public class Node{
     private int level;
     private int pathCost;
 
+    public Node(){
+        this.parent = null;
+        this.puzzle = null;
+        this.cost = 0;
+        this.level = 0;
+        this.pathCost = 0;
+    }
+
     public Node(Node parent, Matrix puzzle) {
         this.parent = parent;
         this.puzzle = puzzle;

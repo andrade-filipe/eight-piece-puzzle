@@ -3,6 +3,7 @@ package org.university.adapter;
 import org.university.entity.Matrix;
 import org.university.entity.Node;
 import org.university.exception.EvenInversionsException;
+import org.university.exception.HardProblemException;
 
 import java.util.HashMap;
 
@@ -11,6 +12,8 @@ public abstract class Tecnique {
     final public static int[][] SOLUTION_TWO = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
 
     public Node holdCurrentState;
+
+    public int countTry = 0;
 
     //Saves solved positions and solvable positions that exceed memory
     public HashMap<int[][], Node> cachePositions;
@@ -38,8 +41,8 @@ public abstract class Tecnique {
                 solved = this.solve(initial, SOLUTION);
                 System.out.println(initial);
                 System.out.println(solved.getPuzzle());
-            } catch (OutOfMemoryError e) {
-                throw e;
+            } catch (HardProblemException e){
+                System.out.println("Hard Problem");
             }
         } else {
             throw new EvenInversionsException();
@@ -51,9 +54,9 @@ public abstract class Tecnique {
             try {
                 this.execute();
                 System.out.println("#################################");
-                System.out.println("EXECUTION NUMBER: " + i + 1);
+                System.out.println("EXECUTION NUMBER: " + (i + 1));
                 System.out.println("#################################");
-            } catch (OutOfMemoryError | EvenInversionsException e) {
+            } catch (OutOfMemoryError | EvenInversionsException | HardProblemException e) {
                 i--;
             }
         }
