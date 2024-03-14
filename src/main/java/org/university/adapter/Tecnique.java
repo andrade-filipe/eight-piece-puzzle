@@ -10,6 +10,8 @@ public abstract class Tecnique {
     final public static int[][] SOLUTION = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
     final public static int[][] SOLUTION_TWO = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
 
+    public Node holdCurrentState;
+
     //Saves solved positions and solvable positions that exceed memory
     public HashMap<int[][], Node> cachePositions;
 

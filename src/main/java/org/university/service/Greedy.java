@@ -24,31 +24,21 @@ public class Greedy extends Tecnique {
 
         this.queue.add(root);
 
-        while (queueIsNotEmpty()) {
-            Node node = this.queue.peek();
-            this.queue.poll();
+        int countTry;
+        try{
+            while (queueIsNotEmpty()) {
+                Node node = this.queue.peek();
+                this.holdCurrentState = node;
+                this.queue.poll();
 
-            System.out.println(node.getPuzzle());
-
-            if (node.getCost() == 0) {
-                return node;
-            }
-
-            for (int i = 0; i < MAX_NUMBER_OF_MOVES; i++) {
-                if (node.getPuzzle().checkRight() && i == 0) {
-                    Node child = this.doChildCalculations(node, this.createNewStateOf(node).moveRight(), solution);
-                    this.queue.add(child);
-                } else if (node.getPuzzle().checkLeft() && i == 1) {
-                    Node child = this.doChildCalculations(node, this.createNewStateOf(node).moveLeft(), solution);
-                    this.queue.add(child);
-                } else if (node.getPuzzle().checkUp() && i == 2) {
-                    Node child = this.doChildCalculations(node, this.createNewStateOf(node).moveUp(), solution);
-                    this.queue.add(child);
-                } else if (node.getPuzzle().checkDown() && i == 3) {
-                    Node child = this.doChildCalculations(node, this.createNewStateOf(node).moveDown(), solution);
-                    this.queue.add(child);
+                if (node.getCost() == 0) {
+                    return node;
                 }
+
+                performPossibleMoves(node, solution);
             }
+        } catch (OutOfMemoryError e){
+
         }
         return null;
     }
@@ -71,5 +61,39 @@ public class Greedy extends Tecnique {
         child.setCost(cost);
         child.getPuzzle().calculateInversions();
         return child;
+    }
+
+    private void performPossibleMoves(Node node, int[][] solution){
+        tryRight(node,solution);
+        tryLeft(node,solution);
+        tryDown(node, solution);
+        tryUp(node, solution);
+    }
+
+    private void tryRight(Node parent, int[][] solution){
+        if (parent.getPuzzle().checkRight()) {
+            Node child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveRight(), solution);
+            this.queue.add(child);
+        }
+    }
+
+    private void tryLeft(Node parent, int[][] solution){
+        if (parent.getPuzzle().checkLeft()) {
+            Node child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveLeft(), solution);
+            this.queue.add(child);
+        }
+    }
+
+    private void tryDown(Node parent, int[][] solution){
+        if (parent.getPuzzle().checkDown()) {
+            Node child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveDown(), solution);
+            this.queue.add(child);
+        }
+    }
+    private void tryUp(Node parent, int[][] solution){
+        if (parent.getPuzzle().checkUp()) {
+            Node child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveUp(), solution);
+            this.queue.add(child);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package org.university.service;
+package org.university.service.refactor;
 
 import org.university.adapter.Tecnique;
 import org.university.entity.Matrix;
