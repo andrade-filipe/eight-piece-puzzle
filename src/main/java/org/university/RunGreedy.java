@@ -33,8 +33,8 @@ public class RunGreedy {
 
                 solved = greedy.solve(initial, Tecnique.SOLUTION);
 
-                long finish = System.currentTimeMillis();
                 long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+                long finish = System.currentTimeMillis();
                 long executionTime = finish - start;
                 long actualMemUsed = afterUsedMem - beforeUsedMem;
                 int megaByte = 1048576;

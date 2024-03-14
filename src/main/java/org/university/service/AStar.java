@@ -30,6 +30,7 @@ public class AStar extends Tecnique {
             this.queue.poll();
 
             if (node.getCost() == 0) {
+                System.out.println("Path Cost: " + node.getPathCost());
                 return node.getPuzzle();
             }
 

@@ -3,9 +3,9 @@ package org.university;
 public class Main {
     public static void main(String[] args) {
         RunGreedy greedy = new RunGreedy();
-        greedy.run(5);
+        greedy.run(10);
 
 //        RunAStar astar = new RunAStar();
-//        astar.run(1);
+//        astar.run(5);
     }
 }
