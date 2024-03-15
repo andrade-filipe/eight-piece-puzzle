@@ -1,10 +1,12 @@
 package org.university.entity;
 
+import org.university.adapter.Matrix;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Matrix {
+public class ClassicMatrix implements Matrix {
     final public static int MATRIX_SIZE = 3;
     private ArrayList possibilities;
     private Random randomNumber;
@@ -12,15 +14,15 @@ public class Matrix {
     private int blankX, blankY;
     private int inversions;
 
-    public Matrix() {
+    public ClassicMatrix() {
         this.possibilities = new ArrayList();
-        this.possibilities.addAll(List.of(0,1,2,3,4,5,6,7,8));
-        this.randomNumber= new Random();
+        this.possibilities.addAll(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8));
+        this.randomNumber = new Random();
         this.data = new int[MATRIX_SIZE][MATRIX_SIZE];
         this.generatePuzzle();
     }
 
-    public Matrix(int[][] data, int blankX, int blankY) {
+    public ClassicMatrix(int[][] data, int blankX, int blankY) {
         this.data = new int[MATRIX_SIZE][MATRIX_SIZE];
         this.blankX = blankX;
         this.blankY = blankY;
@@ -33,7 +35,7 @@ public class Matrix {
         for (int i = 0; i < MATRIX_SIZE; i++) {
             for (int j = 0; j < MATRIX_SIZE; j++) {
                 this.data[i][j] = (int) arr.get(k);
-                if((int) arr.get(k) == 0){
+                if ((int) arr.get(k) == 0) {
                     this.setBlankX(j);
                     this.setBlankY(i);
                 }
@@ -43,12 +45,13 @@ public class Matrix {
         this.calculateInversions();
     }
 
+    @Override
     public void generatePuzzle() {
         int i = 9;
 
         ArrayList randomize = new ArrayList();
 
-        while (i > 0){
+        while (i > 0) {
             int index = this.randomNumber.nextInt(i);
             randomize.add(this.possibilities.get(index));
             this.possibilities.remove(index);
@@ -57,7 +60,7 @@ public class Matrix {
         this.add(randomize);
     }
 
-    private void copyData(int[][] data){
+    private void copyData(int[][] data) {
         for (int i = 0; i < MATRIX_SIZE; i++) {
             for (int j = 0; j < MATRIX_SIZE; j++) {
                 this.data[i][j] = data[i][j];
@@ -65,11 +68,12 @@ public class Matrix {
         }
     }
 
-    public void calculateInversions(){
+    @Override
+    public void calculateInversions() {
         int count = 0;
-        for (int i = 0; i < Matrix.MATRIX_SIZE - 1; i++) {
-            for (int j = 0; j < Matrix.MATRIX_SIZE - 1; j++) {
-                if(this.data[i][j] > this.data[i][j + 1]){
+        for (int i = 0; i < ClassicMatrix.MATRIX_SIZE - 1; i++) {
+            for (int j = 0; j < ClassicMatrix.MATRIX_SIZE - 1; j++) {
+                if (this.data[i][j] > this.data[i][j + 1]) {
                     count++;
                 }
             }
@@ -82,8 +86,9 @@ public class Matrix {
         return check > 0;
     }
 
-    public Matrix moveRight(){
-        if(this.checkRight()){
+    @Override
+    public ClassicMatrix moveRight() {
+        if (this.checkRight()) {
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY()][this.getBlankX() + 1];
             this.data[this.getBlankY()][this.getBlankX() + 1] = 0;
             this.setBlankX(this.getBlankX() + 1);
@@ -92,8 +97,9 @@ public class Matrix {
         return null;
     }
 
-    public Matrix moveLeft(){
-        if(checkLeft()){
+    @Override
+    public ClassicMatrix moveLeft() {
+        if (checkLeft()) {
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY()][this.getBlankX() - 1];
             this.data[this.getBlankY()][this.getBlankX() - 1] = 0;
             this.setBlankX(this.getBlankX() - 1);
@@ -102,8 +108,9 @@ public class Matrix {
         return null;
     }
 
-    public Matrix moveUp(){
-        if(checkUp()){
+    @Override
+    public ClassicMatrix moveUp() {
+        if (checkUp()) {
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY() - 1][this.getBlankX()];
             this.data[this.getBlankY() - 1][this.getBlankX()] = 0;
             this.setBlankY(this.getBlankY() - 1);
@@ -111,8 +118,10 @@ public class Matrix {
         }
         return null;
     }
-    public Matrix moveDown(){
-        if(checkDown()){
+
+    @Override
+    public ClassicMatrix moveDown() {
+        if (checkDown()) {
             this.data[this.getBlankY()][this.getBlankX()] = this.data[this.getBlankY() + 1][this.getBlankX()];
             this.data[this.getBlankY() + 1][this.getBlankX()] = 0;
             this.setBlankY(this.getBlankY() + 1);
@@ -121,19 +130,23 @@ public class Matrix {
         return null;
     }
 
-    public boolean checkRight(){
+    @Override
+    public boolean checkRight() {
         return this.checkMove(this.getBlankX() + 1, this.getBlankY());
     }
 
-    public boolean checkLeft(){
+    @Override
+    public boolean checkLeft() {
         return this.checkMove(this.getBlankX() - 1, this.getBlankY());
     }
 
-    public boolean checkUp(){
+    @Override
+    public boolean checkUp() {
         return this.checkMove(this.getBlankX(), this.getBlankY() - 1);
     }
 
-    public boolean checkDown(){
+    @Override
+    public boolean checkDown() {
         return this.checkMove(this.getBlankX(), this.getBlankY() + 1);
     }
 

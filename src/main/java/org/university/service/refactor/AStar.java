@@ -1,8 +1,8 @@
 package org.university.service.refactor;
 
 import org.university.adapter.Tecnique;
-import org.university.entity.Matrix;
-import org.university.entity.Node;
+import org.university.entity.ClassicMatrix;
+import org.university.entity.ClassicNode;
 import org.university.util.PathCostComparator;
 
 import java.util.PriorityQueue;
@@ -10,15 +10,15 @@ import java.util.PriorityQueue;
 public class AStar extends Tecnique {
 
     final public static int MAX_NUMBER_OF_MOVES = 4;
-    PriorityQueue<Node> queue;
+    PriorityQueue<ClassicNode> queue;
 
     public AStar() {
         this.queue = new PriorityQueue<>(new PathCostComparator());
     }
 
     @Override
-    public Node solve(Matrix initial, int[][] solution) {
-        Node root = new Node(null, initial);
+    public ClassicNode solve(ClassicMatrix initial, int[][] solution) {
+        ClassicNode root = new ClassicNode(null, initial);
         int rootCost = calculateCost(root.getPuzzle().getData(), solution);
         root.setCost(rootCost);
         root.calculatePathCost();
@@ -26,51 +26,51 @@ public class AStar extends Tecnique {
         this.queue.add(root);
 
         while (queueIsNotEmpty()) {
-            Node node = this.queue.peek();
+            ClassicNode classicNode = this.queue.peek();
             this.queue.poll();
 
-            if (node.getCost() == 0) {
-                System.out.println("Path Cost: " + node.getPathCost());
-                return node;
+            if (classicNode.getCost() == 0) {
+                System.out.println("Path Cost: " + classicNode.getPathCost());
+                return classicNode;
             }
 
             for (int i = 0; i < MAX_NUMBER_OF_MOVES; i++) {
-                if (node.getPuzzle().checkRight() && i == 0) {
-                    Matrix cloneMatrix = new Matrix(node.getPuzzle().getData(), node.getPuzzle().getBlankX(), node.getPuzzle().getBlankY());
+                if (classicNode.getPuzzle().checkRight() && i == 0) {
+                    ClassicMatrix cloneMatrix = new ClassicMatrix(classicNode.getPuzzle().getData(), classicNode.getPuzzle().getBlankX(), classicNode.getPuzzle().getBlankY());
 
                     cloneMatrix.moveRight();
 
-                    Node child = new Node(node, cloneMatrix);
+                    ClassicNode child = new ClassicNode(classicNode, cloneMatrix);
                     int cost = calculateCost(cloneMatrix.getData(), solution);
                     child.setCost(cost);
                     child.calculatePathCost();
                     this.queue.add(child);
-                } else if (node.getPuzzle().checkLeft() && i == 1) {
-                    Matrix cloneMatrix = new Matrix(node.getPuzzle().getData(), node.getPuzzle().getBlankX(), node.getPuzzle().getBlankY());
+                } else if (classicNode.getPuzzle().checkLeft() && i == 1) {
+                    ClassicMatrix cloneMatrix = new ClassicMatrix(classicNode.getPuzzle().getData(), classicNode.getPuzzle().getBlankX(), classicNode.getPuzzle().getBlankY());
 
                     cloneMatrix.moveLeft();
 
-                    Node child = new Node(node, cloneMatrix);
+                    ClassicNode child = new ClassicNode(classicNode, cloneMatrix);
                     int cost = calculateCost(cloneMatrix.getData(), solution);
                     child.setCost(cost);
                     child.calculatePathCost();
                     this.queue.add(child);
-                } else if (node.getPuzzle().checkUp() && i == 2) {
-                    Matrix cloneMatrix = new Matrix(node.getPuzzle().getData(), node.getPuzzle().getBlankX(), node.getPuzzle().getBlankY());
+                } else if (classicNode.getPuzzle().checkUp() && i == 2) {
+                    ClassicMatrix cloneMatrix = new ClassicMatrix(classicNode.getPuzzle().getData(), classicNode.getPuzzle().getBlankX(), classicNode.getPuzzle().getBlankY());
 
                     cloneMatrix.moveUp();
 
-                    Node child = new Node(node, cloneMatrix);
+                    ClassicNode child = new ClassicNode(classicNode, cloneMatrix);
                     int cost = calculateCost(cloneMatrix.getData(), solution);
                     child.setCost(cost);
                     child.calculatePathCost();
                     this.queue.add(child);
-                } else if (node.getPuzzle().checkDown() && i == 3) {
-                    Matrix cloneMatrix = new Matrix(node.getPuzzle().getData(), node.getPuzzle().getBlankX(), node.getPuzzle().getBlankY());
+                } else if (classicNode.getPuzzle().checkDown() && i == 3) {
+                    ClassicMatrix cloneMatrix = new ClassicMatrix(classicNode.getPuzzle().getData(), classicNode.getPuzzle().getBlankX(), classicNode.getPuzzle().getBlankY());
 
                     cloneMatrix.moveDown();
 
-                    Node child = new Node(node, cloneMatrix);
+                    ClassicNode child = new ClassicNode(classicNode, cloneMatrix);
                     int cost = calculateCost(cloneMatrix.getData(), solution);
                     child.setCost(cost);
                     child.calculatePathCost();

@@ -1,12 +1,12 @@
 package org.university.util;
 
-import org.university.entity.Node;
+import org.university.entity.ClassicNode;
 
 import java.util.Comparator;
 
-public class CostComparator implements Comparator<Node> {
+public class CostComparator implements Comparator<ClassicNode> {
     @Override
-    public int compare(Node node1, Node node2) {
-        return (node1.getCost() + node1.getLevel() > node2.getCost() + node2.getLevel()) ? 1 : -1;
+    public int compare(ClassicNode classicNode1, ClassicNode classicNode2) {
+        return (classicNode1.getCost() + classicNode1.getLevel() > classicNode2.getCost() + classicNode2.getLevel()) ? 1 : -1;
     }
 }

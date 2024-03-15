@@ -1,7 +1,7 @@
 package org.university.entity;
 
 public class HashNode {
-    private Node parent;
+    private ClassicNode parent;
     private HashMatrix puzzle;
     private int cost;
     private int level;
@@ -17,7 +17,7 @@ public class HashNode {
         this.pathCost = 0;
     }
 
-    public HashNode(Node parent, HashMatrix puzzle) {
+    public HashNode(ClassicNode parent, HashMatrix puzzle) {
         this.parent = parent;
         this.puzzle = puzzle;
         this.level = calculateLevel();
@@ -39,11 +39,11 @@ public class HashNode {
         }
     }
 
-    public Node getParent() {
+    public ClassicNode getParent() {
         return parent;
     }
 
-    public void setParent(Node parent) {
+    public void setParent(ClassicNode parent) {
         this.parent = parent;
     }
 

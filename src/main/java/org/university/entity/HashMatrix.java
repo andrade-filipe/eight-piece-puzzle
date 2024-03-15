@@ -1,19 +1,20 @@
 package org.university.entity;
 
+import org.university.adapter.Matrix;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class HashMatrix {
-    final public static int MATRIX_SIZE = 9;
-    final public static int MATRIX_ROW_SIZE = 3;
-    final private static int ROW_MOVE = 3;
-    final private static int COL_MOVE = 1;
+public class HashMatrix implements Matrix {
     final public static HashMap<Integer, String> DICT_POS_TO_COOR = populateDictionaryPosToCoor();
     final public static HashMap<String, Integer> DICT_COOR_TO_POS = populateDictionaryCoorToPos();
     private ArrayList possibilities;
     private Random randomNumber;
+    final public static int MATRIX_SIZE = 9;
+    final private static int ROW_MOVE = 3;
+    final private static int COL_MOVE = 1;
     private HashMap<String, Integer> data;
     private String blankCoordinate;
     private char col, row;
@@ -36,6 +37,7 @@ public class HashMatrix {
         this.refreshCoordinates(blankPosition);
     }
 
+    @Override
     public void generatePuzzle() {
         while (!this.possibilities.isEmpty()) {
             int getIndex = this.randomNumber.nextInt(this.possibilities.size());
@@ -50,10 +52,11 @@ public class HashMatrix {
         this.calculateInversions();
     }
 
-    public void copyData(HashMap<String, Integer> data) {
+    private void copyData(HashMap<String, Integer> data) {
         this.data = (HashMap<String, Integer>) data.clone();
     }
 
+    @Override
     public void calculateInversions() {
         int count = 0;
         for (int i = 0; i < MATRIX_SIZE; i++) {
@@ -73,6 +76,7 @@ public class HashMatrix {
         this.setCol(this.getBlankCoordinate().charAt(2));
     }
 
+    @Override
     public HashMatrix moveRight(){
         if(checkRight()){
             this.setInCoordinate(this.getBlankCoordinate(), this.getByCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() + COL_MOVE)));
@@ -88,6 +92,7 @@ public class HashMatrix {
         return null;
     }
 
+    @Override
     public HashMatrix moveLeft(){
         if(checkLeft()){
             this.setInCoordinate(this.getBlankCoordinate(), this.getByCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() - COL_MOVE)));
@@ -103,6 +108,7 @@ public class HashMatrix {
         return null;
     }
 
+    @Override
     public HashMatrix moveUp(){
         if(checkUp()){
             this.setInCoordinate(this.getBlankCoordinate(), this.getByCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() - ROW_MOVE)));
@@ -118,6 +124,7 @@ public class HashMatrix {
         return null;
     }
 
+    @Override
     public HashMatrix moveDown(){
         if(checkDown()){
             this.setInCoordinate(this.getBlankCoordinate(), this.getByCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() + ROW_MOVE)));
@@ -133,18 +140,22 @@ public class HashMatrix {
         return null;
     }
 
+    @Override
     public boolean checkRight(){
         return this.getCol() != '2';
     }
 
+    @Override
     public boolean checkLeft(){
         return this.getCol() != '0';
     }
 
+    @Override
     public boolean checkUp(){
         return this.getRow() != '0';
     }
 
+    @Override
     public boolean checkDown(){
         return this.getRow() != '2';
     }

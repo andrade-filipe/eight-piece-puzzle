@@ -1,8 +1,8 @@
 package org.university.service;
 
 import org.university.adapter.Tecnique;
-import org.university.entity.Matrix;
-import org.university.entity.Node;
+import org.university.entity.ClassicMatrix;
+import org.university.entity.ClassicNode;
 import org.university.exception.RepeatedStateException;
 import org.university.util.CostComparator;
 
@@ -17,8 +17,8 @@ public class Greedy extends Tecnique {
     }
 
     @Override
-    public Node solve(Matrix initial, int[][] solution) {
-        Node root = new Node(null, initial);
+    public ClassicNode solve(ClassicMatrix initial, int[][] solution) {
+        ClassicNode root = new ClassicNode(null, initial);
         int rootCost = calculateCost(root.getPuzzle().getData(), solution);
         root.setCost(rootCost);
         this.queue.add(root);
@@ -26,28 +26,28 @@ public class Greedy extends Tecnique {
         this.numberOfExecutions = 0L;
         while (queueIsNotEmpty()) {
             this.numberOfExecutions++;
-            Node node = this.queue.peek();
+            ClassicNode classicNode = this.queue.peek();
             this.queue.poll();
 
             System.out.println("Size: " + this.queue.size());
 
-            if (node.getCost() == 0) {
+            if (classicNode.getCost() == 0) {
 //                if (this.countTry > 0) {
 //                    this.clearAll();
 //                }
-                return node;
+                return classicNode;
             }
 
-            if(numberOfExecutions > 1 && node.equals(initial)){
+            if(numberOfExecutions > 1 && classicNode.equals(initial)){
                 throw new RepeatedStateException("Repeating it self");
             }
 
             if(this.numberOfExecutions >= MAX_NUMBER_OF_ITERATIONS){
-                this.holdCurrentState = node;
+                this.holdCurrentState = classicNode;
                 throw new OutOfMemoryError();
             }
 
-            performPossibleMoves(node, solution);
+            performPossibleMoves(classicNode, solution);
         }
         return null;
     }
@@ -56,53 +56,53 @@ public class Greedy extends Tecnique {
         return !this.queue.isEmpty();
     }
 
-    private Matrix createNewStateOf(Node node) {
-        return new Matrix(
-                node.getPuzzle().getData(),
-                node.getPuzzle().getBlankX(),
-                node.getPuzzle().getBlankY()
+    private ClassicMatrix createNewStateOf(ClassicNode classicNode) {
+        return new ClassicMatrix(
+                classicNode.getPuzzle().getData(),
+                classicNode.getPuzzle().getBlankX(),
+                classicNode.getPuzzle().getBlankY()
         );
     }
 
-    private Node doChildCalculations(Node parentNode, Matrix state, int[][] solution) {
-        Node child = new Node(parentNode, state);
+    private ClassicNode doChildCalculations(ClassicNode parentClassicNode, ClassicMatrix state, int[][] solution) {
+        ClassicNode child = new ClassicNode(parentClassicNode, state);
         int cost = calculateCost(state.getData(), solution);
         child.setCost(cost);
         child.getPuzzle().calculateInversions();
         return child;
     }
 
-    private void performPossibleMoves(Node node, int[][] solution) {
-        tryRight(node, solution);
-        tryLeft(node, solution);
-        tryDown(node, solution);
-        tryUp(node, solution);
+    private void performPossibleMoves(ClassicNode classicNode, int[][] solution) {
+        tryRight(classicNode, solution);
+        tryLeft(classicNode, solution);
+        tryDown(classicNode, solution);
+        tryUp(classicNode, solution);
     }
 
-    private void tryRight(Node parent, int[][] solution) {
+    private void tryRight(ClassicNode parent, int[][] solution) {
         if (parent.getPuzzle().checkRight()) {
-            Node child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveRight(), solution);
+            ClassicNode child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveRight(), solution);
             this.queue.add(child);
         }
     }
 
-    private void tryLeft(Node parent, int[][] solution) {
+    private void tryLeft(ClassicNode parent, int[][] solution) {
         if (parent.getPuzzle().checkLeft()) {
-            Node child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveLeft(), solution);
+            ClassicNode child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveLeft(), solution);
             this.queue.add(child);
         }
     }
 
-    private void tryDown(Node parent, int[][] solution) {
+    private void tryDown(ClassicNode parent, int[][] solution) {
         if (parent.getPuzzle().checkDown()) {
-            Node child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveDown(), solution);
+            ClassicNode child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveDown(), solution);
             this.queue.add(child);
         }
     }
 
-    private void tryUp(Node parent, int[][] solution) {
+    private void tryUp(ClassicNode parent, int[][] solution) {
         if (parent.getPuzzle().checkUp()) {
-            Node child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveUp(), solution);
+            ClassicNode child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveUp(), solution);
             this.queue.add(child);
         }
     }

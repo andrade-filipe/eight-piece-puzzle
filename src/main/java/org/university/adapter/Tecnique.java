@@ -1,7 +1,7 @@
 package org.university.adapter;
 
-import org.university.entity.Matrix;
-import org.university.entity.Node;
+import org.university.entity.ClassicMatrix;
+import org.university.entity.ClassicNode;
 import org.university.exception.EvenInversionsException;
 import org.university.exception.HardProblemException;
 
@@ -13,20 +13,20 @@ public abstract class Tecnique {
     final public static int[][] SOLUTION = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
     final public static int[][] SOLUTION_TWO = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
     public ArrayList<int[][]> statesOfPreviousExecutions = new ArrayList<>();
-    public PriorityQueue<Node> queue;
-    public Node holdCurrentState = new Node();
+    public PriorityQueue<ClassicNode> queue;
+    public ClassicNode holdCurrentState = new ClassicNode();
     public int countTry = 0;
     public long numberOfExecutions = 0L;
 
     //Saves solved positions and solvable positions that exceed memory
-    public HashMap<int[][], Node> cachePositions;
+    public HashMap<int[][], ClassicNode> cachePositions;
 
-    protected abstract Node solve(Matrix initial, int[][] solution);
+    protected abstract ClassicNode solve(ClassicMatrix initial, int[][] solution);
 
     public int calculateCost(int[][] matrix, int[][] solution) {
         int count = 0;
-        for (int i = 0; i < Matrix.MATRIX_SIZE; i++) {
-            for (int j = 0; j < Matrix.MATRIX_SIZE; j++) {
+        for (int i = 0; i < ClassicMatrix.MATRIX_SIZE; i++) {
+            for (int j = 0; j < ClassicMatrix.MATRIX_SIZE; j++) {
                 if (matrix[i][j] != 0 && matrix[i][j] != solution[i][j]) {
                     count++;
                 }
@@ -36,9 +36,9 @@ public abstract class Tecnique {
     }
 
     public void execute() throws OutOfMemoryError, EvenInversionsException, HardProblemException {
-        Matrix initial = new Matrix();
+        ClassicMatrix initial = new ClassicMatrix();
 
-        Node solved;
+        ClassicNode solved;
         if (initial.getInversions() % 2 == 0) {
             try {
                 System.out.println(initial);
@@ -52,7 +52,7 @@ public abstract class Tecnique {
             } catch (OutOfMemoryError e) {
                 System.out.println("Error: " + this.holdCurrentState.getPuzzle());
                 System.out.println("Out of Memory");
-                this.holdCurrentState = new Node();
+                this.holdCurrentState = new ClassicNode();
                 throw e;
             } finally {
                 this.queue.clear();

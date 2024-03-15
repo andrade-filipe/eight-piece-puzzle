@@ -1,8 +1,8 @@
 package org.university.service.refactor;
 
 import org.university.adapter.Tecnique;
-import org.university.entity.Matrix;
-import org.university.entity.Node;
+import org.university.entity.ClassicMatrix;
+import org.university.entity.ClassicNode;
 
 import java.util.ArrayList;
 
@@ -19,11 +19,11 @@ public class RunAStar {
         this.times = new ArrayList();
         this.memoryUsage = new ArrayList();
 
-        Matrix initial = new Matrix();
+        ClassicMatrix initial = new ClassicMatrix();
 
         AStar aStar = new AStar();
 
-        Node solved;
+        ClassicNode solved;
 
         if(initial.getInversions() % 2 == 0 || this.unsolvableCases.contains(initial.getData())) {
             try{
