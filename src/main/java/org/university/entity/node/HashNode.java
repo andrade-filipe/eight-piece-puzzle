@@ -75,19 +75,41 @@ public class HashNode implements Node {
             int valueInThePosition = this.getPuzzle().getData().get(HashMatrix.DICT_POS_TO_COOR.get(i));
             int originalValue = solution.get(HashMatrix.DICT_POS_TO_COOR.get(i));
 
-            if(valueInThePosition == originalValue){
-                continue;
-            }else if (valueInThePosition != originalValue){
-                String currentPosition;
+            if (valueInThePosition != originalValue){
+                //Coordenada Atual
+                String currentPosition = this.getCoordinatesOfValue(valueInThePosition);
+                //Coordenada Que o Valor Deveria Estar
+                String originalPosition = this.getCoordinatesOfValue(solution, valueInThePosition);
+
+                int row = Math.abs((int) currentPosition.charAt(0) - originalPosition.charAt(0));
+                int col = Math.abs((int) currentPosition.charAt(2) - originalPosition.charAt(2));
+                manhattan += row + col;
             }
         }
-
         this.setManhattan(manhattan);
     }
 
     @Override
     public void calculateGeneticFactor() {
 
+    }
+
+    public String getCoordinatesOfValue(int value){
+        for(String key : this.getPuzzle().getData().keySet()){
+            if(this.getPuzzle().getData().get(key).compareTo(value) == 0){
+                return key;
+            }
+        }
+        return null;
+    }
+
+    public String getCoordinatesOfValue(HashMap<String, Integer> matrix ,int value){
+        for(String key : matrix.keySet()){
+            if(matrix.get(key).compareTo(value) == 0){
+                return key;
+            }
+        }
+        return null;
     }
 
     public HashNode getParent() {
