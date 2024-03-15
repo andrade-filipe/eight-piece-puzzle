@@ -8,13 +8,16 @@ import org.university.exception.RepeatedStateException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 
 public abstract class Tecnique {
     final public static int[][] SOLUTION = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
     final public static int[][] SOLUTION_TWO = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
     public ArrayList<int[][]> statesOfPreviousExecutions = new ArrayList<>();
-    public Node holdCurrentState;
+    public PriorityQueue<Node> queue;
+    public Node holdCurrentState = new Node();
     public int countTry = 0;
+    public long numberOfExecutions = 0L;
 
     //Saves solved positions and solvable positions that exceed memory
     public HashMap<int[][], Node> cachePositions;
@@ -39,14 +42,18 @@ public abstract class Tecnique {
         Node solved;
         if (initial.getInversions() % 2 == 0) {
             try {
+                System.out.println(initial);
                 solved = this.solve(initial, SOLUTION);
                 System.out.println(initial);
                 System.out.println(solved.getPuzzle());
-            } catch (HardProblemException e){
+                System.out.println(numberOfExecutions);
+            } catch (HardProblemException e) {
                 System.out.println("Hard Problem");
                 throw e;
-            } catch (OutOfMemoryError e){
+            } catch (OutOfMemoryError e) {
+                System.out.println("Error: " + this.holdCurrentState.getPuzzle());
                 System.out.println("Out of Memory");
+                this.holdCurrentState = new Node();
                 throw e;
             }
         } else {
@@ -67,21 +74,22 @@ public abstract class Tecnique {
         }
     }
 
-    public void clearAll(){
+    public void clearAll() {
         this.countTry = 0;
         this.statesOfPreviousExecutions.clear();
+        this.queue.clear();
         this.holdCurrentState = null;
     }
 
-    public void tryAgain(int[][] solution){
+    public void tryAgain(int[][] solution) {
         this.countTry++;
         this.statesOfPreviousExecutions.add(this.holdCurrentState.getPuzzle().getData());
         this.solve(this.holdCurrentState.getPuzzle(), solution);
     }
 
-    public void resetExecutionFromPreviousState(){
-        if(countTry > 0){
-            if(this.statesOfPreviousExecutions.contains(this.holdCurrentState.getPuzzle().getData())){
+    public void resetExecutionFromPreviousState() {
+        if (countTry > 0) {
+            if (this.statesOfPreviousExecutions.contains(this.holdCurrentState.getPuzzle().getData())) {
                 this.clearAll();
                 System.out.println("Stop execution");
                 throw new RepeatedStateException();

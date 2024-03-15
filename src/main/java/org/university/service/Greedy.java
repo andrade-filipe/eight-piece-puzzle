@@ -3,15 +3,14 @@ package org.university.service;
 import org.university.adapter.Tecnique;
 import org.university.entity.Matrix;
 import org.university.entity.Node;
-import org.university.exception.HardProblemException;
+import org.university.exception.RepeatedStateException;
 import org.university.util.CostComparator;
 
 import java.util.PriorityQueue;
 
 public class Greedy extends Tecnique {
 
-    final public static int MAX_NUMBER_OF_MOVES = 4;
-    private PriorityQueue<Node> queue;
+    final public static long MAX_NUMBER_OF_ITERATIONS = 4000000L;
 
     public Greedy() {
         this.queue = new PriorityQueue<>(new CostComparator());
@@ -19,40 +18,35 @@ public class Greedy extends Tecnique {
 
     @Override
     public Node solve(Matrix initial, int[][] solution) {
-        if (this.countTry < 10) {
-            System.out.println("Tentativa" + countTry);
-            try {
-                Node root = new Node(null, initial);
-                int rootCost = calculateCost(root.getPuzzle().getData(), solution);
-                root.setCost(rootCost);
-                this.queue.add(root);
+        Node root = new Node(null, initial);
+        int rootCost = calculateCost(root.getPuzzle().getData(), solution);
+        root.setCost(rootCost);
+        this.queue.add(root);
 
-                int numberOfExecutions = 0;
-                while (queueIsNotEmpty()) {
-                    numberOfExecutions++;
-                    System.out.println(numberOfExecutions);
-                    Node node = this.queue.peek();
-                    this.holdCurrentState = node;
-                    this.queue.poll();
+        this.numberOfExecutions = 0L;
+        while (queueIsNotEmpty()) {
+            this.numberOfExecutions++;
+//            System.out.println(this.numberOfExecutions);
+            Node node = this.queue.peek();
+            this.queue.poll();
 
-                    if (node.getCost() == 0) {
-                        if(this.countTry > 0){
-                            this.clearAll();
-                        }
-                        return node;
-                    }
-                    performPossibleMoves(node, solution);
-                }
-            } catch (OutOfMemoryError e) {
-                System.out.println("Trying Again...");
-                System.out.println(this.holdCurrentState.getPuzzle());
-                this.countTry++;
-                throw e;
+            if (node.getCost() == 0) {
+//                if (this.countTry > 0) {
+//                    this.clearAll();
+//                }
+                return node;
             }
-        } else {
-            this.clearAll();
-            System.out.println("Cleared and stoped execution");
-            throw new HardProblemException();
+
+            if(numberOfExecutions > 1 && node.equals(initial)){
+                throw new RepeatedStateException();
+            }
+
+            if(this.numberOfExecutions >= MAX_NUMBER_OF_ITERATIONS){
+                this.holdCurrentState = node;
+                throw new OutOfMemoryError();
+            }
+
+            performPossibleMoves(node, solution);
         }
         return null;
     }
