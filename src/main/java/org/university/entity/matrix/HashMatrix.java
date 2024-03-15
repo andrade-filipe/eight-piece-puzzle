@@ -5,13 +5,13 @@ import org.university.adapter.Matrix;
 import java.util.*;
 
 public class HashMatrix implements Matrix {
-    final public static HashMap<Integer, String> DICT_POS_TO_COOR = populateDictionaryPosToCoor();
+    final private static HashMap<Integer, String> DICT_POS_TO_COOR = populateDictionaryPosToCoor();
     final public static HashMap<String, Integer> DICT_COOR_TO_POS = populateDictionaryCoorToPos();
-    private ArrayList possibilities;
-    private Random randomNumber;
     final public static int MATRIX_SIZE = 9;
     final private static int ROW_MOVE = 3;
     final private static int COL_MOVE = 1;
+    private ArrayList possibilities;
+    private Random randomNumber;
     private HashMap<String, Integer> data;
     private String blankCoordinate;
     private char col, row;
@@ -41,12 +41,16 @@ public class HashMatrix implements Matrix {
             int drawnNumber = (int) this.possibilities.get(getIndex);
             if (drawnNumber == 0) {
                 this.setBlankPosition(this.possibilities.size() - 1);
-                this.refreshCoordinates(this.getBlankPosition());
             }
-            this.setInPosition(this.possibilities.size() - 1, drawnNumber);
+            this.insertInPosition(this.possibilities.size() - 1, drawnNumber);
             this.possibilities.remove(getIndex);
         }
+        this.perfomCalculations();
+    }
+
+    private void perfomCalculations() {
         this.calculateInversions();
+        this.refreshCoordinates(this.getBlankPosition());
     }
 
     private void copyData(HashMap<String, Integer> data) {
@@ -68,7 +72,7 @@ public class HashMatrix implements Matrix {
     }
 
     private void refreshCoordinates(int blankPosition) {
-        this.setBlankCoordinate(DICT_POS_TO_COOR.get(blankPosition));
+        this.setBlankCoordinate(positionToCoordinate(blankPosition));
         this.setRow(this.getBlankCoordinate().charAt(0));
         this.setCol(this.getBlankCoordinate().charAt(2));
     }
@@ -76,12 +80,13 @@ public class HashMatrix implements Matrix {
     @Override
     public HashMatrix moveRight() {
         if (checkRight()) {
-            this.setInCoordinate(this.getBlankCoordinate(), this.getByCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() + COL_MOVE)));
-            this.setInCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() + COL_MOVE), 0);
-            this.setBlankPosition(this.getBlankPosition() + COL_MOVE);
+            this.insertInCoordinate(this.getBlankCoordinate(),
+                    this.getByCoordinate(positionToCoordinate(this.getBlankPosition() + COL_MOVE)));
 
-            this.refreshCoordinates(this.getBlankPosition());
-            this.calculateInversions();
+            this.insertInCoordinate(positionToCoordinate(this.getBlankPosition() + COL_MOVE), 0);
+
+            this.setBlankPosition(this.getBlankPosition() + COL_MOVE);
+            this.perfomCalculations();
             return this;
         }
         return null;
@@ -90,12 +95,14 @@ public class HashMatrix implements Matrix {
     @Override
     public HashMatrix moveLeft() {
         if (checkLeft()) {
-            this.setInCoordinate(this.getBlankCoordinate(), this.getByCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() - COL_MOVE)));
-            this.setInCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() - COL_MOVE), 0);
+            this.insertInCoordinate(this.getBlankCoordinate(),
+                    this.getByCoordinate(positionToCoordinate(this.getBlankPosition() - COL_MOVE)));
+
+            this.insertInCoordinate(positionToCoordinate(this.getBlankPosition() - COL_MOVE), 0);
+
             this.setBlankPosition(this.getBlankPosition() - COL_MOVE);
 
-            this.refreshCoordinates(this.getBlankPosition());
-            this.calculateInversions();
+            this.perfomCalculations();
             return this;
         }
         return null;
@@ -104,12 +111,14 @@ public class HashMatrix implements Matrix {
     @Override
     public HashMatrix moveUp() {
         if (checkUp()) {
-            this.setInCoordinate(this.getBlankCoordinate(), this.getByCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() - ROW_MOVE)));
-            this.setInCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() - ROW_MOVE), 0);
+            this.insertInCoordinate(this.getBlankCoordinate(),
+                    this.getByCoordinate(positionToCoordinate(this.getBlankPosition() - ROW_MOVE)));
+
+            this.insertInCoordinate(positionToCoordinate(this.getBlankPosition() - ROW_MOVE), 0);
+
             this.setBlankPosition(this.getBlankPosition() - ROW_MOVE);
 
-            this.refreshCoordinates(this.getBlankPosition());
-            this.calculateInversions();
+            this.perfomCalculations();
             return this;
         }
         return null;
@@ -118,12 +127,15 @@ public class HashMatrix implements Matrix {
     @Override
     public HashMatrix moveDown() {
         if (checkDown()) {
-            this.setInCoordinate(this.getBlankCoordinate(), this.getByCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() + ROW_MOVE)));
-            this.setInCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() + ROW_MOVE), 0);
+            this.insertInCoordinate(
+                    this.getBlankCoordinate(),
+                    this.getByCoordinate(positionToCoordinate(this.getBlankPosition() + ROW_MOVE)));
+
+            this.insertInCoordinate(positionToCoordinate(this.getBlankPosition() + ROW_MOVE), 0);
+
             this.setBlankPosition(this.getBlankPosition() + ROW_MOVE);
 
-            this.refreshCoordinates(this.getBlankPosition());
-            this.calculateInversions();
+            this.perfomCalculations();
             return this;
         }
         return null;
@@ -149,7 +161,7 @@ public class HashMatrix implements Matrix {
         return this.getRow() != '2';
     }
 
-    public static String convertPositionToCoordinate(int position){
+    public static String positionToCoordinate(int position) {
         return DICT_POS_TO_COOR.get(position);
     }
 
@@ -185,7 +197,7 @@ public class HashMatrix implements Matrix {
         return x + "," + y;
     }
 
-    private void setInPosition(int position, int value) {
+    private void insertInPosition(int position, int value) {
         this.data.put(DICT_POS_TO_COOR.get(position), value);
     }
 
@@ -193,7 +205,7 @@ public class HashMatrix implements Matrix {
         return this.data.get(DICT_POS_TO_COOR.get(position));
     }
 
-    private void setInCoordinate(String coordinate, int value) {
+    private void insertInCoordinate(String coordinate, int value) {
         this.data.put(coordinate, value);
     }
 

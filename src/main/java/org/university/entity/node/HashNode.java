@@ -49,9 +49,9 @@ public class HashNode implements Node {
     public void calculateCost(HashMap<String, Integer> solution) {
         int cost = 0;
         for (int i = 0; i < HashMatrix.MATRIX_SIZE; i++) {
-            if ((this.getPuzzle().getData().get(HashMatrix.convertPositionToCoordinate(i)) != 0) &&
-                    (!this.getPuzzle().getData().get(HashMatrix.convertPositionToCoordinate(i))
-                            .equals(solution.get(HashMatrix.convertPositionToCoordinate(i))))) {
+            if ((this.getPuzzleMap().get(HashMatrix.positionToCoordinate(i)) != 0) &&
+                    (!this.getPuzzleMap().get(HashMatrix.positionToCoordinate(i))
+                            .equals(solution.get(HashMatrix.positionToCoordinate(i))))) {
                 cost++;
             }
         }
@@ -72,18 +72,16 @@ public class HashNode implements Node {
     public void calculateManhattan(HashMap<String, Integer> solution) {
         int manhattan = 0;
         for (int i = 0; i < HashMatrix.MATRIX_SIZE; i++) {
-            int valueInThePosition = this.getPuzzle().getData().get(HashMatrix.convertPositionToCoordinate(i));
-            int originalValue = solution.get(HashMatrix.convertPositionToCoordinate(i));
+            int valueInThePosition = this.getPuzzleMap().get(HashMatrix.positionToCoordinate(i));
+            int originalValue = solution.get(HashMatrix.positionToCoordinate(i));
 
             if (valueInThePosition != originalValue){
-                //Coordenada Atual
                 String currentPosition = this.getCoordinatesOfValue(valueInThePosition);
-                //Coordenada Que o Valor Deveria Estar
                 String originalPosition = this.getCoordinatesOfValue(solution, valueInThePosition);
 
-                int row = Math.abs((int) currentPosition.charAt(0) - originalPosition.charAt(0));
-                int col = Math.abs((int) currentPosition.charAt(2) - originalPosition.charAt(2));
-                manhattan += row + col;
+                int row = Math.abs((int) currentPosition.charAt(0) - originalPosition.charAt(0)); // |x1 - x2|
+                int col = Math.abs((int) currentPosition.charAt(2) - originalPosition.charAt(2)); // |y1 - y2|
+                manhattan += row + col; // |x1 - x2| + |y1 - y2| -> Manhattan Distance
             }
         }
         this.setManhattan(manhattan);
@@ -96,8 +94,8 @@ public class HashNode implements Node {
     }
 
     public String getCoordinatesOfValue(int value){
-        for(String key : this.getPuzzle().getData().keySet()){
-            if(this.getPuzzle().getData().get(key).compareTo(value) == 0){
+        for(String key : this.getPuzzleMap().keySet()){
+            if(this.getPuzzleMap().get(key).compareTo(value) == 0){
                 return key;
             }
         }
@@ -111,6 +109,10 @@ public class HashNode implements Node {
             }
         }
         return null;
+    }
+
+    public HashMap<String, Integer> getPuzzleMap(){
+        return this.getPuzzle().getData();
     }
 
     public HashNode getParent() {
