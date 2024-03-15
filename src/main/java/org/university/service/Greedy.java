@@ -20,31 +20,38 @@ public class Greedy extends Tecnique {
     @Override
     public Node solve(Matrix initial, int[][] solution) {
         if (this.countTry < 10) {
+            System.out.println("Tentativa" + countTry);
             try {
                 Node root = new Node(null, initial);
                 int rootCost = calculateCost(root.getPuzzle().getData(), solution);
                 root.setCost(rootCost);
-
                 this.queue.add(root);
+
+                int numberOfExecutions = 0;
                 while (queueIsNotEmpty()) {
+                    numberOfExecutions++;
+                    System.out.println(numberOfExecutions);
                     Node node = this.queue.peek();
                     this.holdCurrentState = node;
                     this.queue.poll();
 
                     if (node.getCost() == 0) {
-                        this.countTry = 0;
+                        if(this.countTry > 0){
+                            this.clearAll();
+                        }
                         return node;
                     }
                     performPossibleMoves(node, solution);
                 }
             } catch (OutOfMemoryError e) {
-                this.countTry++;
                 System.out.println("Trying Again...");
                 System.out.println(this.holdCurrentState.getPuzzle());
-                this.solve(this.holdCurrentState.getPuzzle(), SOLUTION);
+                this.countTry++;
+                throw e;
             }
         } else {
-            this.countTry = 0;
+            this.clearAll();
+            System.out.println("Cleared and stoped execution");
             throw new HardProblemException();
         }
         return null;

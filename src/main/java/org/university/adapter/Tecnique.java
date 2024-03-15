@@ -4,15 +4,16 @@ import org.university.entity.Matrix;
 import org.university.entity.Node;
 import org.university.exception.EvenInversionsException;
 import org.university.exception.HardProblemException;
+import org.university.exception.RepeatedStateException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class Tecnique {
     final public static int[][] SOLUTION = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
     final public static int[][] SOLUTION_TWO = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
-
+    public ArrayList<int[][]> statesOfPreviousExecutions = new ArrayList<>();
     public Node holdCurrentState;
-
     public int countTry = 0;
 
     //Saves solved positions and solvable positions that exceed memory
@@ -32,7 +33,7 @@ public abstract class Tecnique {
         return count;
     }
 
-    public void execute() throws OutOfMemoryError, EvenInversionsException {
+    public void execute() throws OutOfMemoryError, EvenInversionsException, HardProblemException {
         Matrix initial = new Matrix();
 
         Node solved;
@@ -43,6 +44,10 @@ public abstract class Tecnique {
                 System.out.println(solved.getPuzzle());
             } catch (HardProblemException e){
                 System.out.println("Hard Problem");
+                throw e;
+            } catch (OutOfMemoryError e){
+                System.out.println("Out of Memory");
+                throw e;
             }
         } else {
             throw new EvenInversionsException();
@@ -59,6 +64,34 @@ public abstract class Tecnique {
             } catch (OutOfMemoryError | EvenInversionsException | HardProblemException e) {
                 i--;
             }
+        }
+    }
+
+    public void clearAll(){
+        this.countTry = 0;
+        this.statesOfPreviousExecutions.clear();
+        this.holdCurrentState = null;
+    }
+
+    public void tryAgain(int[][] solution){
+        this.countTry++;
+        this.statesOfPreviousExecutions.add(this.holdCurrentState.getPuzzle().getData());
+        this.solve(this.holdCurrentState.getPuzzle(), solution);
+    }
+
+    public void resetExecutionFromPreviousState(){
+        if(countTry > 0){
+            if(this.statesOfPreviousExecutions.contains(this.holdCurrentState.getPuzzle().getData())){
+                this.clearAll();
+                System.out.println("Stop execution");
+                throw new RepeatedStateException();
+            } else {
+                System.out.println("Not repeating, continue...");
+                this.tryAgain(SOLUTION);
+            }
+        } else {
+            System.out.println("First repetition, continue...");
+            this.tryAgain(SOLUTION);
         }
     }
 }
