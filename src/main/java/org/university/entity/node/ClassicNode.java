@@ -3,6 +3,8 @@ package org.university.entity.node;
 import org.university.adapter.Node;
 import org.university.entity.matrix.ClassicMatrix;
 
+import java.util.HashMap;
+
 public class ClassicNode implements Node {
     private ClassicNode parent;
     private ClassicMatrix puzzle;
@@ -13,6 +15,8 @@ public class ClassicNode implements Node {
     private int geneticFactor;
 
     public ClassicNode(){
+        this.parent = null;
+        this.puzzle = new ClassicMatrix();
     }
 
     public ClassicNode(ClassicNode parent, ClassicMatrix puzzle) {
@@ -47,7 +51,7 @@ public class ClassicNode implements Node {
     }
 
     @Override
-    public void calculateManhattan() {
+    public void calculateManhattan(HashMap<String, Integer> solution) {
 
     }
 

@@ -6,7 +6,7 @@ import java.util.*;
 
 public class HashMatrix implements Matrix {
     final public static HashMap<Integer, String> DICT_POS_TO_COOR = populateDictionaryPosToCoor();
-    //    final public static HashMap<String, Integer> DICT_COOR_TO_POS = populateDictionaryCoorToPos();
+    final public static HashMap<String, Integer> DICT_COOR_TO_POS = populateDictionaryCoorToPos();
     private ArrayList possibilities;
     private Random randomNumber;
     final public static int MATRIX_SIZE = 9;
@@ -163,19 +163,19 @@ public class HashMatrix implements Matrix {
         return dict;
     }
 
-//    private static HashMap<String, Integer> populateDictionaryCoorToPos() {
-//        HashMap<String, Integer> dict = new HashMap<>();
-//        dict.put("0,0", 0);
-//        dict.put("0,1", 1);
-//        dict.put("0,2", 2);
-//        dict.put("1,0", 3);
-//        dict.put("1,1", 4);
-//        dict.put("1,2", 5);
-//        dict.put("2,0", 6);
-//        dict.put("2,1", 7);
-//        dict.put("2,2", 8);
-//        return dict;
-//    }
+    private static HashMap<String, Integer> populateDictionaryCoorToPos() {
+        HashMap<String, Integer> dict = new HashMap<>();
+        dict.put("0,0", 0);
+        dict.put("0,1", 1);
+        dict.put("0,2", 2);
+        dict.put("1,0", 3);
+        dict.put("1,1", 4);
+        dict.put("1,2", 5);
+        dict.put("2,0", 6);
+        dict.put("2,1", 7);
+        dict.put("2,2", 8);
+        return dict;
+    }
 
     public String concatCoordinate(int x, int y) {
         return x + "," + y;
