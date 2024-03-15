@@ -38,7 +38,7 @@ public class Greedy extends Tecnique {
             }
 
             if(numberOfExecutions > 1 && node.equals(initial)){
-                throw new RepeatedStateException();
+                throw new RepeatedStateException("Repeating it self");
             }
 
             if(this.numberOfExecutions >= MAX_NUMBER_OF_ITERATIONS){

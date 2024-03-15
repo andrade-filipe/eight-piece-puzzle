@@ -4,7 +4,6 @@ import org.university.entity.Matrix;
 import org.university.entity.Node;
 import org.university.exception.EvenInversionsException;
 import org.university.exception.HardProblemException;
-import org.university.exception.RepeatedStateException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,21 +84,5 @@ public abstract class Tecnique {
         this.countTry++;
         this.statesOfPreviousExecutions.add(this.holdCurrentState.getPuzzle().getData());
         this.solve(this.holdCurrentState.getPuzzle(), solution);
-    }
-
-    public void resetExecutionFromPreviousState() {
-        if (countTry > 0) {
-            if (this.statesOfPreviousExecutions.contains(this.holdCurrentState.getPuzzle().getData())) {
-                this.clearAll();
-                System.out.println("Stop execution");
-                throw new RepeatedStateException();
-            } else {
-                System.out.println("Not repeating, continue...");
-                this.tryAgain(SOLUTION);
-            }
-        } else {
-            System.out.println("First repetition, continue...");
-            this.tryAgain(SOLUTION);
-        }
     }
 }
