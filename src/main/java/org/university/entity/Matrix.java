@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Matrix {
-
     final public static int MATRIX_SIZE = 3;
-
     private ArrayList possibilities;
     private Random randomNumber;
     private int[][] data;
@@ -19,7 +17,6 @@ public class Matrix {
         this.possibilities.addAll(List.of(0,1,2,3,4,5,6,7,8));
         this.randomNumber= new Random();
         this.data = new int[MATRIX_SIZE][MATRIX_SIZE];
-        this.inversions = 0;
         this.generatePuzzle();
     }
 
@@ -27,7 +24,6 @@ public class Matrix {
         this.data = new int[MATRIX_SIZE][MATRIX_SIZE];
         this.blankX = blankX;
         this.blankY = blankY;
-        this.inversions = 0;
 
         this.copyData(data);
     }

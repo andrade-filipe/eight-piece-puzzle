@@ -1,11 +1,10 @@
 package org.university;
 
-import org.university.service.Greedy;
+import org.university.entity.HashMatrix;
 
 public class Main {
     public static void main(String[] args) {
-        Greedy greedy = new Greedy();
-
-        greedy.execute(5);
+        HashMatrix puzzle = new HashMatrix();
+        System.out.println(puzzle);
     }
 }

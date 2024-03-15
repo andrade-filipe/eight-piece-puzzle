@@ -1,15 +1,15 @@
 package org.university.entity;
 
-public class Node{
+public class HashNode {
     private Node parent;
-    private Matrix puzzle;
+    private HashMatrix puzzle;
     private int cost;
     private int level;
     private int pathCost;
     private int manhattan;
     private int genetics;
 
-    public Node(){
+    public HashNode(){
         this.parent = null;
         this.puzzle = null;
         this.cost = 0;
@@ -17,7 +17,7 @@ public class Node{
         this.pathCost = 0;
     }
 
-    public Node(Node parent, Matrix puzzle) {
+    public HashNode(Node parent, HashMatrix puzzle) {
         this.parent = parent;
         this.puzzle = puzzle;
         this.level = calculateLevel();
@@ -45,14 +45,6 @@ public class Node{
 
     public void setParent(Node parent) {
         this.parent = parent;
-    }
-
-    public Matrix getPuzzle() {
-        return puzzle;
-    }
-
-    public void setPuzzle(Matrix puzzle) {
-        this.puzzle = puzzle;
     }
 
     public int getCost() {
@@ -93,5 +85,13 @@ public class Node{
 
     public void setGenetics(int genetics) {
         this.genetics = genetics;
+    }
+
+    public HashMatrix getPuzzle() {
+        return puzzle;
+    }
+
+    public void setPuzzle(HashMatrix puzzle) {
+        this.puzzle = puzzle;
     }
 }

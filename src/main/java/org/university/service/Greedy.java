@@ -26,9 +26,10 @@ public class Greedy extends Tecnique {
         this.numberOfExecutions = 0L;
         while (queueIsNotEmpty()) {
             this.numberOfExecutions++;
-//            System.out.println(this.numberOfExecutions);
             Node node = this.queue.peek();
             this.queue.poll();
+
+            System.out.println("Size: " + this.queue.size());
 
             if (node.getCost() == 0) {
 //                if (this.countTry > 0) {

@@ -54,6 +54,8 @@ public abstract class Tecnique {
                 System.out.println("Out of Memory");
                 this.holdCurrentState = new Node();
                 throw e;
+            } finally {
+                this.queue.clear();
             }
         } else {
             throw new EvenInversionsException();
