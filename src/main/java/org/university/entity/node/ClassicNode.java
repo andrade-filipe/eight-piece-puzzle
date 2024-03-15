@@ -1,42 +1,59 @@
-package org.university.entity;
+package org.university.entity.node;
 
-public class ClassicNode {
+import org.university.adapter.Node;
+import org.university.entity.matrix.ClassicMatrix;
+
+public class ClassicNode implements Node {
     private ClassicNode parent;
     private ClassicMatrix puzzle;
     private int cost;
     private int level;
     private int pathCost;
     private int manhattan;
-    private int genetics;
+    private int geneticFactor;
 
     public ClassicNode(){
-        this.parent = null;
-        this.puzzle = null;
-        this.cost = 0;
-        this.level = 0;
-        this.pathCost = 0;
     }
 
     public ClassicNode(ClassicNode parent, ClassicMatrix puzzle) {
         this.parent = parent;
         this.puzzle = puzzle;
-        this.level = calculateLevel();
-        this.cost = 0;
-        this.pathCost = 0;
+
     }
 
-    private int calculateLevel() {
-        if(this.parent == null){
-            return 0;
-        }
-        return this.parent.getLevel() + 1;
+    @Override
+    public void performCalculations() {
+
     }
+
+    @Override
+    public void calculateLevel() {
+        if(this.parent == null){
+            this.setLevel(0);
+        }
+        this.setLevel(this.parent.getLevel() + 1);
+    }
+    public void calculateCost(ClassicMatrix solution) {
+
+    }
+
+    @Override
     public void calculatePathCost(){
         if(this.parent == null){
             this.setPathCost(cost);
         } else{
             this.setPathCost(this.parent.getPathCost() + cost);
         }
+    }
+
+    @Override
+    public void calculateManhattan() {
+
+    }
+
+    @Override
+    public void calculateGeneticFactor() {
+
     }
 
     public ClassicNode getParent() {
@@ -87,11 +104,11 @@ public class ClassicNode {
         this.manhattan = manhattan;
     }
 
-    public int getGenetics() {
-        return genetics;
+    public int getGeneticFactor() {
+        return geneticFactor;
     }
 
-    public void setGenetics(int genetics) {
-        this.genetics = genetics;
+    public void setGeneticFactor(int geneticFactor) {
+        this.geneticFactor = geneticFactor;
     }
 }

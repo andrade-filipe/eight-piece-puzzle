@@ -1,10 +1,8 @@
-package org.university.entity;
+package org.university.entity.matrix;
 
 import org.university.adapter.Matrix;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class ClassicMatrix implements Matrix {
     final public static int MATRIX_SIZE = 3;
@@ -180,6 +178,26 @@ public class ClassicMatrix implements Matrix {
 
     public void setInversions(int inversions) {
         this.inversions = inversions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClassicMatrix that = (ClassicMatrix) o;
+        return getBlankX() == that.getBlankX()
+                && getBlankY() == that.getBlankY()
+                && getInversions() == that.getInversions()
+                && Objects.equals(possibilities, that.possibilities)
+                && Objects.equals(randomNumber, that.randomNumber)
+                && Arrays.equals(getData(), that.getData());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(possibilities, randomNumber, getBlankX(), getBlankY(), getInversions());
+        result = 31 * result + Arrays.hashCode(getData());
+        return result;
     }
 
     @Override

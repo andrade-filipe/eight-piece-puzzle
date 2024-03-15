@@ -1,7 +1,6 @@
 package org.university.adapter;
 
 public interface Matrix {
-
     void generatePuzzle();
     void calculateInversions();
 

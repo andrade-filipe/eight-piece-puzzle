@@ -1,7 +1,7 @@
 package org.university.adapter;
 
-import org.university.entity.ClassicMatrix;
-import org.university.entity.ClassicNode;
+import org.university.entity.matrix.ClassicMatrix;
+import org.university.entity.node.ClassicNode;
 import org.university.exception.EvenInversionsException;
 import org.university.exception.HardProblemException;
 
@@ -11,7 +11,8 @@ import java.util.PriorityQueue;
 
 public abstract class Tecnique {
     final public static int[][] SOLUTION = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
-    final public static int[][] SOLUTION_TWO = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
+    final public static HashMap<String, Integer> HASH_SOLUTION = getSolution();
+
     public ArrayList<int[][]> statesOfPreviousExecutions = new ArrayList<>();
     public PriorityQueue<ClassicNode> queue;
     public ClassicNode holdCurrentState = new ClassicNode();
@@ -22,6 +23,20 @@ public abstract class Tecnique {
     public HashMap<int[][], ClassicNode> cachePositions;
 
     protected abstract ClassicNode solve(ClassicMatrix initial, int[][] solution);
+
+    private static HashMap<String, Integer> getSolution() {
+        HashMap<String, Integer> dict = new HashMap<>();
+        dict.put("0,0", 0);
+        dict.put("0,1", 1);
+        dict.put("0,2", 2);
+        dict.put("1,0", 3);
+        dict.put("1,1", 4);
+        dict.put("1,2", 5);
+        dict.put("2,0", 6);
+        dict.put("2,1", 7);
+        dict.put("2,2", 8);
+        return dict;
+    }
 
     public int calculateCost(int[][] matrix, int[][] solution) {
         int count = 0;

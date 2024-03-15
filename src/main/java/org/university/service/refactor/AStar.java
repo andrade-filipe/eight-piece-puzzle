@@ -1,8 +1,8 @@
 package org.university.service.refactor;
 
 import org.university.adapter.Tecnique;
-import org.university.entity.ClassicMatrix;
-import org.university.entity.ClassicNode;
+import org.university.entity.matrix.ClassicMatrix;
+import org.university.entity.node.ClassicNode;
 import org.university.util.PathCostComparator;
 
 import java.util.PriorityQueue;

@@ -1,15 +1,12 @@
-package org.university.entity;
+package org.university.entity.matrix;
 
 import org.university.adapter.Matrix;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class HashMatrix implements Matrix {
     final public static HashMap<Integer, String> DICT_POS_TO_COOR = populateDictionaryPosToCoor();
-    final public static HashMap<String, Integer> DICT_COOR_TO_POS = populateDictionaryCoorToPos();
+    //    final public static HashMap<String, Integer> DICT_COOR_TO_POS = populateDictionaryCoorToPos();
     private ArrayList possibilities;
     private Random randomNumber;
     final public static int MATRIX_SIZE = 9;
@@ -77,15 +74,13 @@ public class HashMatrix implements Matrix {
     }
 
     @Override
-    public HashMatrix moveRight(){
-        if(checkRight()){
+    public HashMatrix moveRight() {
+        if (checkRight()) {
             this.setInCoordinate(this.getBlankCoordinate(), this.getByCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() + COL_MOVE)));
             this.setInCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() + COL_MOVE), 0);
             this.setBlankPosition(this.getBlankPosition() + COL_MOVE);
 
-            this.setBlankCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition()));
-            this.setRow(this.getBlankCoordinate().charAt(0));
-            this.setCol(this.getBlankCoordinate().charAt(2));
+            this.refreshCoordinates(this.getBlankPosition());
             this.calculateInversions();
             return this;
         }
@@ -93,15 +88,13 @@ public class HashMatrix implements Matrix {
     }
 
     @Override
-    public HashMatrix moveLeft(){
-        if(checkLeft()){
+    public HashMatrix moveLeft() {
+        if (checkLeft()) {
             this.setInCoordinate(this.getBlankCoordinate(), this.getByCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() - COL_MOVE)));
             this.setInCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() - COL_MOVE), 0);
             this.setBlankPosition(this.getBlankPosition() - COL_MOVE);
 
-            this.setBlankCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition()));
-            this.setRow(this.getBlankCoordinate().charAt(0));
-            this.setCol(this.getBlankCoordinate().charAt(2));
+            this.refreshCoordinates(this.getBlankPosition());
             this.calculateInversions();
             return this;
         }
@@ -109,15 +102,13 @@ public class HashMatrix implements Matrix {
     }
 
     @Override
-    public HashMatrix moveUp(){
-        if(checkUp()){
+    public HashMatrix moveUp() {
+        if (checkUp()) {
             this.setInCoordinate(this.getBlankCoordinate(), this.getByCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() - ROW_MOVE)));
             this.setInCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() - ROW_MOVE), 0);
             this.setBlankPosition(this.getBlankPosition() - ROW_MOVE);
 
-            this.setBlankCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition()));
-            this.setRow(this.getBlankCoordinate().charAt(0));
-            this.setCol(this.getBlankCoordinate().charAt(2));
+            this.refreshCoordinates(this.getBlankPosition());
             this.calculateInversions();
             return this;
         }
@@ -125,15 +116,13 @@ public class HashMatrix implements Matrix {
     }
 
     @Override
-    public HashMatrix moveDown(){
-        if(checkDown()){
+    public HashMatrix moveDown() {
+        if (checkDown()) {
             this.setInCoordinate(this.getBlankCoordinate(), this.getByCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() + ROW_MOVE)));
             this.setInCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition() + ROW_MOVE), 0);
             this.setBlankPosition(this.getBlankPosition() + ROW_MOVE);
 
-            this.setBlankCoordinate(DICT_POS_TO_COOR.get(this.getBlankPosition()));
-            this.setRow(this.getBlankCoordinate().charAt(0));
-            this.setCol(this.getBlankCoordinate().charAt(2));
+            this.refreshCoordinates(this.getBlankPosition());
             this.calculateInversions();
             return this;
         }
@@ -141,22 +130,22 @@ public class HashMatrix implements Matrix {
     }
 
     @Override
-    public boolean checkRight(){
+    public boolean checkRight() {
         return this.getCol() != '2';
     }
 
     @Override
-    public boolean checkLeft(){
+    public boolean checkLeft() {
         return this.getCol() != '0';
     }
 
     @Override
-    public boolean checkUp(){
+    public boolean checkUp() {
         return this.getRow() != '0';
     }
 
     @Override
-    public boolean checkDown(){
+    public boolean checkDown() {
         return this.getRow() != '2';
     }
 
@@ -174,19 +163,19 @@ public class HashMatrix implements Matrix {
         return dict;
     }
 
-    private static HashMap<String, Integer> populateDictionaryCoorToPos() {
-        HashMap<String, Integer> dict = new HashMap<>();
-        dict.put("0,0", 0);
-        dict.put("0,1", 1);
-        dict.put("0,2", 2);
-        dict.put("1,0", 3);
-        dict.put("1,1", 4);
-        dict.put("1,2", 5);
-        dict.put("2,0", 6);
-        dict.put("2,1", 7);
-        dict.put("2,2", 8);
-        return dict;
-    }
+//    private static HashMap<String, Integer> populateDictionaryCoorToPos() {
+//        HashMap<String, Integer> dict = new HashMap<>();
+//        dict.put("0,0", 0);
+//        dict.put("0,1", 1);
+//        dict.put("0,2", 2);
+//        dict.put("1,0", 3);
+//        dict.put("1,1", 4);
+//        dict.put("1,2", 5);
+//        dict.put("2,0", 6);
+//        dict.put("2,1", 7);
+//        dict.put("2,2", 8);
+//        return dict;
+//    }
 
     public String concatCoordinate(int x, int y) {
         return x + "," + y;
@@ -257,6 +246,26 @@ public class HashMatrix implements Matrix {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HashMatrix that = (HashMatrix) o;
+        return getCol() == that.getCol()
+                && getRow() == that.getRow()
+                && getBlankPosition() == that.getBlankPosition()
+                && getInversions() == that.getInversions()
+                && Objects.equals(possibilities, that.possibilities)
+                && Objects.equals(randomNumber, that.randomNumber)
+                && Objects.equals(getData(), that.getData())
+                && Objects.equals(getBlankCoordinate(), that.getBlankCoordinate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(possibilities, randomNumber, getData(), getBlankCoordinate(), getCol(), getRow(), getBlankPosition(), getInversions());
+    }
+
+    @Override
     public String toString() {
         return "HashMatrix = {" + "\n"
                 + this.getByPosition(0) + " " + this.getByPosition(1) + " " + this.getByPosition(2) + "\n"
@@ -267,7 +276,6 @@ public class HashMatrix implements Matrix {
                 + "Blank Pos: " + getBlankCoordinate() + "\n"
                 + "Row: " + getRow() + "\n"
                 + "Col: " + getCol() + "\n"
-                + "BlankPos number: " + getBlankPosition();
+                + "BlankPos number: " + getBlankPosition() + "\n";
     }
 }
-

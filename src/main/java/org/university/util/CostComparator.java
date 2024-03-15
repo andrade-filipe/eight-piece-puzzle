@@ -1,6 +1,6 @@
 package org.university.util;
 
-import org.university.entity.ClassicNode;
+import org.university.entity.node.ClassicNode;
 
 import java.util.Comparator;
 
