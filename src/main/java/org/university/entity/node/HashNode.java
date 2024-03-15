@@ -49,9 +49,9 @@ public class HashNode implements Node {
     public void calculateCost(HashMap<String, Integer> solution) {
         int cost = 0;
         for (int i = 0; i < HashMatrix.MATRIX_SIZE; i++) {
-            if ((this.getPuzzle().getData().get(HashMatrix.DICT_POS_TO_COOR.get(i)) != 0) &&
-                    (!this.getPuzzle().getData().get(HashMatrix.DICT_POS_TO_COOR.get(i))
-                            .equals(solution.get(HashMatrix.DICT_POS_TO_COOR.get(i))))) {
+            if ((this.getPuzzle().getData().get(HashMatrix.convertPositionToCoordinate(i)) != 0) &&
+                    (!this.getPuzzle().getData().get(HashMatrix.convertPositionToCoordinate(i))
+                            .equals(solution.get(HashMatrix.convertPositionToCoordinate(i))))) {
                 cost++;
             }
         }
@@ -72,8 +72,8 @@ public class HashNode implements Node {
     public void calculateManhattan(HashMap<String, Integer> solution) {
         int manhattan = 0;
         for (int i = 0; i < HashMatrix.MATRIX_SIZE; i++) {
-            int valueInThePosition = this.getPuzzle().getData().get(HashMatrix.DICT_POS_TO_COOR.get(i));
-            int originalValue = solution.get(HashMatrix.DICT_POS_TO_COOR.get(i));
+            int valueInThePosition = this.getPuzzle().getData().get(HashMatrix.convertPositionToCoordinate(i));
+            int originalValue = solution.get(HashMatrix.convertPositionToCoordinate(i));
 
             if (valueInThePosition != originalValue){
                 //Coordenada Atual
@@ -91,7 +91,8 @@ public class HashNode implements Node {
 
     @Override
     public void calculateGeneticFactor() {
-
+        int geneticFactor = 36 * this.getCost() + 18 * this.getManhattan() + 2 * this.getPuzzle().getInversions();
+        this.setGeneticFactor(geneticFactor);
     }
 
     public String getCoordinatesOfValue(int value){

@@ -149,6 +149,10 @@ public class HashMatrix implements Matrix {
         return this.getRow() != '2';
     }
 
+    public static String convertPositionToCoordinate(int position){
+        return DICT_POS_TO_COOR.get(position);
+    }
+
     private static HashMap<Integer, String> populateDictionaryPosToCoor() {
         HashMap<Integer, String> dict = new HashMap<>();
         dict.put(0, "0,0");
