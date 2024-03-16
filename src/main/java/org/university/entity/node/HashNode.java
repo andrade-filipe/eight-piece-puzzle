@@ -3,11 +3,14 @@ package org.university.entity.node;
 import org.university.adapter.Node;
 import org.university.adapter.Tecnique;
 import org.university.entity.matrix.HashMatrix;
+import org.university.exception.EvenInversionsException;
+import org.university.exception.HardProblemException;
 
 import java.util.HashMap;
 import java.util.Objects;
 
 public class HashNode implements Node {
+    final private static int BAD_GENETIC_FACTOR = 600;
     private HashNode parent;
     private HashMatrix puzzle;
     private int cost;
@@ -18,7 +21,13 @@ public class HashNode implements Node {
 
     public HashNode() {
         this.parent = null;
-        this.puzzle = new HashMatrix();
+        try{
+            this.puzzle = new HashMatrix();
+        }catch (EvenInversionsException e){
+            throw e;
+        }finally {
+            this.clearNode();
+        }
     }
 
     public HashNode(HashNode parent, HashMatrix puzzle) {
@@ -29,12 +38,19 @@ public class HashNode implements Node {
 
     @Override
     public void performCalculations() {
-        this.calculateCost(Tecnique.HASH_SOLUTION);
-        this.calculateLevel();
+        try{
+            this.calculateCost(Tecnique.HASH_SOLUTION);
+            this.calculateLevel();
 
-        this.calculatePathCost();
-        this.calculateManhattan(Tecnique.HASH_SOLUTION);
-        this.calculateGeneticFactor();
+            this.calculatePathCost();
+            this.calculateManhattan(Tecnique.HASH_SOLUTION);
+            this.calculateGeneticFactor();
+            this.verifyNode();
+        }catch (HardProblemException e){
+            throw e;
+        } finally{
+            this.clearNode();
+        }
     }
 
     @Override
@@ -109,6 +125,17 @@ public class HashNode implements Node {
             }
         }
         return null;
+    }
+
+    private void verifyNode(){
+        if(this.getGeneticFactor() >= BAD_GENETIC_FACTOR){
+            throw new HardProblemException();
+        }
+    }
+
+    public void clearNode(){
+        this.setParent(null);
+        this.setPuzzle(null);
     }
 
     public HashMap<String, Integer> getPuzzleMap(){

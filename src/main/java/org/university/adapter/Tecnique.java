@@ -15,7 +15,7 @@ public abstract class Tecnique {
 
     public ArrayList<int[][]> statesOfPreviousExecutions = new ArrayList<>();
     public PriorityQueue<ClassicNode> queue;
-    public ClassicNode holdCurrentState = new ClassicNode();
+    public Node holdCurrentState = new ClassicNode();
     public int countTry = 0;
     public long numberOfExecutions = 0L;
 
@@ -38,18 +38,6 @@ public abstract class Tecnique {
         return dict;
     }
 
-    public int calculateCost(int[][] matrix, int[][] solution) {
-        int count = 0;
-        for (int i = 0; i < ClassicMatrix.MATRIX_SIZE; i++) {
-            for (int j = 0; j < ClassicMatrix.MATRIX_SIZE; j++) {
-                if (matrix[i][j] != 0 && matrix[i][j] != solution[i][j]) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-
     public void execute() throws OutOfMemoryError, EvenInversionsException, HardProblemException {
         ClassicMatrix initial = new ClassicMatrix();
 
@@ -65,7 +53,7 @@ public abstract class Tecnique {
                 System.out.println("Hard Problem");
                 throw e;
             } catch (OutOfMemoryError e) {
-                System.out.println("Error: " + this.holdCurrentState.getPuzzle());
+//                System.out.println("Error: " + this.holdCurrentState.getPuzzle());
                 System.out.println("Out of Memory");
                 this.holdCurrentState = new ClassicNode();
                 throw e;
@@ -99,7 +87,7 @@ public abstract class Tecnique {
 
     public void tryAgain(int[][] solution) {
         this.countTry++;
-        this.statesOfPreviousExecutions.add(this.holdCurrentState.getPuzzle().getData());
-        this.solve(this.holdCurrentState.getPuzzle(), solution);
+//        this.statesOfPreviousExecutions.add(this.holdCurrentState.getPuzzle().getData());
+//        this.solve(this.holdCurrentState.getPuzzle(), solution);
     }
 }

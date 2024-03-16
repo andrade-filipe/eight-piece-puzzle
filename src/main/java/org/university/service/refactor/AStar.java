@@ -19,8 +19,8 @@ public class AStar extends Tecnique {
     @Override
     public ClassicNode solve(ClassicMatrix initial, int[][] solution) {
         ClassicNode root = new ClassicNode(null, initial);
-        int rootCost = calculateCost(root.getPuzzle().getData(), solution);
-        root.setCost(rootCost);
+//        int rootCost = calculateCost(root.getPuzzle().getData(), solution);
+//        root.setCost(rootCost);
         root.calculatePathCost();
 
         this.queue.add(root);
@@ -41,8 +41,8 @@ public class AStar extends Tecnique {
                     cloneMatrix.moveRight();
 
                     ClassicNode child = new ClassicNode(classicNode, cloneMatrix);
-                    int cost = calculateCost(cloneMatrix.getData(), solution);
-                    child.setCost(cost);
+//                    int cost = calculateCost(cloneMatrix.getData(), solution);
+//                    child.setCost(cost);
                     child.calculatePathCost();
                     this.queue.add(child);
                 } else if (classicNode.getPuzzle().checkLeft() && i == 1) {
@@ -51,8 +51,8 @@ public class AStar extends Tecnique {
                     cloneMatrix.moveLeft();
 
                     ClassicNode child = new ClassicNode(classicNode, cloneMatrix);
-                    int cost = calculateCost(cloneMatrix.getData(), solution);
-                    child.setCost(cost);
+//                    int cost = calculateCost(cloneMatrix.getData(), solution);
+//                    child.setCost(cost);
                     child.calculatePathCost();
                     this.queue.add(child);
                 } else if (classicNode.getPuzzle().checkUp() && i == 2) {
@@ -61,8 +61,8 @@ public class AStar extends Tecnique {
                     cloneMatrix.moveUp();
 
                     ClassicNode child = new ClassicNode(classicNode, cloneMatrix);
-                    int cost = calculateCost(cloneMatrix.getData(), solution);
-                    child.setCost(cost);
+//                    int cost = calculateCost(cloneMatrix.getData(), solution);
+//                    child.setCost(cost);
                     child.calculatePathCost();
                     this.queue.add(child);
                 } else if (classicNode.getPuzzle().checkDown() && i == 3) {
@@ -71,8 +71,8 @@ public class AStar extends Tecnique {
                     cloneMatrix.moveDown();
 
                     ClassicNode child = new ClassicNode(classicNode, cloneMatrix);
-                    int cost = calculateCost(cloneMatrix.getData(), solution);
-                    child.setCost(cost);
+//                    int cost = calculateCost(cloneMatrix.getData(), solution);
+//                    child.setCost(cost);
                     child.calculatePathCost();
                     this.queue.add(child);
                 }

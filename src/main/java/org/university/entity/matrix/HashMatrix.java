@@ -1,6 +1,7 @@
 package org.university.entity.matrix;
 
 import org.university.adapter.Matrix;
+import org.university.exception.EvenInversionsException;
 
 import java.util.*;
 
@@ -24,14 +25,14 @@ public class HashMatrix implements Matrix {
         this.randomNumber = new Random();
         this.data = new HashMap<>();
         this.generatePuzzle();
+        this.perfomCalculations();
     }
 
-    public HashMatrix(HashMap<String, Integer> data, int blankPosition, int inversions) {
+    public HashMatrix(HashMap<String, Integer> data, int blankPosition) {
         this.data = new HashMap<>();
         this.blankPosition = blankPosition;
-        this.inversions = inversions;
         this.copyData(data);
-        this.refreshCoordinates(blankPosition);
+        this.perfomCalculations();
     }
 
     @Override
@@ -45,16 +46,6 @@ public class HashMatrix implements Matrix {
             this.insertInPosition(this.possibilities.size() - 1, drawnNumber);
             this.possibilities.remove(getIndex);
         }
-        this.perfomCalculations();
-    }
-
-    private void perfomCalculations() {
-        this.calculateInversions();
-        this.refreshCoordinates(this.getBlankPosition());
-    }
-
-    private void copyData(HashMap<String, Integer> data) {
-        this.data = (HashMap<String, Integer>) data.clone();
     }
 
     @Override
@@ -69,12 +60,6 @@ public class HashMatrix implements Matrix {
             }
         }
         this.setInversions(count);
-    }
-
-    private void refreshCoordinates(int blankPosition) {
-        this.setBlankCoordinate(positionToCoordinate(blankPosition));
-        this.setRow(this.getBlankCoordinate().charAt(0));
-        this.setCol(this.getBlankCoordinate().charAt(2));
     }
 
     @Override
@@ -159,6 +144,41 @@ public class HashMatrix implements Matrix {
     @Override
     public boolean checkDown() {
         return this.getRow() != '2';
+    }
+
+    private void perfomCalculations() {
+        try{
+            this.calculateInversions();
+            this.refreshCoordinates(this.getBlankPosition());
+            this.verifyMatrix();
+        } catch (EvenInversionsException e){
+            throw e;
+        } finally {
+            this.clearMatrix();
+        }
+    }
+
+    private void copyData(HashMap<String, Integer> data) {
+        this.data = (HashMap<String, Integer>) data.clone();
+    }
+
+    private void refreshCoordinates(int blankPosition) {
+        this.setBlankCoordinate(positionToCoordinate(blankPosition));
+        this.setRow(this.getBlankCoordinate().charAt(0));
+        this.setCol(this.getBlankCoordinate().charAt(2));
+    }
+
+    private void verifyMatrix(){
+        if(this.getInversions() % 2 != 0){
+            throw new EvenInversionsException();
+        }
+    }
+
+    public void clearMatrix(){
+        this.setData(null);
+        this.setBlankCoordinate(null);
+        this.possibilities.clear();
+        this.randomNumber = null;
     }
 
     public static String positionToCoordinate(int position) {

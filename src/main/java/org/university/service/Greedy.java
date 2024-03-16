@@ -19,8 +19,8 @@ public class Greedy extends Tecnique {
     @Override
     public ClassicNode solve(ClassicMatrix initial, int[][] solution) {
         ClassicNode root = new ClassicNode(null, initial);
-        int rootCost = calculateCost(root.getPuzzle().getData(), solution);
-        root.setCost(rootCost);
+//        int rootCost = calculateCost(root.getPuzzle().getData(), solution);
+//        root.setCost(rootCost);
         this.queue.add(root);
 
         this.numberOfExecutions = 0L;
@@ -66,8 +66,8 @@ public class Greedy extends Tecnique {
 
     private ClassicNode doChildCalculations(ClassicNode parentClassicNode, ClassicMatrix state, int[][] solution) {
         ClassicNode child = new ClassicNode(parentClassicNode, state);
-        int cost = calculateCost(state.getData(), solution);
-        child.setCost(cost);
+//        int cost = calculateCost(state.getData(), solution);
+//        child.setCost(cost);
         child.getPuzzle().calculateInversions();
         return child;
     }
