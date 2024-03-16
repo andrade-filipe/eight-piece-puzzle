@@ -1,109 +1,46 @@
 package org.university.service;
 
-import org.university.adapter.Tecnique;
-import org.university.entity.matrix.ClassicMatrix;
-import org.university.entity.node.ClassicNode;
-import org.university.exception.RepeatedStateException;
-import org.university.util.CostComparator;
+import org.university.adapter.Executor;
+import org.university.adapter.Node;
+import org.university.exception.EvenInversionsException;
+import org.university.exception.HardProblemException;
 
-import java.util.PriorityQueue;
+import java.util.HashMap;
 
-public class Greedy extends Tecnique {
+public class Greedy implements Executor {
+    final public static HashMap<String, Integer> HASH_SOLUTION = getSolution();
 
-    final public static long MAX_NUMBER_OF_ITERATIONS = 4000000L;
+    @Override
+    public void execute(int times) {
 
-    public Greedy() {
-        this.queue = new PriorityQueue<>(new CostComparator());
     }
 
     @Override
-    public ClassicNode solve(ClassicMatrix initial, int[][] solution) {
-        ClassicNode root = new ClassicNode(null, initial);
-//        int rootCost = calculateCost(root.getPuzzle().getData(), solution);
-//        root.setCost(rootCost);
-        this.queue.add(root);
+    public void execute() throws OutOfMemoryError, EvenInversionsException, HardProblemException {
 
-        this.numberOfExecutions = 0L;
-        while (queueIsNotEmpty()) {
-            this.numberOfExecutions++;
-            ClassicNode classicNode = this.queue.peek();
-            this.queue.poll();
+    }
 
-            System.out.println("Size: " + this.queue.size());
-
-            if (classicNode.getCost() == 0) {
-//                if (this.countTry > 0) {
-//                    this.clearAll();
-//                }
-                return classicNode;
-            }
-
-            if(numberOfExecutions > 1 && classicNode.equals(initial)){
-                throw new RepeatedStateException("Repeating it self");
-            }
-
-            if(this.numberOfExecutions >= MAX_NUMBER_OF_ITERATIONS){
-                this.holdCurrentState = classicNode;
-                throw new OutOfMemoryError();
-            }
-
-            performPossibleMoves(classicNode, solution);
-        }
+    @Override
+    public Node solve(Node root, HashMap solution) {
         return null;
     }
 
-    private boolean queueIsNotEmpty() {
-        return !this.queue.isEmpty();
+    @Override
+    public void clearAll() {
+
     }
 
-    private ClassicMatrix createNewStateOf(ClassicNode classicNode) {
-        return new ClassicMatrix(
-                classicNode.getPuzzle().getData(),
-                classicNode.getPuzzle().getBlankX(),
-                classicNode.getPuzzle().getBlankY()
-        );
-    }
-
-    private ClassicNode doChildCalculations(ClassicNode parentClassicNode, ClassicMatrix state, int[][] solution) {
-        ClassicNode child = new ClassicNode(parentClassicNode, state);
-//        int cost = calculateCost(state.getData(), solution);
-//        child.setCost(cost);
-        child.getPuzzle().calculateInversions();
-        return child;
-    }
-
-    private void performPossibleMoves(ClassicNode classicNode, int[][] solution) {
-        tryRight(classicNode, solution);
-        tryLeft(classicNode, solution);
-        tryDown(classicNode, solution);
-        tryUp(classicNode, solution);
-    }
-
-    private void tryRight(ClassicNode parent, int[][] solution) {
-        if (parent.getPuzzle().checkRight()) {
-            ClassicNode child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveRight(), solution);
-            this.queue.add(child);
-        }
-    }
-
-    private void tryLeft(ClassicNode parent, int[][] solution) {
-        if (parent.getPuzzle().checkLeft()) {
-            ClassicNode child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveLeft(), solution);
-            this.queue.add(child);
-        }
-    }
-
-    private void tryDown(ClassicNode parent, int[][] solution) {
-        if (parent.getPuzzle().checkDown()) {
-            ClassicNode child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveDown(), solution);
-            this.queue.add(child);
-        }
-    }
-
-    private void tryUp(ClassicNode parent, int[][] solution) {
-        if (parent.getPuzzle().checkUp()) {
-            ClassicNode child = this.doChildCalculations(parent, this.createNewStateOf(parent).moveUp(), solution);
-            this.queue.add(child);
-        }
+    private static HashMap<String, Integer> getSolution() {
+        HashMap<String, Integer> dict = new HashMap<>();
+        dict.put("0,0", 0);
+        dict.put("0,1", 1);
+        dict.put("0,2", 2);
+        dict.put("1,0", 3);
+        dict.put("1,1", 4);
+        dict.put("1,2", 5);
+        dict.put("2,0", 6);
+        dict.put("2,1", 7);
+        dict.put("2,2", 8);
+        return dict;
     }
 }

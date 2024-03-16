@@ -152,6 +152,7 @@ public class HashNode implements Node {
         this.parent = parent;
     }
 
+    @Override
     public int getCost() {
         return cost;
     }
@@ -160,6 +161,7 @@ public class HashNode implements Node {
         this.cost = cost;
     }
 
+    @Override
     public int getLevel() {
         return level;
     }
@@ -168,6 +170,7 @@ public class HashNode implements Node {
         this.level = level;
     }
 
+    @Override
     public int getPathCost() {
         return pathCost;
     }
@@ -184,6 +187,7 @@ public class HashNode implements Node {
         this.manhattan = manhattan;
     }
 
+    @Override
     public int getGeneticFactor() {
         return geneticFactor;
     }
