@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class HashNode implements Node {
-    final private static int BAD_GENETIC_FACTOR = 1000; //Depth of the Puzzles
+    final private static int BAD_GENETIC_FACTOR = 1200; //Depth of the Puzzles
     private Node parent;
     private HashMatrix puzzle;
     private int cost;
@@ -230,9 +230,7 @@ public class HashNode implements Node {
 
     @Override
     public String toString() {
-        return "HashNode{" +
-                "parent=" + this.getParent() +
-                ", puzzle=" + this.getPuzzle() +
+        return "puzzle=" + this.getPuzzle() + "\n" +
                 ", cost=" + this.getCost() +
                 ", level=" + this.getLevel() +
                 ", pathCost=" + this.getPathCost() +

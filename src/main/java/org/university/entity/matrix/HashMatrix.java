@@ -304,7 +304,7 @@ public class HashMatrix implements Matrix {
 
     @Override
     public String toString() {
-        return "HashMatrix = {" + "\n"
+        return "Matrix = {" + "\n"
                 + this.getByPosition(0) + " " + this.getByPosition(1) + " " + this.getByPosition(2) + "\n"
                 + this.getByPosition(3) + " " + this.getByPosition(4) + " " + this.getByPosition(5) + "\n"
                 + this.getByPosition(6) + " " + this.getByPosition(7) + " " + this.getByPosition(8) + "\n"

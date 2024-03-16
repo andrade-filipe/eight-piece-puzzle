@@ -29,14 +29,27 @@ public class Greedy implements Executor {
         for (int i = 0; i < times; i++) {
             try {
                 this.execute();
-                System.out.println("#################################");
-                System.out.println("EXECUTION NUMBER: " + (i + 1));
-                System.out.println("#################################");
+                System.out.println("#CLEAN EXECUTION NUMBER: " + (i + 1));
+                System.out.println("************************************");
             } catch (HardProblemException | OutOfMemoryError e) {
 //                System.out.println("Trying Again");
                 i--;
             }
         }
+    }
+
+    private void printResult(Node initial, Node solved) {
+        System.out.println("####################################");
+        System.out.println("######### Starting Point ###########");
+        System.out.println("Genetic Factor: " + initial.getGeneticFactor());
+        System.out.println("Cost: " + initial.getCost());
+        System.out.println("Manhattan: " + initial.getManhattan());
+        System.out.println("Inversions: " + initial.getPuzzle().getInversions());
+        System.out.println("############# Solved ###############");
+        System.out.println("Full Path Cost: " + solved.getPathCost());
+        System.out.println("Number of Steps: " + solved.getLevel());
+        System.out.println("Number of Iterations: " + this.numberOfExecutions);
+        System.out.println("**************************************");
     }
 
     @Override
@@ -53,9 +66,7 @@ public class Greedy implements Executor {
 
         try {
             solved = this.solve(this.root, HASH_SOLUTION);
-            System.out.println(this.root);
-            System.out.println(solved.getPuzzle());
-            System.out.println(numberOfExecutions);
+            this.printResult(this.root, solved);
         } catch (HardProblemException | OutOfMemoryError e) {
 //            System.out.println("Hard Problem, Cleaning...");
             this.clearAll();
