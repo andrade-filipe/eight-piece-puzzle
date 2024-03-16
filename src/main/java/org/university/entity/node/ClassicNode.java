@@ -60,6 +60,11 @@ public class ClassicNode implements Node {
 
     }
 
+    @Override
+    public void clearNode() {
+
+    }
+
     public ClassicNode getParent() {
         return parent;
     }

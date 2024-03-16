@@ -9,11 +9,9 @@ public interface Node {
     void calculatePathCost();
     void calculateManhattan(HashMap<String, Integer> solution);
     void calculateGeneticFactor();
-
+    void clearNode();
     int getCost();
     int getLevel();
-
     int getPathCost();
-
     int getGeneticFactor();
 }

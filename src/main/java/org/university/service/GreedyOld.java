@@ -39,7 +39,7 @@ public class GreedyOld extends Tecnique {
             }
 
             if (numberOfExecutions > 1 && classicNode.equals(initial)) {
-                throw new RepeatedStateException("Repeating it self");
+                throw new RepeatedStateException();
             }
 
             if (this.numberOfExecutions >= MAX_NUMBER_OF_ITERATIONS) {

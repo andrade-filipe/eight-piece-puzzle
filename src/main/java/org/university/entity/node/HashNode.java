@@ -1,10 +1,9 @@
 package org.university.entity.node;
 
 import org.university.adapter.Node;
-import org.university.adapter.Tecnique;
 import org.university.entity.matrix.HashMatrix;
-import org.university.exception.EvenInversionsException;
 import org.university.exception.HardProblemException;
+import org.university.service.Greedy;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -19,16 +18,6 @@ public class HashNode implements Node {
     private int manhattan;
     private int geneticFactor;
 
-    public HashNode() {
-        this.parent = null;
-        try {
-            this.puzzle = new HashMatrix();
-        } catch (EvenInversionsException e) {
-            this.clearNode();
-            throw e;
-        }
-    }
-
     public HashNode(HashNode parent, HashMatrix puzzle) {
         this.parent = parent;
         this.puzzle = puzzle;
@@ -42,11 +31,11 @@ public class HashNode implements Node {
 
     @Override
     public void performCalculations() {
-        this.calculateCost(Tecnique.HASH_SOLUTION);
+        this.calculateCost(Greedy.HASH_SOLUTION);
         this.calculateLevel();
 
         this.calculatePathCost();
-        this.calculateManhattan(Tecnique.HASH_SOLUTION);
+        this.calculateManhattan(Greedy.HASH_SOLUTION);
         this.calculateGeneticFactor();
         try {
             this.verifyNode();

@@ -72,7 +72,7 @@ public abstract class Tecnique {
                 System.out.println("#################################");
                 System.out.println("EXECUTION NUMBER: " + (i + 1));
                 System.out.println("#################################");
-            } catch (OutOfMemoryError | EvenInversionsException | HardProblemException e) {
+            } catch (OutOfMemoryError | HardProblemException e) {
                 i--;
             }
         }

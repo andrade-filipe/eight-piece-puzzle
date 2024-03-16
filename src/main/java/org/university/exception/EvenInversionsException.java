@@ -1,4 +1,4 @@
 package org.university.exception;
 
-public class EvenInversionsException extends RuntimeException{
+public class EvenInversionsException extends HardProblemException{
 }

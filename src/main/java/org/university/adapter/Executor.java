@@ -1,5 +1,6 @@
 package org.university.adapter;
 
+import org.university.entity.node.HashNode;
 import org.university.exception.EvenInversionsException;
 import org.university.exception.HardProblemException;
 
@@ -10,7 +11,7 @@ public interface Executor {
 
     void execute() throws OutOfMemoryError, EvenInversionsException, HardProblemException;
 
-    Node solve(Node root, HashMap solution);
+    HashNode solve(HashNode root, HashMap solution);
 
     void clearAll();
 }
