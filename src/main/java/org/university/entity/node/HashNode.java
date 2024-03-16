@@ -120,6 +120,7 @@ public class HashNode implements Node {
 
     private void verifyNode() {
         if (this.getGeneticFactor() >= BAD_GENETIC_FACTOR) {
+//            System.out.println("Bad Genetics, ignoring...");
             throw new HardProblemException();
         }
     }

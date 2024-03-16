@@ -30,7 +30,8 @@ public class Greedy implements Executor {
                 System.out.println("#################################");
                 System.out.println("EXECUTION NUMBER: " + (i + 1));
                 System.out.println("#################################");
-            } catch (HardProblemException e) {
+            } catch (HardProblemException | OutOfMemoryError e) {
+//                System.out.println("Trying Again");
                 i--;
             }
         }
@@ -42,6 +43,7 @@ public class Greedy implements Executor {
             HashMatrix initial = new HashMatrix();
             this.root = new HashNode(null, initial);
         } catch (HardProblemException e) {
+//            System.out.println("Initial matrix or Root were not adequate");
             throw e;
         }
 
@@ -53,7 +55,7 @@ public class Greedy implements Executor {
             System.out.println(solved.getPuzzle());
             System.out.println(numberOfExecutions);
         } catch (HardProblemException | OutOfMemoryError e) {
-            System.out.println("Hard Problem, Cleaning...");
+//            System.out.println("Hard Problem, Cleaning...");
             this.clearAll();
             throw new HardProblemException();
         }
@@ -76,17 +78,19 @@ public class Greedy implements Executor {
             }
 
             if (numberOfExecutions > 1 && node.equals(root)) {
+//                System.out.println("State Repeated it Self");
                 throw new RepeatedStateException();
             }
 
             if (this.numberOfExecutions >= MAX_NUMBER_OF_EXECUTIONS) {
                 this.countTry++;
                 if (this.countTry >= 10) {
+//                    System.out.println("Too many tentatives...");
                     throw new HardProblemException();
                 }
+//                System.out.println("Tentative number " + this.countTry);
                 return this.solve(this.queue.peek(), solution);
             }
-
             this.performPossibleMoves(node);
         }
         return null;

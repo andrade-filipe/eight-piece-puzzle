@@ -170,6 +170,7 @@ public class HashMatrix implements Matrix {
 
     private void verifyMatrix() {
         if (this.getInversions() % 2 != 0) {
+//            System.out.println("Even Inversions, ignoring...");
             throw new EvenInversionsException();
         }
     }

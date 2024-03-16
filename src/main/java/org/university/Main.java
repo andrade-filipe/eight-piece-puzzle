@@ -6,6 +6,6 @@ public class Main {
     public static void main(String[] args) {
         Greedy greedy = new Greedy();
 
-        greedy.execute(1);
+        greedy.execute(1000);
     }
 }
