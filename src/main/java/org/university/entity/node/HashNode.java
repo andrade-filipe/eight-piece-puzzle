@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class HashNode implements Node {
-    final private static int BAD_GENETIC_FACTOR = 600;
+    final private static int BAD_GENETIC_FACTOR = 1000; //Depth of the Puzzles
     private HashNode parent;
     private HashMatrix puzzle;
     private int cost;

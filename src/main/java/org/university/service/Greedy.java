@@ -11,7 +11,8 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 
 public class Greedy implements Executor {
-    final public static long MAX_NUMBER_OF_EXECUTIONS = 4_000_000L;
+    //181_440 is the number of possible states for the problem
+    final public static long MAX_NUMBER_OF_EXECUTIONS = 181_440L; //Number os steps the solving process should try
     final public static HashMap<String, Integer> HASH_SOLUTION = getSolution();
     public PriorityQueue<HashNode> queue;
     public int countTry = 0;
@@ -74,6 +75,8 @@ public class Greedy implements Executor {
                 if (countTry > 0) {
                     this.clearAll();
                 }
+//                System.out.println("Solved");
+//                System.out.println(node.hashCode());
                 return node;
             }
 
