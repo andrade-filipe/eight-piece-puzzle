@@ -1,5 +1,6 @@
 package org.university.entity.node;
 
+import org.university.adapter.Matrix;
 import org.university.adapter.Node;
 import org.university.entity.matrix.HashMatrix;
 import org.university.exception.HardProblemException;
@@ -9,16 +10,16 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class HashNode implements Node {
-    final private static int BAD_GENETIC_FACTOR = 1200; //Depth of the Puzzles
+    final private static int BAD_GENETIC_FACTOR = Integer.MAX_VALUE; //Depth of the Puzzles
     private Node parent;
-    private HashMatrix puzzle;
+    private Matrix puzzle;
     private int cost;
     private int level;
     private int pathCost;
     private int manhattan;
     private int geneticFactor;
 
-    public HashNode(Node parent, HashMatrix puzzle) {
+    public HashNode(Node parent, Matrix puzzle) {
         this.parent = parent;
         this.puzzle = puzzle;
         try {
@@ -200,12 +201,12 @@ public class HashNode implements Node {
     }
 
     @Override
-    public HashMatrix getPuzzle() {
+    public Matrix getPuzzle() {
         return puzzle;
     }
 
     @Override
-    public void setPuzzle(HashMatrix puzzle) {
+    public void setPuzzle(Matrix puzzle) {
         this.puzzle = puzzle;
     }
 

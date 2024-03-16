@@ -49,7 +49,7 @@ public class Greedy implements Executor {
         System.out.println("Full Path Cost: " + solved.getPathCost());
         System.out.println("Number of Steps: " + solved.getLevel());
         System.out.println("Number of Iterations: " + this.numberOfExecutions);
-        System.out.println("**************************************");
+        System.out.println("************************************");
     }
 
     @Override
@@ -67,6 +67,7 @@ public class Greedy implements Executor {
         try {
             solved = this.solve(this.root, HASH_SOLUTION);
             this.printResult(this.root, solved);
+            this.clearAll();
         } catch (HardProblemException | OutOfMemoryError e) {
 //            System.out.println("Hard Problem, Cleaning...");
             this.clearAll();
@@ -84,11 +85,6 @@ public class Greedy implements Executor {
             this.queue.poll();
 
             if (node.getCost() == 0) {
-                if (countTry > 0) {
-                    this.clearAll();
-                }
-//                System.out.println("Solved");
-//                System.out.println(node.hashCode());
                 return node;
             }
 

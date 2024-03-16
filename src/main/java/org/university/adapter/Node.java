@@ -1,7 +1,5 @@
 package org.university.adapter;
 
-import org.university.entity.matrix.HashMatrix;
-
 import java.util.HashMap;
 
 public interface Node {
@@ -22,12 +20,12 @@ public interface Node {
     HashMap<String, Integer> getPuzzleMap();
     Node getParent();
     int getManhattan();
-    HashMatrix getPuzzle();
+    Matrix getPuzzle();
     void setParent(Node parent);
     void setCost(int cost);
     void setLevel(int level);
     void setPathCost(int pathCost);
     void setManhattan(int manhattan);
     void setGeneticFactor(int geneticFactor);
-    void setPuzzle(HashMatrix puzzle);
+    void setPuzzle(Matrix puzzle);
 }

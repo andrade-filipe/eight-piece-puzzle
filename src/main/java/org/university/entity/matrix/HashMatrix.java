@@ -153,7 +153,8 @@ public class HashMatrix implements Matrix {
         return this.getRow() != '2';
     }
 
-    private void perfomCalculations() {
+    @Override
+    public void perfomCalculations() {
         this.calculateInversions();
         this.refreshCoordinates(this.getBlankPosition());
     }
@@ -175,6 +176,7 @@ public class HashMatrix implements Matrix {
         }
     }
 
+    @Override
     public void clearMatrix() {
         this.setData(null);
         this.setBlankCoordinate(null);
@@ -234,10 +236,12 @@ public class HashMatrix implements Matrix {
         return this.getData().get(coordinate);
     }
 
+    @Override
     public HashMap<String, Integer> getData() {
         return data;
     }
 
+    @Override
     public void setData(HashMap<String, Integer> data) {
         this.data = data;
     }
@@ -246,14 +250,17 @@ public class HashMatrix implements Matrix {
         return blankCoordinate;
     }
 
+    @Override
     public void setBlankCoordinate(String blankCoordinate) {
         this.blankCoordinate = blankCoordinate;
     }
 
+    @Override
     public int getInversions() {
         return inversions;
     }
 
+    @Override
     public void setInversions(int inversions) {
         this.inversions = inversions;
     }
@@ -274,10 +281,12 @@ public class HashMatrix implements Matrix {
         this.row = row;
     }
 
+    @Override
     public int getBlankPosition() {
         return blankPosition;
     }
 
+    @Override
     public void setBlankPosition(int blankPosition) {
         this.blankPosition = blankPosition;
     }
