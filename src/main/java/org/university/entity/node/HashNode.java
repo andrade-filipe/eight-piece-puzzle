@@ -21,35 +21,37 @@ public class HashNode implements Node {
 
     public HashNode() {
         this.parent = null;
-        try{
+        try {
             this.puzzle = new HashMatrix();
-        }catch (EvenInversionsException e){
-            throw e;
-        }finally {
+        } catch (EvenInversionsException e) {
             this.clearNode();
+            throw e;
         }
     }
 
     public HashNode(HashNode parent, HashMatrix puzzle) {
         this.parent = parent;
         this.puzzle = puzzle;
-        this.performCalculations();
+        try {
+            this.performCalculations();
+        } catch (HardProblemException e) {
+            this.clearNode();
+            throw e;
+        }
     }
 
     @Override
     public void performCalculations() {
-        try{
-            this.calculateCost(Tecnique.HASH_SOLUTION);
-            this.calculateLevel();
+        this.calculateCost(Tecnique.HASH_SOLUTION);
+        this.calculateLevel();
 
-            this.calculatePathCost();
-            this.calculateManhattan(Tecnique.HASH_SOLUTION);
-            this.calculateGeneticFactor();
+        this.calculatePathCost();
+        this.calculateManhattan(Tecnique.HASH_SOLUTION);
+        this.calculateGeneticFactor();
+        try {
             this.verifyNode();
-        }catch (HardProblemException e){
+        } catch (HardProblemException e) {
             throw e;
-        } finally{
-            this.clearNode();
         }
     }
 
@@ -91,7 +93,7 @@ public class HashNode implements Node {
             int valueInThePosition = this.getPuzzleMap().get(HashMatrix.positionToCoordinate(i));
             int originalValue = solution.get(HashMatrix.positionToCoordinate(i));
 
-            if (valueInThePosition != originalValue){
+            if (valueInThePosition != originalValue) {
                 String currentPosition = this.getCoordinatesOfValue(valueInThePosition);
                 String originalPosition = this.getCoordinatesOfValue(solution, valueInThePosition);
 
@@ -109,36 +111,36 @@ public class HashNode implements Node {
         this.setGeneticFactor(geneticFactor);
     }
 
-    public String getCoordinatesOfValue(int value){
-        for(String key : this.getPuzzleMap().keySet()){
-            if(this.getPuzzleMap().get(key).compareTo(value) == 0){
+    public String getCoordinatesOfValue(int value) {
+        for (String key : this.getPuzzleMap().keySet()) {
+            if (this.getPuzzleMap().get(key).compareTo(value) == 0) {
                 return key;
             }
         }
         return null;
     }
 
-    public String getCoordinatesOfValue(HashMap<String, Integer> matrix ,int value){
-        for(String key : matrix.keySet()){
-            if(matrix.get(key).compareTo(value) == 0){
+    public String getCoordinatesOfValue(HashMap<String, Integer> matrix, int value) {
+        for (String key : matrix.keySet()) {
+            if (matrix.get(key).compareTo(value) == 0) {
                 return key;
             }
         }
         return null;
     }
 
-    private void verifyNode(){
-        if(this.getGeneticFactor() >= BAD_GENETIC_FACTOR){
+    private void verifyNode() {
+        if (this.getGeneticFactor() >= BAD_GENETIC_FACTOR) {
             throw new HardProblemException();
         }
     }
 
-    public void clearNode(){
+    public void clearNode() {
         this.setParent(null);
         this.setPuzzle(null);
     }
 
-    public HashMap<String, Integer> getPuzzleMap(){
+    public HashMap<String, Integer> getPuzzleMap() {
         return this.getPuzzle().getData();
     }
 

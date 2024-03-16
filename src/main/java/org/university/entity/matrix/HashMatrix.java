@@ -26,6 +26,12 @@ public class HashMatrix implements Matrix {
         this.data = new HashMap<>();
         this.generatePuzzle();
         this.perfomCalculations();
+        try {
+            this.verifyMatrix();
+        } catch (EvenInversionsException e) {
+            this.clearMatrix();
+            throw e;
+        }
     }
 
     public HashMatrix(HashMap<String, Integer> data, int blankPosition) {
@@ -51,14 +57,18 @@ public class HashMatrix implements Matrix {
     @Override
     public void calculateInversions() {
         int count = 0;
+
         for (int i = 0; i < MATRIX_SIZE; i++) {
-            if (i == 2 || i == 5 || i == 8) {
-                continue;
-            }
-            if (this.getByPosition(i) > this.getByPosition(i + 1)) {
-                count++;
+            int value = this.getData().get(positionToCoordinate(i));
+
+            for (int j = MATRIX_SIZE - 1; j > i; j--) {
+
+                if(value > this.getData().get(positionToCoordinate(j))){
+                    count++;
+                }
             }
         }
+
         this.setInversions(count);
     }
 
@@ -86,7 +96,6 @@ public class HashMatrix implements Matrix {
             this.insertInCoordinate(positionToCoordinate(this.getBlankPosition() - COL_MOVE), 0);
 
             this.setBlankPosition(this.getBlankPosition() - COL_MOVE);
-
             this.perfomCalculations();
             return this;
         }
@@ -102,7 +111,6 @@ public class HashMatrix implements Matrix {
             this.insertInCoordinate(positionToCoordinate(this.getBlankPosition() - ROW_MOVE), 0);
 
             this.setBlankPosition(this.getBlankPosition() - ROW_MOVE);
-
             this.perfomCalculations();
             return this;
         }
@@ -119,7 +127,6 @@ public class HashMatrix implements Matrix {
             this.insertInCoordinate(positionToCoordinate(this.getBlankPosition() + ROW_MOVE), 0);
 
             this.setBlankPosition(this.getBlankPosition() + ROW_MOVE);
-
             this.perfomCalculations();
             return this;
         }
@@ -147,15 +154,8 @@ public class HashMatrix implements Matrix {
     }
 
     private void perfomCalculations() {
-        try{
-            this.calculateInversions();
-            this.refreshCoordinates(this.getBlankPosition());
-            this.verifyMatrix();
-        } catch (EvenInversionsException e){
-            throw e;
-        } finally {
-            this.clearMatrix();
-        }
+        this.calculateInversions();
+        this.refreshCoordinates(this.getBlankPosition());
     }
 
     private void copyData(HashMap<String, Integer> data) {
@@ -168,13 +168,13 @@ public class HashMatrix implements Matrix {
         this.setCol(this.getBlankCoordinate().charAt(2));
     }
 
-    private void verifyMatrix(){
-        if(this.getInversions() % 2 != 0){
+    private void verifyMatrix() {
+        if (this.getInversions() % 2 != 0) {
             throw new EvenInversionsException();
         }
     }
 
-    public void clearMatrix(){
+    public void clearMatrix() {
         this.setData(null);
         this.setBlankCoordinate(null);
         this.possibilities.clear();
