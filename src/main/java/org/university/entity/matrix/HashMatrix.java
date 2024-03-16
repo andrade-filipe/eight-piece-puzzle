@@ -62,7 +62,6 @@ public class HashMatrix implements Matrix {
             int value = this.getByPosition(i);
 
             for (int j = MATRIX_SIZE - 1; j > i; j--) {
-
                 if(value > this.getByPosition(j)){
                     count++;
                 }
@@ -75,62 +74,79 @@ public class HashMatrix implements Matrix {
     @Override
     public HashMatrix moveRight() {
         if (checkRight()) {
-            this.insertInCoordinate(this.getBlankCoordinate(),
-                    this.getByPosition(this.getBlankPosition() + COL_MOVE));
-
-            this.insertInPosition(this.getBlankPosition() + COL_MOVE, 0);
-
-            this.setBlankPosition(this.getBlankPosition() + COL_MOVE);
+            this.swapRight();
             this.perfomCalculations();
             return this;
         }
         return null;
+    }
+
+    private void swapRight(){
+        this.insertInCoordinate(this.getBlankCoordinate(),
+                this.getByPosition(this.getBlankPosition() + COL_MOVE));
+
+        this.insertInPosition(this.getBlankPosition() + COL_MOVE, 0);
+
+        this.setBlankPosition(this.getBlankPosition() + COL_MOVE);
     }
 
     @Override
     public HashMatrix moveLeft() {
         if (checkLeft()) {
-            this.insertInCoordinate(this.getBlankCoordinate(),
-                    this.getByPosition(this.getBlankPosition() - COL_MOVE));
-
-            this.insertInPosition(this.getBlankPosition() - COL_MOVE, 0);
-
-            this.setBlankPosition(this.getBlankPosition() - COL_MOVE);
+            this.swapLeft();
             this.perfomCalculations();
             return this;
         }
         return null;
+    }
+
+    private void swapLeft(){
+        this.insertInCoordinate(this.getBlankCoordinate(),
+                this.getByPosition(this.getBlankPosition() - COL_MOVE));
+
+        this.insertInPosition(this.getBlankPosition() - COL_MOVE, 0);
+
+        this.setBlankPosition(this.getBlankPosition() - COL_MOVE);
     }
 
     @Override
     public HashMatrix moveUp() {
         if (checkUp()) {
-            this.insertInCoordinate(this.getBlankCoordinate(),
-                    this.getByPosition(this.getBlankPosition() - ROW_MOVE));
-
-            this.insertInPosition(this.getBlankPosition() - ROW_MOVE, 0);
-
-            this.setBlankPosition(this.getBlankPosition() - ROW_MOVE);
+            this.swapUp();
             this.perfomCalculations();
             return this;
         }
         return null;
     }
 
+    private void swapUp(){
+        this.insertInCoordinate(this.getBlankCoordinate(),
+                this.getByPosition(this.getBlankPosition() - ROW_MOVE));
+
+        this.insertInPosition(this.getBlankPosition() - ROW_MOVE, 0);
+
+        this.setBlankPosition(this.getBlankPosition() - ROW_MOVE);
+    }
+
+
     @Override
     public HashMatrix moveDown() {
         if (checkDown()) {
-            this.insertInCoordinate(
-                    this.getBlankCoordinate(),
-                    this.getByPosition(this.getBlankPosition() + ROW_MOVE));
-
-            this.insertInPosition(this.getBlankPosition() + ROW_MOVE, 0);
-
-            this.setBlankPosition(this.getBlankPosition() + ROW_MOVE);
+            this.swapDown();
             this.perfomCalculations();
             return this;
         }
         return null;
+    }
+
+    private void swapDown(){
+        this.insertInCoordinate(
+                this.getBlankCoordinate(),
+                this.getByPosition(this.getBlankPosition() + ROW_MOVE));
+
+        this.insertInPosition(this.getBlankPosition() + ROW_MOVE, 0);
+
+        this.setBlankPosition(this.getBlankPosition() + ROW_MOVE);
     }
 
     @Override
