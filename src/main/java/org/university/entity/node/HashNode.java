@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class HashNode implements Node {
     final private static int BAD_GENETIC_FACTOR = 1000; //Depth of the Puzzles
-    private HashNode parent;
+    private Node parent;
     private HashMatrix puzzle;
     private int cost;
     private int level;
@@ -18,7 +18,7 @@ public class HashNode implements Node {
     private int manhattan;
     private int geneticFactor;
 
-    public HashNode(HashNode parent, HashMatrix puzzle) {
+    public HashNode(Node parent, HashMatrix puzzle) {
         this.parent = parent;
         this.puzzle = puzzle;
         try {
@@ -53,6 +53,7 @@ public class HashNode implements Node {
         this.setLevel(this.parent.getLevel() + 1);
     }
 
+    @Override
     public void calculateCost(HashMap<String, Integer> solution) {
         int cost = 0;
         for (int i = 0; i < HashMatrix.MATRIX_SIZE; i++) {
@@ -100,6 +101,7 @@ public class HashNode implements Node {
         this.setGeneticFactor(geneticFactor);
     }
 
+    @Override
     public String getCoordinatesOfValue(int value) {
         for (String key : this.getPuzzleMap().keySet()) {
             if (this.getPuzzleMap().get(key).compareTo(value) == 0) {
@@ -109,6 +111,7 @@ public class HashNode implements Node {
         return null;
     }
 
+    @Override
     public String getCoordinatesOfValue(HashMap<String, Integer> matrix, int value) {
         for (String key : matrix.keySet()) {
             if (matrix.get(key).compareTo(value) == 0) {
@@ -125,20 +128,24 @@ public class HashNode implements Node {
         }
     }
 
+    @Override
     public void clearNode() {
         this.setParent(null);
         this.setPuzzle(null);
     }
 
+    @Override
     public HashMap<String, Integer> getPuzzleMap() {
         return this.getPuzzle().getData();
     }
 
-    public HashNode getParent() {
+    @Override
+    public Node getParent() {
         return parent;
     }
 
-    public void setParent(HashNode parent) {
+    @Override
+    public void setParent(Node parent) {
         this.parent = parent;
     }
 
@@ -147,6 +154,7 @@ public class HashNode implements Node {
         return cost;
     }
 
+    @Override
     public void setCost(int cost) {
         this.cost = cost;
     }
@@ -156,6 +164,7 @@ public class HashNode implements Node {
         return level;
     }
 
+    @Override
     public void setLevel(int level) {
         this.level = level;
     }
@@ -165,14 +174,17 @@ public class HashNode implements Node {
         return pathCost;
     }
 
+    @Override
     public void setPathCost(int pathCost) {
         this.pathCost = pathCost;
     }
 
+    @Override
     public int getManhattan() {
         return manhattan;
     }
 
+    @Override
     public void setManhattan(int manhattan) {
         this.manhattan = manhattan;
     }
@@ -182,14 +194,17 @@ public class HashNode implements Node {
         return geneticFactor;
     }
 
+    @Override
     public void setGeneticFactor(int geneticFactor) {
         this.geneticFactor = geneticFactor;
     }
 
+    @Override
     public HashMatrix getPuzzle() {
         return puzzle;
     }
 
+    @Override
     public void setPuzzle(HashMatrix puzzle) {
         this.puzzle = puzzle;
     }

@@ -1,7 +1,5 @@
 package org.university.adapter;
 
-import org.university.entity.node.HashNode;
-import org.university.exception.EvenInversionsException;
 import org.university.exception.HardProblemException;
 
 import java.util.HashMap;
@@ -9,9 +7,9 @@ import java.util.HashMap;
 public interface Executor {
     void execute(int times);
 
-    void execute() throws OutOfMemoryError, EvenInversionsException, HardProblemException;
+    void execute() throws OutOfMemoryError, HardProblemException;
 
-    HashNode solve(HashNode root, HashMap solution);
+    Node solve(Node root, HashMap solution);
 
     void clearAll();
 }

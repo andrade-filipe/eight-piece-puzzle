@@ -1,6 +1,7 @@
 package org.university.service;
 
 import org.university.adapter.Executor;
+import org.university.adapter.Node;
 import org.university.entity.matrix.HashMatrix;
 import org.university.entity.node.HashNode;
 import org.university.exception.HardProblemException;
@@ -14,10 +15,10 @@ public class Greedy implements Executor {
     //181_440 is the number of possible states for the problem
     final public static long MAX_NUMBER_OF_EXECUTIONS = 181_440L; //Number os steps the solving process should try
     final public static HashMap<String, Integer> HASH_SOLUTION = getSolution();
-    public PriorityQueue<HashNode> queue;
+    public PriorityQueue<Node> queue;
     public int countTry = 0;
     public long numberOfExecutions = 0L;
-    public HashNode root;
+    public Node root;
 
     public Greedy() {
         this.queue = new PriorityQueue<>(new CostComparator());
@@ -48,7 +49,7 @@ public class Greedy implements Executor {
             throw e;
         }
 
-        HashNode solved;
+        Node solved;
 
         try {
             solved = this.solve(this.root, HASH_SOLUTION);
@@ -63,12 +64,12 @@ public class Greedy implements Executor {
     }
 
     @Override
-    public HashNode solve(HashNode root, HashMap solution) throws HardProblemException {
+    public Node solve(Node root, HashMap solution) throws HardProblemException {
         this.queue.add(root);
         this.numberOfExecutions = 0L;
         while (queueIsNotEmpty()) {
             this.numberOfExecutions++;
-            HashNode node = this.queue.peek();
+            Node node = this.queue.peek();
             this.queue.poll();
 
             if (node.getCost() == 0) {
@@ -99,44 +100,44 @@ public class Greedy implements Executor {
         return null;
     }
 
-    private HashMatrix createNewStateOf(HashNode parent) {
+    private HashMatrix createNewStateOf(Node parent) {
         return new HashMatrix(
                 parent.getPuzzleMap(),
                 parent.getPuzzle().getBlankPosition()
         );
     }
 
-    private void performPossibleMoves(HashNode node) {
+    private void performPossibleMoves(Node node) {
         tryRight(node);
         tryLeft(node);
         tryUp(node);
         tryDown(node);
     }
 
-    private void tryDown(HashNode parent) {
+    private void tryDown(Node parent) {
         if (parent.getPuzzle().checkDown()) {
-            HashNode child = new HashNode(parent, createNewStateOf(parent).moveDown());
+            Node child = new HashNode(parent, createNewStateOf(parent).moveDown());
             this.queue.add(child);
         }
     }
 
-    private void tryUp(HashNode parent) {
+    private void tryUp(Node parent) {
         if (parent.getPuzzle().checkUp()) {
-            HashNode child = new HashNode(parent, createNewStateOf(parent).moveUp());
+            Node child = new HashNode(parent, createNewStateOf(parent).moveUp());
             this.queue.add(child);
         }
     }
 
-    private void tryLeft(HashNode parent) {
+    private void tryLeft(Node parent) {
         if (parent.getPuzzle().checkLeft()) {
-            HashNode child = new HashNode(parent, createNewStateOf(parent).moveLeft());
+            Node child = new HashNode(parent, createNewStateOf(parent).moveLeft());
             this.queue.add(child);
         }
     }
 
-    private void tryRight(HashNode parent) {
+    private void tryRight(Node parent) {
         if (parent.getPuzzle().checkRight()) {
-            HashNode child = new HashNode(parent, createNewStateOf(parent).moveRight());
+            Node child = new HashNode(parent, createNewStateOf(parent).moveRight());
             this.queue.add(child);
         }
     }
