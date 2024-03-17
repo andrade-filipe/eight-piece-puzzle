@@ -13,15 +13,18 @@ import java.util.PriorityQueue;
 
 public class Greedy implements Executor {
     //181_440 is the number of possible states for the problem
-    final public static long MAX_NUMBER_OF_EXECUTIONS = 181_440L; //Number os steps the solving process should try
+    final public static long MAX_NUMBER_OF_ITERATIONS = 1_000L; //Number os steps the solving process should try
+    final public static int MAX_NUMBER_OF_TENTATIVES = 500;
     final public static HashMap<String, Integer> HASH_SOLUTION = getSolution();
+    public HashMap<Node, Node> CACHE;
     public PriorityQueue<Node> queue;
     public int countTry = 0;
-    public long numberOfExecutions = 0L;
+    public long sumOfIterations = 0L;
     public Node root;
 
     public Greedy() {
         this.queue = new PriorityQueue<>(new CostComparator());
+        this.CACHE = new HashMap<>();
     }
 
     @Override
@@ -38,7 +41,7 @@ public class Greedy implements Executor {
         }
     }
 
-    private void printResult(Node initial, Node solved) {
+    private void printResult(Node initial, Node solved, int tentatives, long executions) {
         System.out.println("####################################");
         System.out.println("######### Starting Point ###########");
         System.out.println("Genetic Factor: " + initial.getGeneticFactor());
@@ -48,7 +51,8 @@ public class Greedy implements Executor {
         System.out.println("############# Solved ###############");
         System.out.println("Full Path Cost: " + solved.getPathCost());
         System.out.println("Number of Steps: " + solved.getLevel());
-        System.out.println("Number of Iterations: " + this.numberOfExecutions);
+        System.out.println("Number of Iterations: " + executions);
+        System.out.println("Number of Tentatives: " + tentatives);
         System.out.println("************************************");
     }
 
@@ -66,7 +70,7 @@ public class Greedy implements Executor {
 
         try {
             solved = this.solve(this.root, HASH_SOLUTION);
-            this.printResult(this.root, solved);
+            this.printResult(this.root, solved, this.countTry, this.sumOfIterations);
             this.clearAll();
         } catch (HardProblemException | OutOfMemoryError e) {
 //            System.out.println("Hard Problem, Cleaning...");
@@ -77,29 +81,38 @@ public class Greedy implements Executor {
 
     @Override
     public Node solve(Node root, HashMap solution) throws HardProblemException {
+
+        if (this.countTry >= MAX_NUMBER_OF_TENTATIVES) {
+            throw new HardProblemException();
+        }
+
         this.queue.add(root);
-        this.numberOfExecutions = 0L;
+        long numberOfIterations = 0L;
         while (queueIsNotEmpty()) {
-            this.numberOfExecutions++;
+            numberOfIterations++;
             Node node = this.queue.peek();
             this.queue.poll();
 
             if (node.getCost() == 0) {
+                this.sumOfIterations += numberOfIterations;
                 return node;
             }
 
-            if (numberOfExecutions > 1 && node.equals(root)) {
+            if (numberOfIterations > 1 && node.equals(root)) {
 //                System.out.println("State Repeated it Self");
                 throw new RepeatedStateException();
             }
 
-            if (this.numberOfExecutions >= MAX_NUMBER_OF_EXECUTIONS) {
+            if(this.CACHE.containsKey(node)){
+                System.out.println("Cache called...");
+                this.sumOfIterations += numberOfIterations;
+                return this.solve(this.CACHE.get(node), solution);
+            }
+
+            if (numberOfIterations >= MAX_NUMBER_OF_ITERATIONS) {
                 this.countTry++;
-                if (this.countTry >= 10) {
-//                    System.out.println("Too many tentatives...");
-                    throw new HardProblemException();
-                }
-//                System.out.println("Tentative number " + this.countTry);
+                this.sumOfIterations += numberOfIterations;
+                this.CACHE.put(root, node);
                 return this.solve(this.queue.peek(), solution);
             }
             this.performPossibleMoves(node);
@@ -153,7 +166,7 @@ public class Greedy implements Executor {
     public void clearAll() {
         this.queue.clear();
         this.countTry = 0;
-        this.numberOfExecutions = 0L;
+        this.sumOfIterations = 0L;
     }
 
     private boolean queueIsNotEmpty() {
