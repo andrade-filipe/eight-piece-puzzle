@@ -13,7 +13,7 @@ import java.util.PriorityQueue;
 
 public class Greedy implements Executor {
     //181_440 is the number of possible states for the problem
-    final public static long MAX_NUMBER_OF_ITERATIONS = 1_000L; //Number os steps the solving process should try
+    final public static long MAX_NUMBER_OF_ITERATIONS = 600L; //Number os steps the solving process should try
     final public static int MAX_NUMBER_OF_TENTATIVES = 500;
     final public static HashMap<String, Integer> HASH_SOLUTION = getSolution();
     public HashMap<Node, Node> CACHE;
@@ -83,6 +83,7 @@ public class Greedy implements Executor {
     public Node solve(Node root, HashMap solution) throws HardProblemException {
 
         if (this.countTry >= MAX_NUMBER_OF_TENTATIVES) {
+            System.out.println("Max number of tentatives");
             throw new HardProblemException();
         }
 
@@ -90,8 +91,7 @@ public class Greedy implements Executor {
         long numberOfIterations = 0L;
         while (queueIsNotEmpty()) {
             numberOfIterations++;
-            Node node = this.queue.peek();
-            this.queue.poll();
+            Node node = this.queue.poll();
 
             if (node.getCost() == 0) {
                 this.sumOfIterations += numberOfIterations;
@@ -109,15 +109,22 @@ public class Greedy implements Executor {
                 return this.solve(this.CACHE.get(node), solution);
             }
 
+            this.performPossibleMoves(node);
+
             if (numberOfIterations >= MAX_NUMBER_OF_ITERATIONS) {
                 this.countTry++;
                 this.sumOfIterations += numberOfIterations;
-                this.CACHE.put(root, node);
-                return this.solve(this.queue.peek(), solution);
+                this.cacheIt(root, this.queue.peek());
+                return this.solve(this.queue.poll(), solution);
             }
-            this.performPossibleMoves(node);
         }
         return null;
+    }
+
+    private void cacheIt(Node root, Node currentNode){
+        if(root.getCost() > currentNode.getCost()){
+            this.CACHE.put(root, currentNode);
+        }
     }
 
     private HashMatrix createNewStateOf(Node parent) {

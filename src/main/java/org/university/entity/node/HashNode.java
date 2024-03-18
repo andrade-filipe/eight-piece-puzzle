@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class HashNode implements Node {
-    final private static int BAD_GENETIC_FACTOR = Integer.MAX_VALUE; //Depth of the Puzzles
+    final private static int BAD_GENETIC_FACTOR = 540; //Depth of the Puzzles
     private Node parent;
     private Matrix puzzle;
     private int cost;
@@ -123,7 +123,7 @@ public class HashNode implements Node {
     }
 
     private void verifyNode() {
-        if (this.getGeneticFactor() >= BAD_GENETIC_FACTOR) {
+        if (this.getGeneticFactor() <= BAD_GENETIC_FACTOR) {
 //            System.out.println("Bad Genetics, ignoring...");
             throw new HardProblemException();
         }

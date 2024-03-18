@@ -7,7 +7,6 @@ import java.util.*;
 
 public class HashMatrix implements Matrix {
     final private static HashMap<Integer, String> DICT_POS_TO_COOR = populateDictionaryPosToCoor();
-    final public static HashMap<String, Integer> DICT_COOR_TO_POS = populateDictionaryCoorToPos();
     final public static int MATRIX_SIZE = 9;
     final private static int ROW_MOVE = 3;
     final private static int COL_MOVE = 1;
@@ -176,7 +175,15 @@ public class HashMatrix implements Matrix {
     }
 
     private void copyData(HashMap<String, Integer> data) {
-        this.data = (HashMap<String, Integer>) data.clone();
+        this.data.put(positionToCoordinate(0), data.get(positionToCoordinate(0)));
+        this.data.put(positionToCoordinate(1), data.get(positionToCoordinate(1)));
+        this.data.put(positionToCoordinate(2), data.get(positionToCoordinate(2)));
+        this.data.put(positionToCoordinate(3), data.get(positionToCoordinate(3)));
+        this.data.put(positionToCoordinate(4), data.get(positionToCoordinate(4)));
+        this.data.put(positionToCoordinate(5), data.get(positionToCoordinate(5)));
+        this.data.put(positionToCoordinate(6), data.get(positionToCoordinate(6)));
+        this.data.put(positionToCoordinate(7), data.get(positionToCoordinate(7)));
+        this.data.put(positionToCoordinate(8), data.get(positionToCoordinate(8)));
     }
 
     private void refreshCoordinates(int blankPosition) {
@@ -216,24 +223,6 @@ public class HashMatrix implements Matrix {
         dict.put(7, "2,1");
         dict.put(8, "2,2");
         return dict;
-    }
-
-    private static HashMap<String, Integer> populateDictionaryCoorToPos() {
-        HashMap<String, Integer> dict = new HashMap<>();
-        dict.put("0,0", 0);
-        dict.put("0,1", 1);
-        dict.put("0,2", 2);
-        dict.put("1,0", 3);
-        dict.put("1,1", 4);
-        dict.put("1,2", 5);
-        dict.put("2,0", 6);
-        dict.put("2,1", 7);
-        dict.put("2,2", 8);
-        return dict;
-    }
-
-    public String concatCoordinate(int x, int y) {
-        return x + "," + y;
     }
 
     private void insertInPosition(int position, int value) {
