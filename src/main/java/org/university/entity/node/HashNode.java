@@ -123,7 +123,7 @@ public class HashNode implements Node {
     }
 
     private void verifyNode() {
-        if (this.getGeneticFactor() <= BAD_GENETIC_FACTOR) {
+        if (this.getGeneticFactor() <= BAD_GENETIC_FACTOR) { // the signal is > ,if is the opposite, i was testing for hard puzzles
 //            System.out.println("Bad Genetics, ignoring...");
             throw new HardProblemException();
         }

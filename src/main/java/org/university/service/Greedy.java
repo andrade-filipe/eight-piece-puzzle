@@ -14,7 +14,7 @@ import java.util.PriorityQueue;
 public class Greedy implements Executor {
     //181_440 is the number of possible states for the problem
     final public static long MAX_NUMBER_OF_ITERATIONS = 600L; //Number os steps the solving process should try
-    final public static int MAX_NUMBER_OF_TENTATIVES = 500;
+    final public static int MAX_NUMBER_OF_TENTATIVES = 600;
     final public static HashMap<String, Integer> HASH_SOLUTION = getSolution();
     public HashMap<Node, Node> CACHE;
     public PriorityQueue<Node> queue;
@@ -100,6 +100,7 @@ public class Greedy implements Executor {
 
             if (numberOfIterations > 1 && node.equals(root)) {
 //                System.out.println("State Repeated it Self");
+                this.CACHE.remove(node);
                 throw new RepeatedStateException();
             }
 
