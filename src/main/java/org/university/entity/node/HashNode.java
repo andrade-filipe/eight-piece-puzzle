@@ -3,6 +3,7 @@ package org.university.entity.node;
 import org.university.adapter.Matrix;
 import org.university.adapter.Node;
 import org.university.entity.matrix.HashMatrix;
+import org.university.exception.OddInversionsException;
 import org.university.exception.HardProblemException;
 import org.university.service.Greedy;
 
@@ -23,6 +24,7 @@ public class HashNode implements Node {
         this.parent = parent;
         this.puzzle = puzzle;
         try {
+            this.verifyMatrix();
             this.performCalculations();
         } catch (HardProblemException e) {
             this.clearNode();
@@ -123,11 +125,17 @@ public class HashNode implements Node {
     }
 
     private void verifyNode() {
-        if (this.getGeneticFactor() >= BAD_GENETIC_FACTOR) { // the signal is > ,if is the opposite, i was testing for hard puzzles
-//            System.out.println("Bad Genetics, ignoring...");
+        if ((this.getParent() == null) && (this.getGeneticFactor() >= BAD_GENETIC_FACTOR)) {
             throw new HardProblemException();
         }
     }
+
+    private void verifyMatrix() {
+        if ((this.getParent() == null) && (this.getPuzzle().getInversions() % 2 != 0)) {
+            throw new OddInversionsException();
+        }
+    }
+
 
     @Override
     public void clearNode() {

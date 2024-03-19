@@ -1,7 +1,6 @@
 package org.university.entity.matrix;
 
 import org.university.adapter.Matrix;
-import org.university.exception.EvenInversionsException;
 
 import java.util.*;
 
@@ -25,12 +24,6 @@ public class HashMatrix implements Matrix {
         this.data = new HashMap<>();
         this.generatePuzzle();
         this.perfomCalculations();
-        try {
-            this.verifyMatrix();
-        } catch (EvenInversionsException e) {
-            this.clearMatrix();
-            throw e;
-        }
     }
 
     public HashMatrix(HashMap<String, Integer> data, int blankPosition) {
@@ -190,13 +183,6 @@ public class HashMatrix implements Matrix {
         this.setBlankCoordinate(positionToCoordinate(blankPosition));
         this.setRow(this.getBlankCoordinate().charAt(0));
         this.setCol(this.getBlankCoordinate().charAt(2));
-    }
-
-    private void verifyMatrix() {
-        if (this.getInversions() % 2 != 0) {
-//            System.out.println("Even Inversions, ignoring...");
-            throw new EvenInversionsException();
-        }
     }
 
     @Override

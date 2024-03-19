@@ -14,17 +14,16 @@ import java.util.PriorityQueue;
 public class Greedy implements Executor {
     //181_440 is the number of possible states for the problem
     final public static long MAX_NUMBER_OF_ITERATIONS = 181_440L; //Number os steps the solving process should try
-    final public static int MAX_NUMBER_OF_TENTATIVES = 275_000;
+    final public static int MAX_NUMBER_OF_TENTATIVES = 100_000;
     final public static HashMap<String, Integer> HASH_SOLUTION = getSolution();
-    public HashMap<Node, Node> CACHE;
     public PriorityQueue<Node> queue;
-    public int countTry = 0;
+    public static int countTry = 0;
+    public static int countRepetition = 0;
     public long sumOfIterations = 0L;
-    public Node root;
+    public static Node root;
 
     public Greedy() {
         this.queue = new PriorityQueue<>(new CostComparator());
-        this.CACHE = new HashMap<>();
     }
 
     @Override
@@ -67,14 +66,26 @@ public class Greedy implements Executor {
         System.out.println("Full Path Cost: " + solved.getPathCost());
         System.out.println("Number of Steps: " + solved.getLevel());
         System.out.println("Number of Tentatives: " + tentatives);
+        System.out.println("Queue Size: " + this.queue.size());
         System.out.println("************************************");
     }
 
     @Override
     public void execute() throws HardProblemException {
         try {
+//            HashMap<String, Integer> worstCase = new HashMap<>();
+//            worstCase.put("0,0", 1);
+//            worstCase.put("0,1", 2);
+//            worstCase.put("0,2", 3);
+//            worstCase.put("1,0", 4);
+//            worstCase.put("1,1", 5);
+//            worstCase.put("1,2", 6);
+//            worstCase.put("2,0", 7);
+//            worstCase.put("2,1", 8);
+//            worstCase.put("2,2", 0);
+//            HashMatrix initial = new HashMatrix(worstCase, 8);
             HashMatrix initial = new HashMatrix();
-            this.root = new HashNode(null, initial);
+            root = new HashNode(null, initial);
         } catch (HardProblemException e) {
 //            System.out.println("Initial matrix or Root were not adequate");
             throw e;
@@ -83,11 +94,15 @@ public class Greedy implements Executor {
         Node solved;
 
         try {
-            solved = this.solveRecursive(this.root);
-            this.printResult(this.root, solved, this.countTry);
+            solved = this.solveRecursive(root);
+            this.printResult(root, solved, countTry);
             this.clearAll();
-        } catch (HardProblemException | IndexOutOfBoundsException | OutOfMemoryError e) {
-//            System.out.println("Hard Problem, Cleaning...");
+        } catch (HardProblemException | OutOfMemoryError e) {
+            System.out.println("Hard Problem, Cleaning...");
+            this.clearAll();
+            throw new HardProblemException();
+        } catch (StackOverflowError e){
+            System.out.println("Stack Overflow");
             this.clearAll();
             throw new HardProblemException();
         }
@@ -96,14 +111,14 @@ public class Greedy implements Executor {
     @Override
     public Node solve(Node root) throws HardProblemException {
 
-        if (this.countTry >= MAX_NUMBER_OF_TENTATIVES) {
+        if (Greedy.countTry >= MAX_NUMBER_OF_TENTATIVES) {
             System.out.println("Max number of tentatives");
             throw new HardProblemException();
         }
 
         this.queue.add(root);
         long numberOfIterations = 0L;
-        while (queueIsNotEmpty()) {
+        while (!queueIsEmpty()) {
             numberOfIterations++;
             Node node = this.queue.poll();
 
@@ -120,7 +135,7 @@ public class Greedy implements Executor {
             this.performPossibleMoves(node);
 
             if (numberOfIterations >= MAX_NUMBER_OF_ITERATIONS) {
-                this.countTry++;
+                Greedy.countTry++;
                 this.sumOfIterations += numberOfIterations;
                 return this.solve(this.queue.poll());
             }
@@ -129,25 +144,14 @@ public class Greedy implements Executor {
     }
 
     public Node solveRecursive(Node node){
-        this.countTry++;
 
-        if(node == null){
-//            System.out.println("Out of Bounds");
-            throw new IndexOutOfBoundsException();
-        }
-
-        if(node.getCost() == 0){
-//            System.out.println("Solution Found");
+        if(node.getCost() == 0 && node.getPuzzle() != null){
             return node;
         }
 
-        if(this.countTry > 1 && node.getPuzzle().getData().equals(this.root.getPuzzle().getData())){
-//            System.out.println("Repeated State");
-            throw new RepeatedStateException();
-        }
+        Greedy.countTry++;
 
-        if(this.countTry >= MAX_NUMBER_OF_TENTATIVES){
-//            System.out.println("Max number of tentatives");
+        if(Greedy.countTry >= MAX_NUMBER_OF_TENTATIVES){
             throw new HardProblemException();
         }
 
@@ -173,40 +177,52 @@ public class Greedy implements Executor {
     private void tryDown(Node parent) {
         if (parent.getPuzzle().checkDown()) {
             Node child = new HashNode(parent, createNewStateOf(parent).moveDown());
-            this.queue.add(child);
+            insertOnQueue(child);
         }
     }
 
     private void tryUp(Node parent) {
         if (parent.getPuzzle().checkUp()) {
             Node child = new HashNode(parent, createNewStateOf(parent).moveUp());
-            this.queue.add(child);
+            insertOnQueue(child);
         }
     }
 
     private void tryLeft(Node parent) {
         if (parent.getPuzzle().checkLeft()) {
             Node child = new HashNode(parent, createNewStateOf(parent).moveLeft());
-            this.queue.add(child);
+            insertOnQueue(child);
         }
     }
 
     private void tryRight(Node parent) {
         if (parent.getPuzzle().checkRight()) {
             Node child = new HashNode(parent, createNewStateOf(parent).moveRight());
-            this.queue.add(child);
+            insertOnQueue(child);
+        }
+    }
+
+    private void insertOnQueue(Node node){
+        if(!this.queue.contains(node)){
+            this.queue.add(node);
         }
     }
 
     @Override
     public void clearAll() {
+        Greedy.root = null;
         this.queue.clear();
-        this.countTry = 0;
+        Greedy.countTry = 0;
+        Greedy.countRepetition = 0;
         this.sumOfIterations = 0L;
     }
 
-    private boolean queueIsNotEmpty() {
-        return !this.queue.isEmpty();
+    private boolean queueIsEmpty() {
+        return this.queue.isEmpty();
+    }
+
+    private boolean verifyIfEqualsRoot(Node node) {
+        return Greedy.countTry > 1 && Greedy.root.getPuzzleMap().equals(node.getPuzzleMap());
     }
 
     private static HashMap<String, Integer> getSolution() {
