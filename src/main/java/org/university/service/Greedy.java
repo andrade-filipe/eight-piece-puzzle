@@ -132,19 +132,22 @@ public class Greedy implements Executor {
         this.countTry++;
 
         if(node == null){
+//            System.out.println("Out of Bounds");
             throw new IndexOutOfBoundsException();
         }
 
         if(node.getCost() == 0){
-            System.out.println(node);
+//            System.out.println("Solution Found");
             return node;
         }
 
         if(this.countTry > 1 && node.getPuzzle().getData().equals(this.root.getPuzzle().getData())){
+//            System.out.println("Repeated State");
             throw new RepeatedStateException();
         }
 
         if(this.countTry >= MAX_NUMBER_OF_TENTATIVES){
+//            System.out.println("Max number of tentatives");
             throw new HardProblemException();
         }
 
