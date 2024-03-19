@@ -13,8 +13,8 @@ import java.util.PriorityQueue;
 
 public class Greedy implements Executor {
     //181_440 is the number of possible states for the problem
-    final public static long MAX_NUMBER_OF_ITERATIONS = 600L; //Number os steps the solving process should try
-    final public static int MAX_NUMBER_OF_TENTATIVES = 600;
+    final public static long MAX_NUMBER_OF_ITERATIONS = 181_440L; //Number os steps the solving process should try
+    final public static int MAX_NUMBER_OF_TENTATIVES = 275_000;
     final public static HashMap<String, Integer> HASH_SOLUTION = getSolution();
     public HashMap<Node, Node> CACHE;
     public PriorityQueue<Node> queue;
@@ -56,6 +56,20 @@ public class Greedy implements Executor {
         System.out.println("************************************");
     }
 
+    private void printResult(Node initial, Node solved, int tentatives) {
+        System.out.println("####################################");
+        System.out.println("######### Starting Point ###########");
+        System.out.println("Genetic Factor: " + initial.getGeneticFactor());
+        System.out.println("Cost: " + initial.getCost());
+        System.out.println("Manhattan: " + initial.getManhattan());
+        System.out.println("Inversions: " + initial.getPuzzle().getInversions());
+        System.out.println("############# Solved ###############");
+        System.out.println("Full Path Cost: " + solved.getPathCost());
+        System.out.println("Number of Steps: " + solved.getLevel());
+        System.out.println("Number of Tentatives: " + tentatives);
+        System.out.println("************************************");
+    }
+
     @Override
     public void execute() throws HardProblemException {
         try {
@@ -69,10 +83,10 @@ public class Greedy implements Executor {
         Node solved;
 
         try {
-            solved = this.solve(this.root, HASH_SOLUTION);
-            this.printResult(this.root, solved, this.countTry, this.sumOfIterations);
+            solved = this.solveRecursive(this.root);
+            this.printResult(this.root, solved, this.countTry);
             this.clearAll();
-        } catch (HardProblemException | OutOfMemoryError e) {
+        } catch (HardProblemException | IndexOutOfBoundsException | OutOfMemoryError e) {
 //            System.out.println("Hard Problem, Cleaning...");
             this.clearAll();
             throw new HardProblemException();
@@ -80,7 +94,7 @@ public class Greedy implements Executor {
     }
 
     @Override
-    public Node solve(Node root, HashMap solution) throws HardProblemException {
+    public Node solve(Node root) throws HardProblemException {
 
         if (this.countTry >= MAX_NUMBER_OF_TENTATIVES) {
             System.out.println("Max number of tentatives");
@@ -98,16 +112,9 @@ public class Greedy implements Executor {
                 return node;
             }
 
-            if (numberOfIterations > 1 && node.equals(root)) {
-//                System.out.println("State Repeated it Self");
-                this.CACHE.remove(node);
+            if (numberOfIterations > 1 && node.getPuzzle().getData().equals(root.getPuzzle().getData())) {
+                System.out.println("State Repeated it Self");
                 throw new RepeatedStateException();
-            }
-
-            if(this.CACHE.containsKey(node)){
-                System.out.println("Cache called...");
-                this.sumOfIterations += numberOfIterations;
-                return this.solve(this.CACHE.get(node), solution);
             }
 
             this.performPossibleMoves(node);
@@ -115,17 +122,35 @@ public class Greedy implements Executor {
             if (numberOfIterations >= MAX_NUMBER_OF_ITERATIONS) {
                 this.countTry++;
                 this.sumOfIterations += numberOfIterations;
-                this.cacheIt(root, this.queue.peek());
-                return this.solve(this.queue.poll(), solution);
+                return this.solve(this.queue.poll());
             }
         }
         return null;
     }
 
-    private void cacheIt(Node root, Node currentNode){
-        if(root.getCost() > currentNode.getCost()){
-            this.CACHE.put(root, currentNode);
+    public Node solveRecursive(Node node){
+        this.countTry++;
+
+        if(node == null){
+            throw new IndexOutOfBoundsException();
         }
+
+        if(node.getCost() == 0){
+            System.out.println(node);
+            return node;
+        }
+
+        if(this.countTry > 1 && node.getPuzzle().getData().equals(this.root.getPuzzle().getData())){
+            throw new RepeatedStateException();
+        }
+
+        if(this.countTry >= MAX_NUMBER_OF_TENTATIVES){
+            throw new HardProblemException();
+        }
+
+        this.performPossibleMoves(node);
+
+        return this.solveRecursive(this.queue.poll());
     }
 
     private HashMatrix createNewStateOf(Node parent) {
@@ -136,10 +161,10 @@ public class Greedy implements Executor {
     }
 
     private void performPossibleMoves(Node node) {
-        tryRight(node);
-        tryLeft(node);
-        tryUp(node);
-        tryDown(node);
+        this.tryRight(node);
+        this.tryLeft(node);
+        this.tryUp(node);
+        this.tryDown(node);
     }
 
     private void tryDown(Node parent) {
