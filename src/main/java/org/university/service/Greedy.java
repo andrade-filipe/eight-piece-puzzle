@@ -5,30 +5,36 @@ import org.university.adapter.Node;
 import org.university.entity.matrix.HashMatrix;
 import org.university.entity.node.HashNode;
 import org.university.exception.HardProblemException;
-import org.university.exception.RepeatedStateException;
 import org.university.util.CostComparator;
 
 import java.util.HashMap;
 import java.util.PriorityQueue;
-import java.util.stream.Stream;
 
 public class Greedy implements Executor {
     //181_440 is the number of possible states for the problem
-    final public static long MAX_NUMBER_OF_ITERATIONS = 181_440L; //Number os steps the solving process should try
-    final public static int MAX_NUMBER_OF_TENTATIVES = Integer.MAX_VALUE;
-    final public static int MAX_QUEUE_SIZE = 25000;
     final public static HashMap<String, Integer> HASH_SOLUTION = getSolution();
-    public PriorityQueue<Node> queue;
-    public PriorityQueue<Node> queueEasy;
+    public PriorityQueue<Node> mainQueue;
+    public PriorityQueue<Node> queueCost1;
+    public PriorityQueue<Node> queueCost2;
+    public PriorityQueue<Node> queueCost3;
+    public PriorityQueue<Node> queueCost4;
+    public PriorityQueue<Node> queueCost5;
+    public PriorityQueue<Node> queueCost6;
+    public PriorityQueue<Node> queueCost7;
+    public PriorityQueue<Node> queueCost8;
     public static int countTry = 0;
-    public static int countRepetition = 0;
-    public long sumOfIterations = 0L;
-    public int genocide = 1;
     public static Node root;
 
     public Greedy() {
-        this.queue = new PriorityQueue<>(new CostComparator());
-        this.queueEasy = new PriorityQueue<>(new CostComparator());
+        this.mainQueue = new PriorityQueue<>(new CostComparator());
+        this.queueCost1 = new PriorityQueue<>(new CostComparator());
+        this.queueCost2 = new PriorityQueue<>(new CostComparator());
+        this.queueCost3 = new PriorityQueue<>(new CostComparator());
+        this.queueCost4 = new PriorityQueue<>(new CostComparator());
+        this.queueCost5 = new PriorityQueue<>(new CostComparator());
+        this.queueCost6 = new PriorityQueue<>(new CostComparator());
+        this.queueCost7 = new PriorityQueue<>(new CostComparator());
+        this.queueCost8 = new PriorityQueue<>(new CostComparator());
     }
 
     @Override
@@ -45,21 +51,6 @@ public class Greedy implements Executor {
         }
     }
 
-    private void printResult(Node initial, Node solved, int tentatives, long executions) {
-        System.out.println("####################################");
-        System.out.println("######### Starting Point ###########");
-        System.out.println("Genetic Factor: " + initial.getGeneticFactor());
-        System.out.println("Cost: " + initial.getCost());
-        System.out.println("Manhattan: " + initial.getManhattan());
-        System.out.println("Inversions: " + initial.getPuzzle().getInversions());
-        System.out.println("############# Solved ###############");
-        System.out.println("Full Path Cost: " + solved.getPathCost());
-        System.out.println("Number of Steps: " + solved.getLevel());
-        System.out.println("Number of Iterations: " + executions);
-        System.out.println("Number of Tentatives: " + tentatives);
-        System.out.println("************************************");
-    }
-
     private void printResult(Node initial, Node solved, int tentatives) {
         System.out.println("####################################");
         System.out.println("######### Starting Point ###########");
@@ -72,8 +63,15 @@ public class Greedy implements Executor {
         System.out.println("Full Path Cost: " + solved.getPathCost());
         System.out.println("Number of Steps: " + solved.getLevel());
         System.out.println("Number of Tentatives: " + tentatives);
-        System.out.println("Queue Size: " + this.queue.size());
-        System.out.println("Easy Queue Size: " + this.queueEasy.size());
+        System.out.println("Main Queue Size: " + this.mainQueue.size());
+        System.out.println("Cost1 Queue Size: " + this.queueCost1.size());
+        System.out.println("Cost2 Queue Size: " + this.queueCost2.size());
+        System.out.println("Cost3 Queue Size: " + this.queueCost3.size());
+        System.out.println("Cost4 Queue Size: " + this.queueCost4.size());
+        System.out.println("Cost5 Queue Size: " + this.queueCost5.size());
+        System.out.println("Cost6 Queue Size: " + this.queueCost6.size());
+        System.out.println("Cost7 Queue Size: " + this.queueCost7.size());
+        System.out.println("Cost8 Queue Size: " + this.queueCost8.size());
         System.out.println("************************************");
     }
 
@@ -101,7 +99,7 @@ public class Greedy implements Executor {
         Node solved;
 
         try {
-            solved = this.solveRecursive(root);
+            solved = this.solve(root);
             this.printResult(root, solved, countTry);
             this.clearAll();
         } catch (HardProblemException | OutOfMemoryError e) {
@@ -117,68 +115,16 @@ public class Greedy implements Executor {
     }
 
     @Override
-    public Node solve(Node root) throws HardProblemException {
-
-        if (Greedy.countTry >= MAX_NUMBER_OF_TENTATIVES) {
-            System.out.println("Max number of tentatives");
-            throw new HardProblemException();
-        }
-
-        this.queue.add(root);
-        long numberOfIterations = 0L;
-        while (!queueIsEmpty()) {
-            numberOfIterations++;
-            Node node = this.queue.poll();
-
-            if (node.getCost() == 0) {
-                this.sumOfIterations += numberOfIterations;
-                return node;
-            }
-
-            if (numberOfIterations > 1 && node.getPuzzle().getData().equals(root.getPuzzle().getData())) {
-                System.out.println("State Repeated it Self");
-                throw new RepeatedStateException();
-            }
-
-            this.performPossibleMoves(node);
-
-            if (numberOfIterations >= MAX_NUMBER_OF_ITERATIONS) {
-                Greedy.countTry++;
-                this.sumOfIterations += numberOfIterations;
-                return this.solve(this.queue.poll());
-            }
-        }
-        return null;
-    }
-
-    public Node solveRecursive(Node node) {
-
+    public Node solve(Node node) throws HardProblemException {
         if (node.getCost() == 0 && node.getPuzzle() != null) {
             return node;
-        }
-
-        if(node.getLevel() >= 16 && node.getGeneticFactor() <= 300  && node.getPuzzle() != null){
-            this.queueEasy.add(node);
-            return this.solveEasy(this.queueEasy.poll());
         }
 
         Greedy.countTry++;
 
         this.performPossibleMoves(node);
 
-        return this.solveRecursive(this.queue.poll());
-    }
-
-    private Node solveEasy(Node node) {
-        if (node.getPuzzle() != null && node.getCost() == 0) {
-            return node;
-        }
-
-        Greedy.countTry++;
-
-        this.performPossibleMovesEasy(node);
-
-        return this.solveEasy(this.queueEasy.poll());
+        return this.solve(this.mainQueue.poll());
     }
 
     private HashMatrix createNewStateOf(Node parent) {
@@ -186,41 +132,6 @@ public class Greedy implements Executor {
                 parent.getPuzzleMap(),
                 parent.getPuzzle().getBlankPosition()
         );
-    }
-
-    private void performPossibleMovesEasy(Node node) {
-        this.tryRightEasy(node);
-        this.tryLeftEasy(node);
-        this.tryUpEasy(node);
-        this.tryDownEasy(node);
-    }
-
-    private void tryDownEasy(Node parent) {
-        if (parent.getPuzzle().checkDown()) {
-            Node child = new HashNode(parent, createNewStateOf(parent).moveDown());
-            insertInQueueEasy(child);
-        }
-    }
-
-    private void tryUpEasy(Node parent) {
-        if (parent.getPuzzle().checkUp()) {
-            Node child = new HashNode(parent, createNewStateOf(parent).moveUp());
-            insertInQueueEasy(child);
-        }
-    }
-
-    private void tryLeftEasy(Node parent) {
-        if (parent.getPuzzle().checkLeft()) {
-            Node child = new HashNode(parent, createNewStateOf(parent).moveLeft());
-            insertInQueueEasy(child);
-        }
-    }
-
-    private void tryRightEasy(Node parent) {
-        if (parent.getPuzzle().checkRight()) {
-            Node child = new HashNode(parent, createNewStateOf(parent).moveRight());
-            insertInQueueEasy(child);
-        }
     }
 
     private void performPossibleMoves(Node node) {
@@ -259,40 +170,88 @@ public class Greedy implements Executor {
     }
 
     private void insertInQueue(Node node) {
-        this.queue.add(node);
+        switch (node.getCost()){
+            case 8:
+                this.queueCost8.add(node);
+                break;
+            case 7:
+                this.queueCost7.add(node);
+                break;
+            case 6:
+                this.queueCost6.add(node);
+                break;
+            case 5:
+                this.queueCost5.add(node);
+                break;
+            case 4:
+                this.queueCost4.add(node);
+                break;
+            case 3:
+                this.queueCost3.add(node);;
+                break;
+            case 2:
+                this.queueCost2.add(node);
+                break;
+            case 1:
+                this.queueCost1.add(node);
+                break;
+            case 0:
+                this.mainQueue.add(node);
+                break;
+        }
+
+        this.manageMainQueue();
     }
 
-    private void insertInQueueEasy(Node node) {
-        this.queueEasy.add(node);
-    }
+    private void manageMainQueue() {
+        if(this.queueCost1.size() > 0){
+            this.mainQueue.add(this.queueCost1.poll());
 
-    private boolean matrixNotInQueue(Node currNode) {
-        return !(Stream.of(this.queue.toArray())
-                .map(Node.class::cast)
-                .anyMatch(node -> node.getPuzzleMap().equals(currNode.getPuzzleMap())));
-    }
+        }
+        if (this.queueCost2.size() > 0 && this.queueCost1.isEmpty()){
+            this.mainQueue.add(this.queueCost2.poll());
 
-    private boolean repeatedState(Node node) {
-        return (Greedy.countTry > 1) && (Greedy.root.equals(node));
+        }
+
+        if (this.queueCost3.size() > 0 && this.queueCost2.isEmpty()) {
+            this.mainQueue.add(this.queueCost3.poll());
+
+        }
+        if (this.queueCost4.size() > 0 && this.queueCost3.isEmpty()){
+            this.mainQueue.add(this.queueCost4.poll());
+
+        }
+        if (this.queueCost5.size() > 0 && this.queueCost4.isEmpty()){
+            this.mainQueue.add(this.queueCost5.poll());
+
+        }
+        if (this.queueCost6.size() > 0 && this.queueCost5.isEmpty()){
+            this.mainQueue.add(this.queueCost6.poll());
+
+        }
+        if (this.queueCost7.size() > 0 && this.queueCost6.isEmpty()){
+            this.mainQueue.add(this.queueCost7.poll());
+
+        }
+        if (this.queueCost8.size() > 0 && this.queueCost7.isEmpty()){
+            this.mainQueue.add(this.queueCost8.poll());
+
+        }
     }
 
     @Override
     public void clearAll() {
         Greedy.root = null;
-        this.queue.clear();
-        this.queueEasy.clear();
         Greedy.countTry = 0;
-        Greedy.countRepetition = 0;
-        this.genocide = 0;
-        this.sumOfIterations = 0L;
-    }
-
-    private boolean queueIsEmpty() {
-        return this.queue.isEmpty();
-    }
-
-    private boolean verifyIfEqualsRoot(Node node) {
-        return Greedy.countTry > 1 && Greedy.root.getPuzzleMap().equals(node.getPuzzleMap());
+        this.mainQueue.clear();
+        this.queueCost1.clear();
+        this.queueCost2.clear();
+        this.queueCost3.clear();
+        this.queueCost4.clear();
+        this.queueCost5.clear();
+        this.queueCost6.clear();
+        this.queueCost7.clear();
+        this.queueCost8.clear();
     }
 
     private static HashMap<String, Integer> getSolution() {
