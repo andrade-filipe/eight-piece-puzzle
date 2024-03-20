@@ -6,6 +6,7 @@ import org.university.entity.matrix.HashMatrix;
 import org.university.entity.node.HashNode;
 import org.university.exception.HardProblemException;
 import org.university.util.CostComparator;
+import org.university.util.GeneticComparator;
 
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -27,14 +28,14 @@ public class Greedy implements Executor {
 
     public Greedy() {
         this.mainQueue = new PriorityQueue<>(new CostComparator());
-        this.queueCost1 = new PriorityQueue<>(new CostComparator());
-        this.queueCost2 = new PriorityQueue<>(new CostComparator());
-        this.queueCost3 = new PriorityQueue<>(new CostComparator());
-        this.queueCost4 = new PriorityQueue<>(new CostComparator());
-        this.queueCost5 = new PriorityQueue<>(new CostComparator());
-        this.queueCost6 = new PriorityQueue<>(new CostComparator());
-        this.queueCost7 = new PriorityQueue<>(new CostComparator());
-        this.queueCost8 = new PriorityQueue<>(new CostComparator());
+        this.queueCost1 = new PriorityQueue<>(new GeneticComparator());
+        this.queueCost2 = new PriorityQueue<>(new GeneticComparator());
+        this.queueCost3 = new PriorityQueue<>(new GeneticComparator());
+        this.queueCost4 = new PriorityQueue<>(new GeneticComparator());
+        this.queueCost5 = new PriorityQueue<>(new GeneticComparator());
+        this.queueCost6 = new PriorityQueue<>(new GeneticComparator());
+        this.queueCost7 = new PriorityQueue<>(new GeneticComparator());
+        this.queueCost8 = new PriorityQueue<>(new GeneticComparator());
     }
 
     @Override
@@ -139,6 +140,8 @@ public class Greedy implements Executor {
         this.tryLeft(node);
         this.tryUp(node);
         this.tryDown(node);
+
+        this.manageMainQueue();
     }
 
     private void tryDown(Node parent) {
@@ -170,72 +173,68 @@ public class Greedy implements Executor {
     }
 
     private void insertInQueue(Node node) {
-        switch (node.getCost()){
-            case 8:
-                this.queueCost8.add(node);
-                break;
-            case 7:
-                this.queueCost7.add(node);
-                break;
-            case 6:
-                this.queueCost6.add(node);
-                break;
-            case 5:
-                this.queueCost5.add(node);
-                break;
-            case 4:
-                this.queueCost4.add(node);
-                break;
-            case 3:
-                this.queueCost3.add(node);;
-                break;
-            case 2:
-                this.queueCost2.add(node);
-                break;
-            case 1:
-                this.queueCost1.add(node);
-                break;
-            case 0:
-                this.mainQueue.add(node);
-                break;
+        if(node.getPuzzle() != null){
+            switch (node.getCost()){
+                case 0:
+                    this.mainQueue.add(node);
+                    break;
+                case 1:
+                    this.queueCost1.add(node);
+                    break;
+                case 2:
+                    this.queueCost2.add(node);
+                    break;
+                case 3:
+                    this.queueCost3.add(node);;
+                    break;
+                case 4:
+                    this.queueCost4.add(node);
+                    break;
+                case 5:
+                    this.queueCost5.add(node);
+                    break;
+                case 6:
+                    this.queueCost6.add(node);
+                    break;
+                case 7:
+                    this.queueCost7.add(node);
+                    break;
+                case 8:
+                    this.queueCost8.add(node);
+                    break;
+            }
         }
-
-        this.manageMainQueue();
     }
 
     private void manageMainQueue() {
-        if(this.queueCost1.size() > 0){
-            this.mainQueue.add(this.queueCost1.poll());
-
-        }
-        if (this.queueCost2.size() > 0 && this.queueCost1.isEmpty()){
-            this.mainQueue.add(this.queueCost2.poll());
-
-        }
-
-        if (this.queueCost3.size() > 0 && this.queueCost2.isEmpty()) {
-            this.mainQueue.add(this.queueCost3.poll());
-
-        }
-        if (this.queueCost4.size() > 0 && this.queueCost3.isEmpty()){
-            this.mainQueue.add(this.queueCost4.poll());
-
-        }
-        if (this.queueCost5.size() > 0 && this.queueCost4.isEmpty()){
-            this.mainQueue.add(this.queueCost5.poll());
-
-        }
-        if (this.queueCost6.size() > 0 && this.queueCost5.isEmpty()){
-            this.mainQueue.add(this.queueCost6.poll());
-
-        }
-        if (this.queueCost7.size() > 0 && this.queueCost6.isEmpty()){
-            this.mainQueue.add(this.queueCost7.poll());
-
-        }
-        if (this.queueCost8.size() > 0 && this.queueCost7.isEmpty()){
-            this.mainQueue.add(this.queueCost8.poll());
-
+        for (int i = 0; i < 1; i++) {
+            if(this.mainQueue.size() > 0){
+                break;
+            }else if(this.queueCost1.size() > 0){
+                this.mainQueue.add(this.queueCost1.poll());
+                break;
+            }else if (this.queueCost2.size() > 0 && this.queueCost1.isEmpty()){
+                this.mainQueue.add(this.queueCost2.poll());
+                break;
+            }else if (this.queueCost3.size() > 0 && this.queueCost2.isEmpty()) {
+                this.mainQueue.add(this.queueCost3.poll());
+                break;
+            }else if (this.queueCost4.size() > 0 && this.queueCost3.isEmpty()){
+                this.mainQueue.add(this.queueCost4.poll());
+                break;
+            }else if (this.queueCost5.size() > 0 && this.queueCost4.isEmpty()){
+                this.mainQueue.add(this.queueCost5.poll());
+                break;
+            }else if (this.queueCost6.size() > 0 && this.queueCost5.isEmpty()){
+                this.mainQueue.add(this.queueCost6.poll());
+                break;
+            }else if (this.queueCost7.size() > 0 && this.queueCost6.isEmpty()){
+                this.mainQueue.add(this.queueCost7.poll());
+                break;
+            }else if (this.queueCost8.size() > 0 && this.queueCost7.isEmpty()){
+                this.mainQueue.add(this.queueCost8.poll());
+                break;
+            }
         }
     }
 
