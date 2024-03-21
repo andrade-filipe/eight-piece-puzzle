@@ -9,10 +9,10 @@ import org.university.util.CostComparator;
 import org.university.util.GeneticComparator;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 public class Greedy implements Executor {
-    //181_440 is the number of possible states for the problem
     final public static HashMap<String, Integer> HASH_SOLUTION = getSolution();
     public PriorityQueue<Node> mainQueue;
     public PriorityQueue<Node> queueCost1;
@@ -23,6 +23,7 @@ public class Greedy implements Executor {
     public PriorityQueue<Node> queueCost6;
     public PriorityQueue<Node> queueCost7;
     public PriorityQueue<Node> queueCost8;
+    public LinkedList<HashMap<String, Integer>> checkPrevious;
     public static int countTry = 0;
     public static Node root;
 
@@ -36,6 +37,7 @@ public class Greedy implements Executor {
         this.queueCost6 = new PriorityQueue<>(new GeneticComparator());
         this.queueCost7 = new PriorityQueue<>(new GeneticComparator());
         this.queueCost8 = new PriorityQueue<>(new GeneticComparator());
+        this.checkPrevious = new LinkedList<>();
     }
 
     @Override
@@ -46,7 +48,6 @@ public class Greedy implements Executor {
                 System.out.println("#CLEAN EXECUTION NUMBER: " + (i + 1));
                 System.out.println("************************************");
             } catch (HardProblemException | OutOfMemoryError e) {
-//                System.out.println("Trying Again");
                 i--;
             }
         }
@@ -79,21 +80,9 @@ public class Greedy implements Executor {
     @Override
     public void execute() throws HardProblemException {
         try {
-//            HashMap<String, Integer> worstCase = new HashMap<>();
-//            worstCase.put("0,0", 1);
-//            worstCase.put("0,1", 2);
-//            worstCase.put("0,2", 3);
-//            worstCase.put("1,0", 4);
-//            worstCase.put("1,1", 5);
-//            worstCase.put("1,2", 6);
-//            worstCase.put("2,0", 7);
-//            worstCase.put("2,1", 8);
-//            worstCase.put("2,2", 0);
-//            HashMatrix initial = new HashMatrix(worstCase, 8);
             HashMatrix initial = new HashMatrix();
             root = new HashNode(null, initial);
         } catch (HardProblemException e) {
-//            System.out.println("Initial matrix or Root were not adequate");
             throw e;
         }
 
@@ -103,13 +92,7 @@ public class Greedy implements Executor {
             solved = this.solve(root);
             this.printResult(root, solved, countTry);
             this.clearAll();
-        } catch (HardProblemException | OutOfMemoryError e) {
-//            System.out.println("Hard Problem, Cleaning...");
-            this.clearAll();
-            throw new HardProblemException();
-        } catch (StackOverflowError e) {
-            System.out.println("Stack Overflow");
-            System.out.println(Greedy.countTry);
+        } catch (HardProblemException | StackOverflowError | OutOfMemoryError e) {
             this.clearAll();
             throw new HardProblemException();
         }
@@ -117,7 +100,11 @@ public class Greedy implements Executor {
 
     @Override
     public Node solve(Node node) throws HardProblemException {
-        if (node.getCost() == 0 && node.getPuzzle() != null) {
+        if (node == null) {
+            throw new HardProblemException();
+        }
+
+        if (node.getPuzzle() != null && node.getCost() == 0) {
             return node;
         }
 
@@ -136,12 +123,16 @@ public class Greedy implements Executor {
     }
 
     private void performPossibleMoves(Node node) {
-        this.tryRight(node);
-        this.tryLeft(node);
-        this.tryUp(node);
-        this.tryDown(node);
+        if (!this.checkPrevious.contains(node.getPuzzleMap())) {
+            this.tryRight(node);
+            this.tryLeft(node);
+            this.tryUp(node);
+            this.tryDown(node);
+        }
 
         this.manageMainQueue();
+
+        this.checkPrevious.add(node.getPuzzleMap());
     }
 
     private void tryDown(Node parent) {
@@ -173,34 +164,50 @@ public class Greedy implements Executor {
     }
 
     private void insertInQueue(Node node) {
-        if(node.getPuzzle() != null){
-            switch (node.getCost()){
+        if (node.getPuzzle() != null) {
+            switch (node.getCost()) {
                 case 0:
                     this.mainQueue.add(node);
                     break;
                 case 1:
-                    this.queueCost1.add(node);
+                    if (!this.queueCost1.contains(node)) {
+                        this.queueCost1.add(node);
+                    }
                     break;
                 case 2:
-                    this.queueCost2.add(node);
+                    if (!this.queueCost2.contains(node)) {
+                        this.queueCost2.add(node);
+                    }
                     break;
                 case 3:
-                    this.queueCost3.add(node);;
+                    if (!this.queueCost3.contains(node)) {
+                        this.queueCost3.add(node);
+                    }
                     break;
                 case 4:
-                    this.queueCost4.add(node);
+                    if (!this.queueCost4.contains(node)) {
+                        this.queueCost4.add(node);
+                    }
                     break;
                 case 5:
-                    this.queueCost5.add(node);
+                    if (!this.queueCost5.contains(node)) {
+                        this.queueCost5.add(node);
+                    }
                     break;
                 case 6:
-                    this.queueCost6.add(node);
+                    if (!this.queueCost6.contains(node)) {
+                        this.queueCost6.add(node);
+                    }
                     break;
                 case 7:
-                    this.queueCost7.add(node);
+                    if (!this.queueCost7.contains(node)) {
+                        this.queueCost7.add(node);
+                    }
                     break;
                 case 8:
-                    this.queueCost8.add(node);
+                    if (!this.queueCost8.contains(node)) {
+                        this.queueCost8.add(node);
+                    }
                     break;
             }
         }
@@ -208,30 +215,30 @@ public class Greedy implements Executor {
 
     private void manageMainQueue() {
         for (int i = 0; i < 1; i++) {
-            if(this.mainQueue.size() > 0){
+            if (this.mainQueue.size() > 0) {
                 break;
-            }else if(this.queueCost1.size() > 0){
+            } else if (this.queueCost1.size() > 0) {
                 this.mainQueue.add(this.queueCost1.poll());
                 break;
-            }else if (this.queueCost2.size() > 0 && this.queueCost1.isEmpty()){
+            } else if (this.queueCost2.size() > 0 && this.queueCost1.isEmpty()) {
                 this.mainQueue.add(this.queueCost2.poll());
                 break;
-            }else if (this.queueCost3.size() > 0 && this.queueCost2.isEmpty()) {
+            } else if (this.queueCost3.size() > 0 && this.queueCost2.isEmpty()) {
                 this.mainQueue.add(this.queueCost3.poll());
                 break;
-            }else if (this.queueCost4.size() > 0 && this.queueCost3.isEmpty()){
+            } else if (this.queueCost4.size() > 0 && this.queueCost3.isEmpty()) {
                 this.mainQueue.add(this.queueCost4.poll());
                 break;
-            }else if (this.queueCost5.size() > 0 && this.queueCost4.isEmpty()){
+            } else if (this.queueCost5.size() > 0 && this.queueCost4.isEmpty()) {
                 this.mainQueue.add(this.queueCost5.poll());
                 break;
-            }else if (this.queueCost6.size() > 0 && this.queueCost5.isEmpty()){
+            } else if (this.queueCost6.size() > 0 && this.queueCost5.isEmpty()) {
                 this.mainQueue.add(this.queueCost6.poll());
                 break;
-            }else if (this.queueCost7.size() > 0 && this.queueCost6.isEmpty()){
+            } else if (this.queueCost7.size() > 0 && this.queueCost6.isEmpty()) {
                 this.mainQueue.add(this.queueCost7.poll());
                 break;
-            }else if (this.queueCost8.size() > 0 && this.queueCost7.isEmpty()){
+            } else if (this.queueCost8.size() > 0 && this.queueCost7.isEmpty()) {
                 this.mainQueue.add(this.queueCost8.poll());
                 break;
             }
@@ -243,6 +250,7 @@ public class Greedy implements Executor {
         Greedy.root = null;
         Greedy.countTry = 0;
         this.mainQueue.clear();
+        this.checkPrevious.clear();
         this.queueCost1.clear();
         this.queueCost2.clear();
         this.queueCost3.clear();
