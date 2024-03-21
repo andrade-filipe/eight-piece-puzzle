@@ -57,7 +57,7 @@ public class Greedy implements Executor {
         System.out.println("Time: " + finish);
     }
 
-    private void printResult(Node initial, Node solved) {
+    private void printResult(Node solved) {
         System.out.println("####################################");
         System.out.println("######### Step by Step #############");
         Node node = solved;
@@ -87,7 +87,7 @@ public class Greedy implements Executor {
 
         try {
             solved = this.solve(root);
-            this.printResult(root, solved);
+            this.printResult(solved);
             this.clearAll();
         } catch (StackOverflowError e) {
             this.clearAll();
