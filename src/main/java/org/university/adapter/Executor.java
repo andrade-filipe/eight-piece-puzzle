@@ -5,7 +5,7 @@ import org.university.exception.HardProblemException;
 public interface Executor {
     void execute(int times);
 
-    void execute() throws OutOfMemoryError, HardProblemException;
+    void execute() throws HardProblemException;
 
     Node solve(Node root);
 

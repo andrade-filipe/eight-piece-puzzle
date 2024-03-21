@@ -223,10 +223,6 @@ public class HashMatrix implements Matrix {
         this.getData().put(coordinate, value);
     }
 
-    private int getByCoordinate(String coordinate) {
-        return this.getData().get(coordinate);
-    }
-
     @Override
     public HashMap<String, Integer> getData() {
         return data;

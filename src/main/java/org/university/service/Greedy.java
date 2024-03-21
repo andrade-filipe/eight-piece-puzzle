@@ -49,7 +49,7 @@ public class Greedy implements Executor {
                 this.execute();
                 System.out.println("#CLEAN EXECUTION NUMBER: " + (i + 1));
                 System.out.println("************************************");
-            } catch (HardProblemException | StackOverflowError e) {
+            } catch (HardProblemException e) {
                 i--;
             }
         }
@@ -240,7 +240,6 @@ public class Greedy implements Executor {
     public void clearAll() {
         Greedy.root = null;
         this.mainQueue.clear();
-        this.checkPrevious.clear();
         this.queueCost1.clear();
         this.queueCost2.clear();
         this.queueCost3.clear();
@@ -249,6 +248,7 @@ public class Greedy implements Executor {
         this.queueCost6.clear();
         this.queueCost7.clear();
         this.queueCost8.clear();
+        this.checkPrevious.clear();
         this.stepByStep.clear();
     }
 
