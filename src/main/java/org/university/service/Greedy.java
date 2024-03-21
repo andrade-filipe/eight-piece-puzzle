@@ -24,7 +24,6 @@ public class Greedy implements Executor {
     public PriorityQueue<Node> queueCost7;
     public PriorityQueue<Node> queueCost8;
     public LinkedList<HashMap<String, Integer>> checkPrevious;
-    public static int countTry = 0;
     public static Node root;
 
     public Greedy() {
@@ -42,6 +41,7 @@ public class Greedy implements Executor {
 
     @Override
     public void execute(int times) {
+        var start = System.currentTimeMillis();
         for (int i = 0; i < times; i++) {
             try {
                 this.execute();
@@ -51,29 +51,20 @@ public class Greedy implements Executor {
                 i--;
             }
         }
+        var finish = System.currentTimeMillis() - start;
+        System.out.println("Time: " + finish);
     }
 
-    private void printResult(Node initial, Node solved, int tentatives) {
+    private void printResult(Node initial, Node solved) {
         System.out.println("####################################");
         System.out.println("######### Starting Point ###########");
+        System.out.println(initial);
         System.out.println("Genetic Factor: " + initial.getGeneticFactor());
         System.out.println("Cost: " + initial.getCost());
         System.out.println("Manhattan: " + initial.getManhattan());
         System.out.println("Inversions: " + initial.getPuzzle().getInversions());
-        System.out.println(initial);
         System.out.println("############# Solved ###############");
-        System.out.println("Full Path Cost: " + solved.getPathCost());
         System.out.println("Number of Steps: " + solved.getLevel());
-        System.out.println("Number of Tentatives: " + tentatives);
-        System.out.println("Main Queue Size: " + this.mainQueue.size());
-        System.out.println("Cost1 Queue Size: " + this.queueCost1.size());
-        System.out.println("Cost2 Queue Size: " + this.queueCost2.size());
-        System.out.println("Cost3 Queue Size: " + this.queueCost3.size());
-        System.out.println("Cost4 Queue Size: " + this.queueCost4.size());
-        System.out.println("Cost5 Queue Size: " + this.queueCost5.size());
-        System.out.println("Cost6 Queue Size: " + this.queueCost6.size());
-        System.out.println("Cost7 Queue Size: " + this.queueCost7.size());
-        System.out.println("Cost8 Queue Size: " + this.queueCost8.size());
         System.out.println("************************************");
     }
 
@@ -90,25 +81,19 @@ public class Greedy implements Executor {
 
         try {
             solved = this.solve(root);
-            this.printResult(root, solved, countTry);
+            this.printResult(root, solved);
             this.clearAll();
-        } catch (HardProblemException | StackOverflowError | OutOfMemoryError e) {
+        } catch (StackOverflowError e) {
             this.clearAll();
             throw new HardProblemException();
         }
     }
 
     @Override
-    public Node solve(Node node) throws HardProblemException {
-        if (node == null) {
-            throw new HardProblemException();
-        }
-
+    public Node solve(Node node) throws StackOverflowError {
         if (node.getPuzzle() != null && node.getCost() == 0) {
             return node;
         }
-
-        Greedy.countTry++;
 
         this.performPossibleMoves(node);
 
@@ -248,7 +233,6 @@ public class Greedy implements Executor {
     @Override
     public void clearAll() {
         Greedy.root = null;
-        Greedy.countTry = 0;
         this.mainQueue.clear();
         this.checkPrevious.clear();
         this.queueCost1.clear();

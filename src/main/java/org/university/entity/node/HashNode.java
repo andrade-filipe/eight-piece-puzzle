@@ -239,12 +239,6 @@ public class HashNode implements Node {
 
     @Override
     public String toString() {
-        return "puzzle=" + this.getPuzzle() + "\n" +
-                ", cost=" + this.getCost() +
-                ", level=" + this.getLevel() +
-                ", pathCost=" + this.getPathCost() +
-                ", manhattan=" + this.getManhattan() +
-                ", geneticFactor=" + this.getGeneticFactor() +
-                '}';
+        return "root=" + this.getPuzzle();
     }
 }
