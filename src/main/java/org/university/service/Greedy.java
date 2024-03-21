@@ -65,7 +65,7 @@ public class Greedy implements Executor {
             this.stepByStep.add(node);
             node = node.getParent();
         }
-        for (int i = stepByStep.size() - 1; i >= 0 ; i--) {
+        for (int i = stepByStep.size() - 1; i >= 0; i--) {
             System.out.println("Step: " + i);
             System.out.println(this.stepByStep.get(i));
         }

@@ -1,4 +1,4 @@
 package org.university.exception;
 
-public class RepeatedStateException extends HardProblemException{
+public class RepeatedStateException extends HardProblemException {
 }

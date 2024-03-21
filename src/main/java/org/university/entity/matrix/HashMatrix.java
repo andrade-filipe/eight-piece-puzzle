@@ -54,7 +54,7 @@ public class HashMatrix implements Matrix {
             int value = this.getByPosition(i);
 
             for (int j = MATRIX_SIZE - 1; j > i; j--) {
-                if(value > this.getByPosition(j)){
+                if (value > this.getByPosition(j)) {
                     count++;
                 }
             }
@@ -73,7 +73,7 @@ public class HashMatrix implements Matrix {
         return null;
     }
 
-    private void swapRight(){
+    private void swapRight() {
         this.insertInCoordinate(this.getBlankCoordinate(),
                 this.getByPosition(this.getBlankPosition() + COL_MOVE));
 
@@ -92,7 +92,7 @@ public class HashMatrix implements Matrix {
         return null;
     }
 
-    private void swapLeft(){
+    private void swapLeft() {
         this.insertInCoordinate(this.getBlankCoordinate(),
                 this.getByPosition(this.getBlankPosition() - COL_MOVE));
 
@@ -111,7 +111,7 @@ public class HashMatrix implements Matrix {
         return null;
     }
 
-    private void swapUp(){
+    private void swapUp() {
         this.insertInCoordinate(this.getBlankCoordinate(),
                 this.getByPosition(this.getBlankPosition() - ROW_MOVE));
 
@@ -131,7 +131,7 @@ public class HashMatrix implements Matrix {
         return null;
     }
 
-    private void swapDown(){
+    private void swapDown() {
         this.insertInCoordinate(
                 this.getBlankCoordinate(),
                 this.getByPosition(this.getBlankPosition() + ROW_MOVE));

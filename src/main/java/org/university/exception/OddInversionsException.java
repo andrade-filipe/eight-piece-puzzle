@@ -1,4 +1,4 @@
 package org.university.exception;
 
-public class OddInversionsException extends HardProblemException{
+public class OddInversionsException extends HardProblemException {
 }

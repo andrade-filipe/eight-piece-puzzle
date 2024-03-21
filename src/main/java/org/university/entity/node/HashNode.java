@@ -3,8 +3,8 @@ package org.university.entity.node;
 import org.university.adapter.Matrix;
 import org.university.adapter.Node;
 import org.university.entity.matrix.HashMatrix;
-import org.university.exception.OddInversionsException;
 import org.university.exception.HardProblemException;
+import org.university.exception.OddInversionsException;
 import org.university.service.Greedy;
 
 import java.util.HashMap;
