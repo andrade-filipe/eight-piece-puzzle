@@ -239,6 +239,6 @@ public class HashNode implements Node {
 
     @Override
     public String toString() {
-        return "root=" + this.getPuzzle();
+        return "Puzzle: " + "\n" + this.getPuzzle();
     }
 }

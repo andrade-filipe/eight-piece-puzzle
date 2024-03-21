@@ -24,6 +24,7 @@ public class Greedy implements Executor {
     public PriorityQueue<Node> queueCost7;
     public PriorityQueue<Node> queueCost8;
     public LinkedList<HashMap<String, Integer>> checkPrevious;
+    public LinkedList<Node> stepByStep;
     public static Node root;
 
     public Greedy() {
@@ -37,6 +38,7 @@ public class Greedy implements Executor {
         this.queueCost7 = new PriorityQueue<>(new GeneticComparator());
         this.queueCost8 = new PriorityQueue<>(new GeneticComparator());
         this.checkPrevious = new LinkedList<>();
+        this.stepByStep = new LinkedList<>();
     }
 
     @Override
@@ -47,7 +49,7 @@ public class Greedy implements Executor {
                 this.execute();
                 System.out.println("#CLEAN EXECUTION NUMBER: " + (i + 1));
                 System.out.println("************************************");
-            } catch (HardProblemException | OutOfMemoryError e) {
+            } catch (HardProblemException | StackOverflowError e) {
                 i--;
             }
         }
@@ -57,12 +59,16 @@ public class Greedy implements Executor {
 
     private void printResult(Node initial, Node solved) {
         System.out.println("####################################");
-        System.out.println("######### Starting Point ###########");
-        System.out.println(initial);
-        System.out.println("Genetic Factor: " + initial.getGeneticFactor());
-        System.out.println("Cost: " + initial.getCost());
-        System.out.println("Manhattan: " + initial.getManhattan());
-        System.out.println("Inversions: " + initial.getPuzzle().getInversions());
+        System.out.println("######### Step by Step #############");
+        Node node = solved;
+        for (int i = 0; i <= solved.getLevel(); i++) {
+            this.stepByStep.add(node);
+            node = node.getParent();
+        }
+        for (int i = stepByStep.size() - 1; i >= 0 ; i--) {
+            System.out.println("Step: " + i);
+            System.out.println(this.stepByStep.get(i));
+        }
         System.out.println("############# Solved ###############");
         System.out.println("Number of Steps: " + solved.getLevel());
         System.out.println("************************************");
@@ -243,6 +249,7 @@ public class Greedy implements Executor {
         this.queueCost6.clear();
         this.queueCost7.clear();
         this.queueCost8.clear();
+        this.stepByStep.clear();
     }
 
     private static HashMap<String, Integer> getSolution() {
