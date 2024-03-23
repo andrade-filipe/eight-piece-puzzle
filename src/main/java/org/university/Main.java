@@ -51,6 +51,6 @@ public class Main {
          */
         Greedy greedy = new Greedy();
 
-        greedy.execute(10000);
+        greedy.execute(25000);
     }
 }
