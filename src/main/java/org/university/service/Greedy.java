@@ -27,6 +27,9 @@ public class Greedy implements Executor {
     public LinkedList<Node> stepByStep;
     public static Node root;
 
+    /**
+     * Initializes all Queues and Auxiliar Lists
+     */
     public Greedy() {
         this.mainQueue = new PriorityQueue<>(new CostComparator());
         this.queueCost1 = new PriorityQueue<>(new GeneticComparator());
@@ -41,6 +44,12 @@ public class Greedy implements Executor {
         this.stepByStep = new LinkedList<>();
     }
 
+    /**
+     * Tries to solve a puzzle, if could not solve, it will not count as an iteration and will run again until solve
+     * also measures the time of all executions
+     *
+     * @param times -> amount of puzzles that will be solved
+     */
     @Override
     public void execute(int times) {
         var start = System.currentTimeMillis();
@@ -57,6 +66,10 @@ public class Greedy implements Executor {
         System.out.println("Time: " + finish);
     }
 
+    /**
+     * Prints all information necessary
+     * @param solved -> The Solved Puzzle
+     */
     private void printResult(Node solved) {
         System.out.println("####################################");
         System.out.println("######### Step by Step #############");
@@ -74,6 +87,11 @@ public class Greedy implements Executor {
         System.out.println("************************************");
     }
 
+    /**
+     * Generates a Random Matrix and tries to solve
+     *
+     * @throws HardProblemException
+     */
     @Override
     public void execute() throws HardProblemException {
         try {
@@ -95,6 +113,12 @@ public class Greedy implements Executor {
         }
     }
 
+    /**
+     *
+     * @param node -> current node
+     * @return recursive call of solve(Node node)
+     * @throws StackOverflowError
+     */
     @Override
     public Node solve(Node node) throws StackOverflowError {
         if (node.getPuzzle() != null && node.getCost() == 0) {
@@ -106,6 +130,13 @@ public class Greedy implements Executor {
         return this.solve(this.mainQueue.poll());
     }
 
+    /**
+     * Creates a new Object of HashMatrix equal to his parent, it'll be used to perform
+     * moves after
+     *
+     * @param parent -> previous step
+     * @return new Object of HashMatrix
+     */
     private HashMatrix createNewStateOf(Node parent) {
         return new HashMatrix(
                 parent.getPuzzleMap(),
@@ -113,6 +144,10 @@ public class Greedy implements Executor {
         );
     }
 
+    /**
+     * calls all 4 possible moves the puzzle can do
+     * @param node -> current recursion node
+     */
     private void performPossibleMoves(Node node) {
         if (!this.checkPrevious.contains(node.getPuzzleMap())) {
             this.tryRight(node);
@@ -154,6 +189,10 @@ public class Greedy implements Executor {
         }
     }
 
+    /**
+     * Sorts all nodes by cost and inserts in the respective queue
+     * @param node -> current recursion node
+     */
     private void insertInQueue(Node node) {
         if (node.getPuzzle() != null) {
             switch (node.getCost()) {
@@ -204,6 +243,9 @@ public class Greedy implements Executor {
         }
     }
 
+    /**
+     * Adds to the main queue the lowest cost and best genetic node of all
+     */
     private void manageMainQueue() {
         for (int i = 0; i < 1; i++) {
             if (this.mainQueue.size() > 0) {
@@ -236,6 +278,9 @@ public class Greedy implements Executor {
         }
     }
 
+    /**
+     * Clears all queues to help garbage collector
+     */
     @Override
     public void clearAll() {
         Greedy.root = null;
