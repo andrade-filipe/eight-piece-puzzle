@@ -17,6 +17,9 @@ public class HashMatrix implements Matrix {
     private int blankPosition;
     private int inversions;
 
+    /**
+     * This constructor generates a random Matrix
+     */
     public HashMatrix() {
         this.possibilities = new ArrayList();
         this.possibilities.addAll(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8));
@@ -26,6 +29,11 @@ public class HashMatrix implements Matrix {
         this.perfomCalculations();
     }
 
+    /**
+     * This Constructor generates a new object of matrix with given HashMap
+     * @param data -> HashMap that represents a matrix
+     * @param blankPosition -> the position number of the empty space on the puzzle
+     */
     public HashMatrix(HashMap<String, Integer> data, int blankPosition) {
         this.data = new HashMap<>();
         this.blankPosition = blankPosition;
@@ -33,6 +41,10 @@ public class HashMatrix implements Matrix {
         this.perfomCalculations();
     }
 
+    /**
+     * Gets a random number from the list of possibilities, and inserts in a position
+     * repeats until the entire matrix is filled generating a random matrix
+     */
     @Override
     public void generatePuzzle() {
         while (!this.possibilities.isEmpty()) {
@@ -46,6 +58,11 @@ public class HashMatrix implements Matrix {
         }
     }
 
+    /**
+     * This method thinks that the matrix is linear, gets a number starting
+     * from position 0, and counts the amount of times this number has another after him
+     * that is lower than him, that means they have to be inverted to be ordered
+     */
     @Override
     public void calculateInversions() {
         int count = 0;
@@ -63,6 +80,11 @@ public class HashMatrix implements Matrix {
         this.setInversions(count);
     }
 
+    /**
+     * Checks if the move is valid, calls the swapRight method and calculates all again on the new matrix
+     *
+     * @return this Matrix changing the position of the empty space to the right
+     */
     @Override
     public HashMatrix moveRight() {
         if (checkRight()) {
@@ -73,6 +95,10 @@ public class HashMatrix implements Matrix {
         return null;
     }
 
+    /**
+     * Imagine you're playing the sliding puzzle and you slide the piece from the right side of
+     * the void space to the left, filling the void and creating a new one on the right
+     */
     private void swapRight() {
         this.insertInCoordinate(this.getBlankCoordinate(),
                 this.getByPosition(this.getBlankPosition() + COL_MOVE));
@@ -82,6 +108,11 @@ public class HashMatrix implements Matrix {
         this.setBlankPosition(this.getBlankPosition() + COL_MOVE);
     }
 
+    /**
+     * Checks if the move is valid, calls the swapLeft method and calculates all again on the new matrix
+     *
+     * @return this Matrix changing the position of the empty space to the left
+     */
     @Override
     public HashMatrix moveLeft() {
         if (checkLeft()) {
@@ -92,6 +123,10 @@ public class HashMatrix implements Matrix {
         return null;
     }
 
+    /**
+     * Imagine you're playing the sliding puzzle and you slide the piece from the left side of
+     * the void space to the right, filling the void and creating a new one on the left
+     */
     private void swapLeft() {
         this.insertInCoordinate(this.getBlankCoordinate(),
                 this.getByPosition(this.getBlankPosition() - COL_MOVE));
@@ -101,6 +136,11 @@ public class HashMatrix implements Matrix {
         this.setBlankPosition(this.getBlankPosition() - COL_MOVE);
     }
 
+    /**
+     * Checks if the move is valid, calls the swapUp method and calculates all again on the new matrix
+     *
+     * @return this Matrix changing the position of the empty space upwards
+     */
     @Override
     public HashMatrix moveUp() {
         if (checkUp()) {
@@ -111,6 +151,10 @@ public class HashMatrix implements Matrix {
         return null;
     }
 
+    /**
+     * Imagine you're playing the sliding puzzle and you slide the piece from the top of
+     * the void space downwards, filling the void and creating a new one on the top
+     */
     private void swapUp() {
         this.insertInCoordinate(this.getBlankCoordinate(),
                 this.getByPosition(this.getBlankPosition() - ROW_MOVE));
@@ -120,7 +164,11 @@ public class HashMatrix implements Matrix {
         this.setBlankPosition(this.getBlankPosition() - ROW_MOVE);
     }
 
-
+    /**
+     * Checks if the move is valid, calls the swapDown method and calculates all again on the new matrix
+     *
+     * @return this Matrix changing the position of the empty space downwards
+     */
     @Override
     public HashMatrix moveDown() {
         if (checkDown()) {
@@ -131,6 +179,10 @@ public class HashMatrix implements Matrix {
         return null;
     }
 
+    /**
+     * Imagine you're playing the sliding puzzle and you slide the piece down of
+     * the void space upwards, filling the void and creating a new one downwards
+     */
     private void swapDown() {
         this.insertInCoordinate(
                 this.getBlankCoordinate(),
@@ -141,32 +193,59 @@ public class HashMatrix implements Matrix {
         this.setBlankPosition(this.getBlankPosition() + ROW_MOVE);
     }
 
+    /**
+     * Checks if the void space is not in Column number 2 (third column), which does not have a piece to the right
+     *
+     * @return true or false
+     */
     @Override
     public boolean checkRight() {
         return this.getCol() != '2';
     }
 
+    /**
+     * Checks if the void space is not in Column number 0 (first column), which does not have a piece to the left
+     *
+     * @return true or false
+     */
     @Override
     public boolean checkLeft() {
         return this.getCol() != '0';
     }
 
+    /**
+     * Checks if the void space is not in Row number 0 (first row), which does not have a piece to the top
+     *
+     * @return true or false
+     */
     @Override
     public boolean checkUp() {
         return this.getRow() != '0';
     }
 
+    /**
+     * Checks if the void space is not in Row number 2 (third row), which does not have a piece downwards
+     *
+     * @return true or false
+     */
     @Override
     public boolean checkDown() {
         return this.getRow() != '2';
     }
 
+    /**
+     * Calls the methods that refreshes Matrix Data
+     */
     @Override
     public void perfomCalculations() {
         this.calculateInversions();
         this.refreshCoordinates(this.getBlankPosition());
     }
 
+    /**
+     * Gets every position from data param and inserts into every position of this.data
+     * @param data -> matrix to be copied
+     */
     private void copyData(HashMap<String, Integer> data) {
         this.data.put(positionToCoordinate(0), data.get(positionToCoordinate(0)));
         this.data.put(positionToCoordinate(1), data.get(positionToCoordinate(1)));
@@ -179,12 +258,19 @@ public class HashMatrix implements Matrix {
         this.data.put(positionToCoordinate(8), data.get(positionToCoordinate(8)));
     }
 
+    /**
+     *
+     * @param blankPosition -> number position of the void space
+     */
     private void refreshCoordinates(int blankPosition) {
         this.setBlankCoordinate(positionToCoordinate(blankPosition));
         this.setRow(this.getBlankCoordinate().charAt(0));
         this.setCol(this.getBlankCoordinate().charAt(2));
     }
 
+    /**
+     * Clears everything to help garbage collector and help memory usage
+     */
     @Override
     public void clearMatrix() {
         this.setData(null);

@@ -20,6 +20,12 @@ public class HashNode implements Node {
     private int manhattan;
     private int geneticFactor;
 
+    /**
+     * Generates a Node and makes all verifications and calculations
+     *
+     * @param parent -> if a movement was made, the parent is the previous position
+     * @param puzzle -> The matrix that represents the puzzle
+     */
     public HashNode(Node parent, Matrix puzzle) {
         this.parent = parent;
         this.puzzle = puzzle;
@@ -32,6 +38,9 @@ public class HashNode implements Node {
         }
     }
 
+    /**
+     * Calls all Calculation Methods of the Node
+     */
     @Override
     public void performCalculations() {
         this.calculateCost(Greedy.HASH_SOLUTION);
@@ -47,6 +56,9 @@ public class HashNode implements Node {
         }
     }
 
+    /**
+     * the level is the amount of parents (or steps)
+     */
     @Override
     public void calculateLevel() {
         if (this.parent == null) {
@@ -56,6 +68,11 @@ public class HashNode implements Node {
         this.setLevel(this.parent.getLevel() + 1);
     }
 
+    /**
+     * The cost is the amount of pieces that are not in the original position
+     * max is 8
+     * @param solution -> the expected pieces position
+     */
     @Override
     public void calculateCost(HashMap<String, Integer> solution) {
         int cost = 0;
@@ -70,6 +87,9 @@ public class HashNode implements Node {
         this.setCost(cost);
     }
 
+    /**
+     * PathCost is the sum of the Cost of all the parents and the current node
+     */
     @Override
     public void calculatePathCost() {
         if (this.parent == null) {
@@ -79,6 +99,10 @@ public class HashNode implements Node {
         }
     }
 
+    /**
+     * Distance of Manhattan is the distance that the piece is from the original coordinate
+     * @param solution -> expected coordinates
+     */
     @Override
     public void calculateManhattan(HashMap<String, Integer> solution) {
         int manhattan = 0;
@@ -98,6 +122,10 @@ public class HashNode implements Node {
         this.setManhattan(manhattan);
     }
 
+    /**
+     * Genetic Factor usually represents how far from the solution a puzzle is, it's a calculation
+     * that weights Cost, Manhattan Distance and Number of Inversions
+     */
     @Override
     public void calculateGeneticFactor() {
         int geneticFactor = 36 * this.getCost() + 18 * this.getManhattan() + 2 * this.getPuzzle().getInversions();
@@ -124,19 +152,28 @@ public class HashNode implements Node {
         return null;
     }
 
+    /**
+     * It's possible to control puzzle difficulty (depth) with this method
+     */
     private void verifyNode() {
         if ((this.getParent() == null) && (this.getGeneticFactor() >= BAD_GENETIC_FACTOR)) {
             throw new HardProblemException();
         }
     }
 
+    /**
+     * Verifies if the number of Inversions is Odd of the root matrix, if true throws an exception, because
+     * a matrix with odd inversions is unsolvable on the 8-piece-puzzle
+     */
     private void verifyMatrix() {
         if ((this.getParent() == null) && (this.getPuzzle().getInversions() % 2 != 0)) {
             throw new OddInversionsException();
         }
     }
 
-
+    /**
+     * Clear all pointers to help garbage collector
+     */
     @Override
     public void clearNode() {
         this.setParent(null);
